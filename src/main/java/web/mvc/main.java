@@ -7,6 +7,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class main {
 
 	public static void main(String[] args) {
+
+		System.out.println("ㅎㅇ");
 		SpringApplication.run(main.class, args);
 	} // 신창훈 pr test 입니다!
 
