@@ -54,5 +54,6 @@ public class Users {
     private  EmailVerification emailVerification;
     @OneToOne(mappedBy = "user" , cascade = CascadeType.ALL)
     private  SmsVerification smsVerification;
+    //   git commit
 }
 
