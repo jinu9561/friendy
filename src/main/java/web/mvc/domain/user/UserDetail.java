@@ -5,10 +5,13 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import web.mvc.enums.users.State;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -22,15 +25,13 @@ public class UserDetail {
     @GeneratedValue(strategy = GenerationType.SEQUENCE , generator = "User_detail_seq")
     @SequenceGenerator(name ="User_detail_seq" , allocationSize = 1 , sequenceName = "User_detail_seq")
     private Long UserDetailSeq;
-    private int userState;
+    private State userState;
     @CreationTimestamp
     private LocalDateTime userRegDate;
     @UpdateTimestamp
     private LocalDateTime userUpdateDate;
     private int userRate;
     private int userJelly;
-    @Column(length = 100)
-    private String Role;
     private LocalDateTime lastLoginDate;
 
     @OneToOne(fetch = FetchType.LAZY)
@@ -39,4 +40,8 @@ public class UserDetail {
     private List<MeetupRecord> meetupRecord;
 
 
+    public UserDetail(Users user) {
+        this.user = user;
+        this.meetupRecord = new ArrayList<>();
+    }
 }

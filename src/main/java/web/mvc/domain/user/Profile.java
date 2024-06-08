@@ -4,6 +4,7 @@ package web.mvc.domain.user;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -29,5 +30,11 @@ public class Profile {
     private List<ProfileDetailImg> profileDetailImgList;
     @OneToMany(mappedBy = "profile" , cascade = CascadeType.ALL)
     private List<Interest> interestList;
+
+    public Profile(Users user) {
+        this.user = user;
+        this.profileDetailImgList = new ArrayList<>();
+        this.interestList = new ArrayList<>();
+    }
 
 }

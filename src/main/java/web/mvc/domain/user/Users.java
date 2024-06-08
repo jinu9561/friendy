@@ -3,6 +3,8 @@ package web.mvc.domain.user;
 
 import jakarta.persistence.*;
 import lombok.*;
+import web.mvc.enums.users.Classification;
+import web.mvc.enums.users.Gender;
 
 import java.util.Date;
 import java.util.List;
@@ -37,8 +39,10 @@ public class Users {
     private String email;
     @Column(length = 100)
     private String phone;
-    private int country;
-    private int gender;
+    @Column(length = 100)
+    private String Role;
+    private Classification country;
+    private Gender gender;
 
     @OneToOne(mappedBy = "user" , cascade = CascadeType.ALL)
     private UserDetail userDetail;
@@ -46,5 +50,9 @@ public class Users {
     private Profile profile;
     @OneToMany(mappedBy = "user" , cascade = CascadeType.ALL)
     private List<JellyRecord> jellyRecord;
+    @OneToOne(mappedBy = "user" , cascade = CascadeType.ALL)
+    private  EmailVerification emailVerification;
+    @OneToOne(mappedBy = "user" , cascade = CascadeType.ALL)
+    private  SmsVerification smsVerification;
 }
 
