@@ -4,7 +4,7 @@ import io.jsonwebtoken.Jwts;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import web.mvc.domain.user.Users;
+import web.mvc.entity.user.Users;
 
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;

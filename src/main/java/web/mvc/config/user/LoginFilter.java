@@ -11,7 +11,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import web.mvc.domain.user.Users;
+import web.mvc.entity.user.Users;
 
 
 import java.io.IOException;
@@ -71,8 +71,8 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
         String role = auth.getAuthority(); // ROLE_USER OR ROLE_ADMIN 저장한 ROLL이 나온다
 
-        // 토큰 생성과정...
-        String token = jwtUtil.createJwt(customMemberDetails.getUsers(), role, 6000*1000L); //시간 설정 MS 1000L = 1초 , 1000L * 60 = 1분
+        // 토큰 생성과정... 토큰 만료시간 1시간으로 설정 3600 * 1000ㅣ
+        String token = jwtUtil.createJwt(customMemberDetails.getUsers(), role, 3600*1000L); //시간 설정 MS 1000L = 1초 , 1000L * 60 = 1분
 
         // 응답할 헤더 설정
         response.addHeader("Authorization", "Bearer " + token);
@@ -80,8 +80,13 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         Map<String, Object> map = new HashMap<>();
         Users users= customMemberDetails.getUsers();
         map.put("userId",users.getUserId() );
-        map.put("userPwd",users.getUserPwd() );
+        map.put("country",users.getCountry() );
+        map.put("gender",users.getGender() );
         map.put("userName",users.getUserName() );
+        map.put("userSeq",users.getUserSeq() );
+        if (!role.equals("ROLE_ADMIN")) {
+            map.put("userState", users.getUserDetail().getUserState());
+        }
 
 
         Gson gson= new Gson();

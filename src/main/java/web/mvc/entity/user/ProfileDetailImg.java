@@ -1,8 +1,9 @@
-package web.mvc.domain.user;
+package web.mvc.entity.user;
 
 
 import jakarta.persistence.*;
 import lombok.*;
+import web.mvc.enums.users.ImgStatus;
 
 @Getter
 @Setter
@@ -22,10 +23,15 @@ public class ProfileDetailImg {
     private String profileDetailImgType;
     @Column(length = 100)
     private String profileDetailImgSize;
+    private ImgStatus imgStatus;
 
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Profile profile;
+
+    public ProfileDetailImg(Profile profile) {
+        this.profile = profile;
+    }
 
 
 }
