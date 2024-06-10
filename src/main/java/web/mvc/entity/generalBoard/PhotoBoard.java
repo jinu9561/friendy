@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import web.mvc.domain.user.Users;
+import web.mvc.entity.user.Users;
 
 import java.time.LocalDateTime;
 

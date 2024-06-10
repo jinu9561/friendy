@@ -5,7 +5,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import web.mvc.dto.generalBoard.PhotoBoardDTO;
 import web.mvc.entity.generalBoard.PhotoBoard;
-import web.mvc.exception.ResourceNotFoundException;
 import web.mvc.repository.generalBoard.PhotoBoardRepository;
 import web.mvc.repository.user.UserRepository;
 
@@ -24,7 +23,7 @@ public class PhotoBoardServiceImpl implements PhotoBoardService {
     public PhotoBoardDTO createPhotoBoard(PhotoBoardDTO photoBoardDTO) {
         PhotoBoard photoBoard = modelMapper.map(photoBoardDTO, PhotoBoard.class);
         photoBoard.setUser(userRepository.findById(photoBoardDTO.getUserSeq())
-                .orElseThrow(() -> new ResourceNotFoundException("User", "id", photoBoardDTO.getUserSeq())));
+                .orElseThrow(() -> new RuntimeException("에러발생. exception 추후 수정")));
         photoBoard = photoBoardRepository.save(photoBoard);
         return modelMapper.map(photoBoard, PhotoBoardDTO.class);
     }
@@ -32,7 +31,7 @@ public class PhotoBoardServiceImpl implements PhotoBoardService {
     @Override
     public PhotoBoardDTO getPhotoBoardById(Long photoBoardSeq) {
         PhotoBoard photoBoard = photoBoardRepository.findById(photoBoardSeq)
-                .orElseThrow(() -> new ResourceNotFoundException("PhotoBoard", "id", photoBoardSeq));
+                .orElseThrow(() -> new RuntimeException("에러발생. exception 추후 수정"));
         return modelMapper.map(photoBoard, PhotoBoardDTO.class);
     }
 
@@ -46,7 +45,7 @@ public class PhotoBoardServiceImpl implements PhotoBoardService {
     @Override
     public PhotoBoardDTO updatePhotoBoard(Long photoBoardSeq, PhotoBoardDTO photoBoardDTO) {
         PhotoBoard photoBoard = photoBoardRepository.findById(photoBoardSeq)
-                .orElseThrow(() -> new ResourceNotFoundException("PhotoBoard", "id", photoBoardSeq));
+                .orElseThrow(() -> new RuntimeException("에러발생. exception 추후 수정"));
 
         modelMapper.map(photoBoardDTO, photoBoard);
         photoBoard = photoBoardRepository.save(photoBoard);
@@ -56,7 +55,7 @@ public class PhotoBoardServiceImpl implements PhotoBoardService {
     @Override
     public void deletePhotoBoard(Long photoBoardSeq) {
         PhotoBoard photoBoard = photoBoardRepository.findById(photoBoardSeq)
-                .orElseThrow(() -> new ResourceNotFoundException("PhotoBoard", "id", photoBoardSeq));
+                .orElseThrow(() -> new RuntimeException("에러발생. exception 추후 수정"));
         photoBoardRepository.delete(photoBoard);
     }
 }

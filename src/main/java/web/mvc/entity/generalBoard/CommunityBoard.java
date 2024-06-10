@@ -6,7 +6,7 @@ import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import web.mvc.domain.user.Users;
+import web.mvc.entity.user.Users;
 
 import java.time.LocalDateTime;
 
