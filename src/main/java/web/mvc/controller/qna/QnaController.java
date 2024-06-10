@@ -14,6 +14,7 @@ public class QnaController {
 
     @PostMapping("/qnaDesc")
     public String askQuestion(@RequestBody String question) {
+
         return qnaService.getQnaReply(question);
     }
 

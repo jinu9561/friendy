@@ -1,13 +1,12 @@
 package web.mvc.entity.qna;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import web.mvc.domain.user.Users;
 
 import java.time.LocalDateTime;
 
@@ -19,10 +18,21 @@ import java.time.LocalDateTime;
 public class Qna {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY ,generator = "qna_seq")
+    @SequenceGenerator(name ="qna_seq" , allocationSize = 1 , sequenceName = "qna_seq")
     private Long qnaSeq;
+    @Column(length = 1000)
     private String qnaDesc;
+    @Column(length = 100)
+    private int qnaStatus;
+    @CreationTimestamp
+    private LocalDateTime qnaUpdateDate;
+    @CreationTimestamp
     private LocalDateTime qnaRegDate;
+    @Column(length = 1000)
     private String qnaReply;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    private Users user;
 
 }
