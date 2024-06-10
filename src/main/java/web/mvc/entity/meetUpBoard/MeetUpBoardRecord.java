@@ -1,4 +1,4 @@
-package web.mvc.entity.partyBoard;
+package web.mvc.entity.meetUpBoard;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -13,7 +13,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 
-public class PartyRecord {
+public class MeetUpBoardRecord {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "partyboard_detail_img_seq")
     @SequenceGenerator(allocationSize = 1, sequenceName = "partyboard_detail_img_seq", name = "partyboard_detail_img_seq")
