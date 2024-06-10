@@ -46,7 +46,4 @@ public class PhotoBoard {
     @Column(name = "PHOTO_BOARD_LIKE")
     private int photoBoardLike;
 
-
-
-    // Getters and Setters
 }

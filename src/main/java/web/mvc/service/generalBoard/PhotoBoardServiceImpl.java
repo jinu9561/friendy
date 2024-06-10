@@ -47,9 +47,9 @@ public class PhotoBoardServiceImpl implements PhotoBoardService {
         PhotoBoard photoBoard = photoBoardRepository.findById(photoBoardSeq)
                 .orElseThrow(() -> new RuntimeException("에러발생. exception 추후 수정"));
 
-        modelMapper.map(photoBoardDTO, photoBoard);
+        modelMapper.map(photoBoardDTO, photoBoard); //ModelMapper를 사용하여 photoBoardDTO의 값을 기존의 photoBoard 엔티티에 매핑
         photoBoard = photoBoardRepository.save(photoBoard);
-        return modelMapper.map(photoBoard, PhotoBoardDTO.class);
+        return modelMapper.map(photoBoard, PhotoBoardDTO.class);    //최종적으로 업데이트된 PhotoBoard 엔티티를 PhotoBoardDTO로 변환하여 반환
     }
 
     @Override

@@ -9,7 +9,7 @@ import web.mvc.service.generalBoard.CommunityBoardService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/community-boards")
+@RequestMapping("/community-board")
 public class CommunityBoardController {
 
     @Autowired
@@ -20,9 +20,9 @@ public class CommunityBoardController {
         return ResponseEntity.ok(communityBoardService.createCommunityBoard(communityBoardDTO));
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<CommunityBoardDTO> getCommunityBoardById(@PathVariable Long id) {
-        return ResponseEntity.ok(communityBoardService.getCommunityBoardById(id));
+    @GetMapping("/{commBoardSeq}")
+    public ResponseEntity<CommunityBoardDTO> getCommunityBoardById(@PathVariable Long commBoardSeq) {
+        return ResponseEntity.ok(communityBoardService.getCommunityBoardById(commBoardSeq));
     }
 
     @GetMapping
@@ -30,14 +30,14 @@ public class CommunityBoardController {
         return ResponseEntity.ok(communityBoardService.getAllCommunityBoards());
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<CommunityBoardDTO> updateCommunityBoard(@PathVariable Long id, @RequestBody CommunityBoardDTO communityBoardDTO) {
-        return ResponseEntity.ok(communityBoardService.updateCommunityBoard(id, communityBoardDTO));
+    @PutMapping("/{commBoardSeq}")
+    public ResponseEntity<CommunityBoardDTO> updateCommunityBoard(@PathVariable Long commBoardSeq, @RequestBody CommunityBoardDTO communityBoardDTO) {
+        return ResponseEntity.ok(communityBoardService.updateCommunityBoard(commBoardSeq, communityBoardDTO));
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteCommunityBoard(@PathVariable Long id) {
-        communityBoardService.deleteCommunityBoard(id);
+    @DeleteMapping("/{commBoardSeq}")
+    public ResponseEntity<Void> deleteCommunityBoard(@PathVariable Long commBoardSeq) {
+        communityBoardService.deleteCommunityBoard(commBoardSeq);
         return ResponseEntity.noContent().build();
     }
 }
