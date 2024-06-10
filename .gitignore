@@ -153,6 +153,8 @@ buildNumber.properties
 # https://github.com/takari/maven-wrapper#usage-without-binary-jar
 .mvn/wrapper/maven-wrapper.jar
 
+**.xml
+
 # Eclipse m2e generated files
 # Eclipse Core
 .project
@@ -350,3 +352,4 @@ gradle-app.setting
 *.hprof
 
 # End of https://www.toptal.com/developers/gitignore/api/windows,maven,gradle,java,intellij,node
+.idea/.gitignore
