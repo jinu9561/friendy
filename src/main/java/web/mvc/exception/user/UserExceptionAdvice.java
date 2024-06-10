@@ -4,10 +4,8 @@ import jakarta.mail.MessagingException;
 import org.springframework.http.ProblemDetail;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import web.mvc.exception.common.ErrorCode;
 import web.mvc.exception.common.GlobalException;
 
-import java.io.UnsupportedEncodingException;
 import java.text.ParseException;
 import java.time.LocalDateTime;
 
