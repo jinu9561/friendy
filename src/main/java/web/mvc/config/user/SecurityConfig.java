@@ -75,17 +75,16 @@ public class SecurityConfig {
 
         //경로별 인가 작업 -> 각 요청 url에대한 시큐리티 설정
         http.authorizeHttpRequests((auth) ->
-                auth.requestMatchers( "/users", "/users/**", "/sms","/sms/**","/email/"
-                                ,"email/**") // ROLE을 설정안해서 기본 ROLE은 ROLE_USER만 permit이 가능하다,토큰없이는 보기만 가능 상세보기x
-                        .permitAll()
-                        .requestMatchers("/admin","/admin/**")
-                        //.hasRole("ADMIN") // Role설정  ROLE_ADMIN만 permit가능, ROLE_접두어가 자동으로 붙고 따로 설정안하면 ROLE_USER가 기본으로 붙는다 -> ROLE_""를 설정한다,
-                        .permitAll() //  임시로 모든 설정 허용 나중에 주석
-                        .anyRequest() // 그 외 모든 요청
-                        //.authenticated()); // 인증이 필요하다
-                        .permitAll()); // 임시로 모든 설정 허용 나중에 주석
-
-        //(서버)세션 설정 - JWT를 이용 할것이기 때문에 stateless설정 -> 사용자 정보를 (서버)세션에 저장하지 않겠다 -> 토큰으로 주고 받겠다
+//                auth.requestMatchers( "/users", "/users/**", "/sms","/sms/**","/email/"
+//                                ,"email/**") // ROLE을 설정안해서 기본 ROLE은 ROLE_USER만 permit이 가능하다,토큰없이는 보기만 가능 상세보기x
+//                        .permitAll()
+//                        .requestMatchers("/admin","/admin/**")
+//                        //.hasRole("ADMIN") // Role설정  ROLE_ADMIN만 permit가능, ROLE_접두어가 자동으로 붙고 따로 설정안하면 ROLE_USER가 기본으로 붙는다 -> ROLE_""를 설정한다,
+//                        .permitAll() //  임시로 모든 설정 허용 나중에 주석
+//                        .anyRequest() // 그 외 모든 요청
+//                        //.authenticated()); // 인증이 필요하다
+//                        .permitAll()); // 임시로 모든 설정 허용 나중에 주석
+        auth.anyRequest().permitAll()); // 임시로 모든 설정 허용        //(서버)세션 설정 - JWT를 이용 할것이기 때문에 stateless설정 -> 사용자 정보를 (서버)세션에 저장하지 않겠다 -> 토큰으로 주고 받겠다
         http.sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
 
