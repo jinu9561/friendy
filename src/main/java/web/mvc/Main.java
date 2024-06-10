@@ -7,11 +7,11 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication
 @EnableScheduling
-public class main {
+public class Main {
 
 	public static void main(String[] args) {
 
-		SpringApplication.run(main.class, args);
+		SpringApplication.run(Main.class, args);
 		System.out.println("gg");
 
 	}
