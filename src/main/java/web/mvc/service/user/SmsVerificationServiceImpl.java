@@ -12,12 +12,15 @@ import net.nurigo.sdk.message.service.DefaultMessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import web.mvc.domain.user.SmsVerification;
-import web.mvc.domain.user.Users;
-import web.mvc.exception.common.ErrorCode;
+import web.mvc.entity.user.SmsVerification;
+import web.mvc.entity.user.Users;
+import web.mvc.enums.users.State;
+import web.mvc.exception.user.ErrorCode;
 import web.mvc.exception.common.GlobalException;
 import web.mvc.repository.user.SmsverificationRepository;
 import web.mvc.repository.user.UserRepository;
+
+import java.util.concurrent.atomic.AtomicBoolean;
 
 
 @Service
@@ -71,11 +74,9 @@ public class SmsVerificationServiceImpl implements SmsVerificationService {
     @Override
     public String getSMSToken(Long userSeq) {
 
-        SmsVerification smsVerification = smsverificationRepository.findByUserSeq(userSeq);
-
-        if (smsVerification == null) {
-            throw new GlobalException(ErrorCode.NOTFOUND_SMSTOKEN);
-        }
+        SmsVerification smsVerification = smsverificationRepository.findByUserSeq(userSeq).orElseThrow(
+                ()->new GlobalException(ErrorCode.NOTFOUND_SMSTOKEN)
+        );
         return smsVerification.getSmsToken();
     }
 
@@ -101,10 +102,15 @@ public class SmsVerificationServiceImpl implements SmsVerificationService {
     @Override
     public boolean verifySMS(String smsToken,Long userSeq) {
         log.info("smsToken : "+smsToken);
-        if(smsverificationRepository.findBySmsToken(smsToken,userSeq) != null){
-            return true;
-        }
-        return false;
+        AtomicBoolean result = new AtomicBoolean(false);
+        smsverificationRepository.findBySmsToken(smsToken, userSeq).ifPresent(
+                smsverification -> {
+                    Users users = userRepository.findById(userSeq).orElseThrow(()->new GlobalException(ErrorCode.NOTFOUND_ID));
+                    users.getUserDetail().setUserState(State.CERTIFIED);
+                    result.set(true);
+                }
+        );
+        return result.get();
     }
 
 

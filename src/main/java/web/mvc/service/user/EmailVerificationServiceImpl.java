@@ -8,13 +8,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
-import web.mvc.domain.user.EmailVerification;
-import web.mvc.domain.user.Users;
+import web.mvc.entity.user.EmailVerification;
+import web.mvc.entity.user.Users;
 import web.mvc.enums.users.State;
-import web.mvc.exception.common.ErrorCode;
+import web.mvc.exception.user.ErrorCode;
 import web.mvc.exception.common.GlobalException;
 import web.mvc.repository.user.EmaillVerificationRepository;
 import web.mvc.repository.user.UserRepository;
+
+import java.util.concurrent.atomic.AtomicBoolean;
 
 @Service
 @Transactional
@@ -35,13 +37,18 @@ public class EmailVerificationServiceImpl implements EmailVerificationService {
     @Override
     public boolean verifyEmail(String emailToken,Long userSeq) {
         log.info("Verify email : {}", emailToken);
-        if(emailVerificationRepository.findByEmailToken(emailToken,userSeq)!=null){
-            Users users = userRepository.findById(userSeq).orElseThrow(()->new GlobalException(ErrorCode.NOTFOUND_ID));
-            users.setRole("ROLE_USER");
-            users.getUserDetail().setUserState(State.NOMAL);
-            return true;
-        };
-        return false;
+        AtomicBoolean result = new AtomicBoolean(false);
+
+        emailVerificationRepository.findByEmailToken(emailToken,userSeq).ifPresent(
+                emailVerification -> {
+                    Users users = userRepository.findById(userSeq).orElseThrow(()->new GlobalException(ErrorCode.NOTFOUND_ID));
+                    users.setRole("ROLE_USER");
+                    users.getUserDetail().setUserState(State.NOMAL);
+                    result.set(true);
+                }
+        );
+
+        return result.get();
     }
 
     @Override
@@ -66,11 +73,9 @@ public class EmailVerificationServiceImpl implements EmailVerificationService {
     @Override
     public String getEmailToken(Long userSeq) {
 
-        EmailVerification emailVerification = emailVerificationRepository.findByUserSeq(userSeq);
-
-        if(emailVerification == null){
-            throw new GlobalException(ErrorCode.NOTFOUND_EMAILTOKEN);
-        }
+        EmailVerification emailVerification = emailVerificationRepository.findByUserSeq(userSeq).orElseThrow(
+                () -> new GlobalException(ErrorCode.NOTFOUND_EMAILTOKEN)
+        );
 
         return emailVerification.getEmailToken();
     }
