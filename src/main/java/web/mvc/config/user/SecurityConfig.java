@@ -13,6 +13,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.logout.LogoutHandler;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 
@@ -27,6 +28,7 @@ public class SecurityConfig {
     //AuthenticationManager가 인자로 받을 AuthenticationConfiguraion 객체 생성자 주입
     private final AuthenticationConfiguration authenticationConfiguration;
     private final JWTUtil jwtUtil;
+    private final CustomLogoutHandler customLogoutHandler;
 
     //AuthenticationManager Bean 등록
     @Bean
@@ -77,10 +79,11 @@ public class SecurityConfig {
                                 ,"email/**") // ROLE을 설정안해서 기본 ROLE은 ROLE_USER만 permit이 가능하다,토큰없이는 보기만 가능 상세보기x
                         .permitAll()
                         .requestMatchers("/admin","/admin/**")
-                        .hasRole("ADMIN") // Role설정  ROLE_ADMIN만 permit가능, ROLE_접두어가 자동으로 붙고 따로 설정안하면 ROLE_USER가 기본으로 붙는다 -> ROLE_""를 설정한다,
+                        //.hasRole("ADMIN") // Role설정  ROLE_ADMIN만 permit가능, ROLE_접두어가 자동으로 붙고 따로 설정안하면 ROLE_USER가 기본으로 붙는다 -> ROLE_""를 설정한다,
+                        .permitAll() //  임시로 모든 설정 허용 나중에 주석
                         .anyRequest() // 그 외 모든 요청
-                        .authenticated()); // 인증이 필요하다
-                        //.permitAll()); // 임시로 모든 설정 허용
+                        //.authenticated()); // 인증이 필요하다
+                        .permitAll()); // 임시로 모든 설정 허용 나중에 주석
 
         //(서버)세션 설정 - JWT를 이용 할것이기 때문에 stateless설정 -> 사용자 정보를 (서버)세션에 저장하지 않겠다 -> 토큰으로 주고 받겠다
         http.sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
@@ -93,6 +96,13 @@ public class SecurityConfig {
         // addFilterAt 매개변수 인자 필터 대체
         // addFilterBefore  매개변수 인자 필터 전에 추가
         // addFilterAfter   매개변수 인자 필터 후에 추가
+
+
+        // logout 했을때 해야되는 기능
+        http.logout(logout ->
+                logout.logoutUrl("/logout") // 로그아웃요청 url
+                        .addLogoutHandler(customLogoutHandler)
+                        .logoutSuccessUrl("/users/logoutTest")); // 로그 아웃 성공시 가야되는 url
 
         return http.build();
     }

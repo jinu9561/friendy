@@ -1,4 +1,4 @@
-package web.mvc.domain.user;
+package web.mvc.entity.user;
 
 
 import jakarta.persistence.*;

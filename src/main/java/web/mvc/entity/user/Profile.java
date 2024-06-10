@@ -1,8 +1,9 @@
-package web.mvc.domain.user;
+package web.mvc.entity.user;
 
 
 import jakarta.persistence.*;
 import lombok.*;
+import web.mvc.enums.users.ImgStatus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,8 +22,13 @@ public class Profile {
     private Long profileSeq;
     @Column(length = 300)
     private String profileMainImg;
+    @Column(length = 10)
+    private String profileMainImgType;
+    @Column(length = 100)
+    private String profileMainImgSize;
     @Column(length = 500)
     private String introduce;
+    private ImgStatus imgStatus;
 
     @OneToOne(fetch = FetchType.LAZY)
     private Users user;

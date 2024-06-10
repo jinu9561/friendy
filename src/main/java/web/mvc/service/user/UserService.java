@@ -13,4 +13,7 @@ public interface UserService {
     // id 중복 체크
     public boolean duplicateIdCheck(String userId);
 
+    // 개인 정보 수정하기
+    public String alter(Long userSeq,UsersDTO usersDTO);
+
 }

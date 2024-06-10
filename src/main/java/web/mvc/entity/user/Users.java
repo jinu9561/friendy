@@ -1,4 +1,4 @@
-package web.mvc.domain.user;
+package web.mvc.entity.user;
 
 
 import jakarta.persistence.*;
@@ -49,11 +49,11 @@ public class Users {
     @OneToOne(mappedBy = "user" , cascade = CascadeType.ALL)
     private Profile profile;
     @OneToMany(mappedBy = "user" , cascade = CascadeType.ALL)
-    private List<JellyRecord> jellyRecord;
+    private List<JellyTransaction> jellyTransactionList;
     @OneToOne(mappedBy = "user" , cascade = CascadeType.ALL)
     private  EmailVerification emailVerification;
     @OneToOne(mappedBy = "user" , cascade = CascadeType.ALL)
     private  SmsVerification smsVerification;
-    //   git commit
+
 }
 
