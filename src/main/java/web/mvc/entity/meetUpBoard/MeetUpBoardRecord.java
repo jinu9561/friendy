@@ -15,14 +15,14 @@ import java.util.Date;
 
 public class MeetUpBoardRecord {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "partyboard_detail_img_seq")
-    @SequenceGenerator(allocationSize = 1, sequenceName = "partyboard_detail_img_seq", name = "partyboard_detail_img_seq")
-    private Long partyRecordSeq;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "meetup_detail_img_seq")
+    @SequenceGenerator(allocationSize = 1, sequenceName = "meetup_detail_img_seq", name = "meetup_detail_img_seq")
+    private Long meetUpRecordSeq;
 
-    @JoinColumn(name = "partyboard_seq")
-    private Long partySeq;
+    @JoinColumn(name = "meetup_seq")
+    private Long meetUpSeq;
 
     @CreationTimestamp
-    private Date partyRegDate;
+    private Date meetUpRegDate;
 
 }

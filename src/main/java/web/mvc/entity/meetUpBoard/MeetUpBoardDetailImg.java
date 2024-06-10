@@ -12,8 +12,8 @@ import lombok.*;
 @Builder
 public class MeetUpBoardDetailImg {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "partyboard_detail_img_seq")
-    @SequenceGenerator(allocationSize = 1, sequenceName = "partyboard_detail_img_seq", name = "partyboard_detail_img_seq")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "meetup_detail_img_seq")
+    @SequenceGenerator(allocationSize = 1, sequenceName = "meetup_detail_img_seq", name = "meetup_detail_img_seq")
     private Long partyDetailImgSeq;
 
 

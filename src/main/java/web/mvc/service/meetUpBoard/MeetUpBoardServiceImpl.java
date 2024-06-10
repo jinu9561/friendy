@@ -7,8 +7,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import web.mvc.dto.meetUpBoard.MeetUpBoardDTO;
 import web.mvc.entity.meetUpBoard.MeetUpBoard;
-import web.mvc.repository.partyRoom.MeetUpBoardDetailImgRepository;
-import web.mvc.repository.partyRoom.MeetUpBoardRepository;
+import web.mvc.repository.meetUpBoard.MeetUpBoardDetailImgRepository;
+import web.mvc.repository.meetUpBoard.MeetUpBoardRepository;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -21,7 +21,7 @@ import java.util.List;
 public class MeetUpBoardServiceImpl implements MeetUpBoardService {
 
     private final MeetUpBoardRepository meetUpBoardRepository;
-    private final MeetUpBoardDetailImgRepository partyBoardDetailImgRepository;
+    private final MeetUpBoardDetailImgRepository meetUpBoardDetailImgRepository;
 
 
     @Override
@@ -74,8 +74,8 @@ public class MeetUpBoardServiceImpl implements MeetUpBoardService {
     @Override
     public List<Date> findByPartySeq() {
         List<Date> list = meetUpBoardRepository.findAllPartDeadLine();
-        System.out.println("list:" + list);
-        return null;
+        System.out.println("list 여기는?:" + list);
+        return list;
     }
 
     //스캐줄러
@@ -83,18 +83,27 @@ public class MeetUpBoardServiceImpl implements MeetUpBoardService {
     @Override
     //    @Scheduled(cron = "0 0 * * * ?") //매시간마다 배포시에는 주석 해제해야함.
 
-    @Scheduled(cron = "0 35 01 * * ?") //테스트용
+    @Scheduled(cron = "0 38 14 * * ?") //테스트용
     public void checkDeadLine() {  //받아오는 타입 문제 ..
 
         List<Date> list = findByPartySeq();
-        System.out.println("list:" + list);
+        System.out.println(" 서비스단 리스트 list :" + list);
         LocalDateTime now = LocalDateTime.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd HH");
+        LocalDateTime truncatedNow = now.withMinute(0).withSecond(0).withNano(0);
+
+        System.out.println("now:" + now);
+        System.out.println("truncatedNow: "+ truncatedNow);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.S");
         String formattedNow = now.format(formatter);
-        System.out.println(formattedNow);
-        for (Date date : list) { // 향상된 for문 사용
-            // 여기에서 각 date에 대한 처리를 수행합니다.
+        System.out.println("formattedNow"+formattedNow);
+        for (Date date : list) {
+                String deadList = date.toString();
+            System.out.println("deadList"+ deadList);
             System.out.println(date);
+
+            if(deadList.equals(formattedNow)){
+                System.out.println("실험성공?");
+            }
 
             List<Long> Seq = meetUpBoardRepository.findByPartySeqByDeadLine(date);
             for (Long partSeq : Seq) {
