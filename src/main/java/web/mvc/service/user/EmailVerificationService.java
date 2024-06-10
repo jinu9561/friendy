@@ -1,8 +1,8 @@
 package web.mvc.service.user;
 
 import jakarta.mail.MessagingException;
-import web.mvc.domain.user.EmailVerification;
-import web.mvc.domain.user.Users;
+import web.mvc.entity.user.EmailVerification;
+import web.mvc.entity.user.Users;
 
 public interface EmailVerificationService {
 

@@ -3,7 +3,7 @@ package web.mvc.repository.user;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import web.mvc.domain.user.Users;
+import web.mvc.entity.user.Users;
 
 public interface UserRepository extends JpaRepository<Users, Long> {
 

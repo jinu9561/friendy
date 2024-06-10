@@ -5,6 +5,7 @@ import lombok.*;
 import web.mvc.enums.users.Classification;
 import web.mvc.enums.users.Gender;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -30,7 +31,8 @@ public class UsersDTO {
     private Classification country;
     private Gender gender;
 
-    private List<InterestDTO> interests;
+    private List<InterestDTO> interestList;
+    private UserDetailDTO userDetail;
 
 
 

@@ -8,12 +8,12 @@ import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import web.mvc.domain.user.*;
 import web.mvc.dto.user.AdminDTO;
 import web.mvc.dto.user.InterestDTO;
 import web.mvc.dto.user.UsersDTO;
+import web.mvc.entity.user.*;
 import web.mvc.enums.users.State;
-import web.mvc.exception.common.ErrorCode;
+import web.mvc.exception.user.ErrorCode;
 import web.mvc.exception.common.GlobalException;
 import web.mvc.repository.user.UserDetailRepository;
 import web.mvc.repository.user.UserRepository;
@@ -33,7 +33,6 @@ public class UserServiceImpl implements UserService {
 
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
-    private final UserDetailRepository userDetailRepository;
     private final EmailVerificationService emailVerificationService;
 
     private final AdminDTO adminDTO;
@@ -41,6 +40,7 @@ public class UserServiceImpl implements UserService {
     private String content ="다음 인증 코드를 사용하여 회원가입을 완료하세요: {code}";
     private String failMsg = "메일 발송을 실패했습니다";
     private String registerMsg = "해당 이메일로 인증 코드를 보냈습니다 확인해 주세요";
+    private String updateMsg ="수정에 성공했습니다";
 
 
     @EventListener(ApplicationReadyEvent.class)
@@ -112,6 +112,7 @@ public class UserServiceImpl implements UserService {
                     .phone(usersDTO.getPhone())
                     .country(usersDTO.getCountry())
                     .gender(usersDTO.getGender())
+                    .Role("인증 미완료")
                     .build();
 
             // 저장하기 전에 UserDetail, profile 생성
@@ -119,12 +120,13 @@ public class UserServiceImpl implements UserService {
             Profile profile = new Profile(user);
             userDetail.setUserState(State.WAITING);
 
-            // user에 userDetail, profile 저장
+            // user에 userDetail, profile  저장
             user.setUserDetail(userDetail);
             user.setProfile(profile);
+
             // user에 관심사 저장
             List<Interest> savedList  = user.getProfile().getInterestList();
-            List<InterestDTO> interests = usersDTO.getInterests();
+            List<InterestDTO> interests = usersDTO.getInterestList();
 
             for(InterestDTO i : interests){
                 Interest interest = Interest.builder()
@@ -164,6 +166,20 @@ public class UserServiceImpl implements UserService {
         }
         
         return false;
+    }
+
+    @Override
+    public String alter(Long userSeq,UsersDTO usersDTO) {
+        Users user = userRepository.findById(userSeq).orElseThrow(()->new GlobalException(ErrorCode.NOTFOUND_ID));
+
+        String newPwd = passwordEncoder.encode(user.getUserPwd());
+
+        user.setAddress(usersDTO.getAddress());
+        user.setEmail(usersDTO.getEmail());
+        user.setPhone(usersDTO.getPhone());
+        user.setUserPwd(newPwd);
+
+        return updateMsg;
     }
 
 }
