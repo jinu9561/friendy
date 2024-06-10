@@ -1,4 +1,4 @@
-package web.mvc.entity.partyBoard;
+package web.mvc.entity.meetUpBoard;
 
 
 import jakarta.persistence.*;
@@ -10,24 +10,24 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class PartyDetailImg {
+public class MeetUpBoardDetailImg {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "partyboard_detail_img_seq")
     @SequenceGenerator(allocationSize = 1, sequenceName = "partyboard_detail_img_seq", name = "partyboard_detail_img_seq")
     private Long partyDetailImgSeq;
 
 
-    @JoinColumn(name="partyboard_seq")
-    private Long partySeq;
+    @JoinColumn(name="meetup_seq")
+    private Long meetUpSeq;
 
     @Column(length = 200)
-    private String partyDetailImgSrc;
+    private String meetUpDetailImgSrc;
 
     @Column(length = 30)
-    private String partyDetailImgType;
+    private String meetUpDetailImgType;
 
 
     @Column(length = 30)
-    private String partyDetailImgSize;
+    private String meetUpDetailImgSize;
 
 }
