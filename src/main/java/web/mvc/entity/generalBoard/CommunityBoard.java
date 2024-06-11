@@ -18,7 +18,10 @@ import java.time.LocalDateTime;
 public class CommunityBoard {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    //시퀀스 전략을 사용하여 기본 키 값을 자동으로 생성하도록 설정. generator 속성의 값은 아래의 name과 일치해야 함.
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "commBoardSeq")
+    //sequencName은 데이터베이스 시퀀스의 이름. name은 JPA에서 이 시퀀스를 식별하는 이름.
+    @SequenceGenerator(allocationSize = 1, sequenceName = "commBoardSeq", name = "commBoardSeq")
     @Column(name = "COMM_BOARD_SEQ")
     private Long commBoardSeq;
 
