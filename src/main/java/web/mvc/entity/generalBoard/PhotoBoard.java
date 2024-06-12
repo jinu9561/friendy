@@ -2,6 +2,8 @@ package web.mvc.entity.generalBoard;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import web.mvc.entity.user.Users;
 
 import java.time.LocalDateTime;
@@ -33,9 +35,11 @@ public class PhotoBoard {
     @Column(name = "INTEREST_SEQ", nullable = false)
     private Long interestSeq;
 
+    @CreationTimestamp
     @Column(name = "PHORTO_BOARD_REGDATE", nullable = false)
     private LocalDateTime photoBoardRegDate;
 
+    @UpdateTimestamp
     @Column(name = "PHOTO_UPDATE_DATE", nullable = false)
     private LocalDateTime photoUpdateDate;
 
@@ -45,16 +49,16 @@ public class PhotoBoard {
     @Column(name = "PHOTO_BOARD_LIKE")
     private int photoBoardLike;
 
-    // 엔티티가 저장되기 전에 호출되는 메서드
-    @PrePersist
-    protected void onCreate() {
-        this.photoBoardRegDate = LocalDateTime.now();
-        this.photoUpdateDate = LocalDateTime.now();
-    }
-
-    // 엔티티가 업데이트되기 전에 호출되는 메서드
-    @PreUpdate
-    protected void onUpdate() {
-        this.photoUpdateDate = LocalDateTime.now();
-    }
+//    // 엔티티가 저장되기 전에 호출되는 메서드
+//    @PrePersist
+//    protected void onCreate() {
+//        this.photoBoardRegDate = LocalDateTime.now();
+//        this.photoUpdateDate = LocalDateTime.now();
+//    }
+//
+//    // 엔티티가 업데이트되기 전에 호출되는 메서드
+//    @PreUpdate
+//    protected void onUpdate() {
+//        this.photoUpdateDate = LocalDateTime.now();
+//    }
 }
