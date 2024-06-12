@@ -17,8 +17,8 @@ public class CustomMessageService {
         myMsg.setText("메시지 테스트입니다.");
 
         DefaultMessageDto.Link link = new DefaultMessageDto.Link();
-//        link.setWebUrl("https://developers.kakao.com");
-//        link.setMobileUrl("https://developers.kakao.com");
+//        link.setWebUrl("http://pf.kakao.com/_SxkLcG");
+//        link.setMobileUrl("http://pf.kakao.com/_SxkLcG");
 
         link.setWebUrl("http://localhost:9000");
         link.setMobileUrl("http://localhost:9000");

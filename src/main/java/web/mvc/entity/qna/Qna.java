@@ -23,7 +23,6 @@ public class Qna {
     private Long qnaSeq;
     @Column(length = 1000)
     private String qnaDesc;
-    @Column(length = 100)
     private int qnaStatus;
     @CreationTimestamp
     private LocalDateTime qnaUpdateDate;

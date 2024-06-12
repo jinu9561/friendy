@@ -11,12 +11,12 @@ import java.util.List;
 public interface QnaRepository extends JpaRepository<Qna, Long> {
 
     @Query("select q from Qna q left join fetch q.user where q.user.userSeq = ?1")
-    public List<Qna> findByQnaByUser(Long userSeq);
+    List<Qna> findByQnaByUser(Long userSeq);
 
 //    @Query("select q from Qna q where q.qnaDesc = ?1")
 //    public Qna findReplyByQuestion(String question);
 
     @Query("select q from Qna q where q.qnaDesc like %?1%")
-    public List<Qna> findRepliesByQuestionContaining(String qnaDesc);
+    List<Qna> findRepliesByQuestionContaining(String qnaDesc);
 
 }

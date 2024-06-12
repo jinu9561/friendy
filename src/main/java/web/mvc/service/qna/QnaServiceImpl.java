@@ -3,7 +3,6 @@ package web.mvc.service.qna;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import web.mvc.dto.qna.QnaDTO;
 import web.mvc.entity.qna.Qna;
@@ -20,10 +19,8 @@ import java.util.stream.Collectors;
 @Slf4j
 public class QnaServiceImpl implements QnaService{
 
-    @Autowired
-    private QnaRepository qnaRepository;
-    @Autowired
-    private UserRepository userRepository;
+    private final QnaRepository qnaRepository;
+    private final UserRepository userRepository;
 
     public List<QnaDTO> getQnaList(Long userSeq) {
         List<Qna> list = qnaRepository.findByQnaByUser(userSeq);
