@@ -23,5 +23,6 @@ public class MeetupRecord {
     private LocalDateTime userRegDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_seq")  // 외래 키를 지정
     private UserDetail userDetail;
 }

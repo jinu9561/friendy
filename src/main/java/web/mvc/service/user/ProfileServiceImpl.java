@@ -14,18 +14,15 @@ import web.mvc.entity.user.Users;
 import web.mvc.dto.user.InterestDTO;
 import web.mvc.dto.user.ProFileDetailImgDTO;
 import web.mvc.enums.users.ImgStatus;
-import web.mvc.exception.user.ErrorCode;
+import web.mvc.exception.common.ErrorCode;
 import web.mvc.exception.common.GlobalException;
 import web.mvc.repository.user.InterestRepository;
 import web.mvc.repository.user.ProfileDetailImgRepository;
 import web.mvc.repository.user.ProfileRepository;
 import web.mvc.repository.user.UserRepository;
+import web.mvc.service.common.CommonService;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,6 +38,7 @@ public class ProfileServiceImpl implements ProfileService {
     private final UserRepository userRepository;
     private final ProfileDetailImgRepository profileDetailImgRepository;
     private final InterestRepository interestRepository;
+    private final CommonService commonService;
 
     @Value("${profile.save.dir}")
     private String uploadDir;
@@ -89,7 +87,7 @@ public class ProfileServiceImpl implements ProfileService {
     @Override
     public String uploadMainPicture(Long userSeq, MultipartFile file) {
         Profile profile = profileRepository.findByUserSeq(userSeq).orElseThrow(()->new GlobalException(ErrorCode.NOTFOUND_PROFILE));
-        Map<String, String>map =this.uploadFile(true,file);
+        Map<String, String>map =commonService.uploadFile(true,file,uploadDir);
 
         profile.setProfileMainImg(map.get("imgSrc"));
         profile.setProfileMainImgSize(map.get("imgSize"));
@@ -102,7 +100,7 @@ public class ProfileServiceImpl implements ProfileService {
     @Override
     public String uploadDetail(Long userSeq, MultipartFile file) {
         Profile profile = profileRepository.findByUserSeq(userSeq).orElseThrow(()->new GlobalException(ErrorCode.NOTFOUND_PROFILE));
-        Map<String, String>map =this.uploadFile(false,file);
+        Map<String, String>map =commonService.uploadFile(false,file,uploadDir);
         ProfileDetailImg profileDetailImg = new ProfileDetailImg(profile);
 
         profileDetailImg.setProfileDetailImgSrc(map.get("imgSrc"));
@@ -138,45 +136,4 @@ public class ProfileServiceImpl implements ProfileService {
         return uploadMsg;
     }
 
-    public Map<String,String> uploadFile(boolean mainImg ,MultipartFile file) {
-        Map<String,String> map = new HashMap<>();
-
-        if(file.isEmpty()){
-            throw new GlobalException(ErrorCode.WRONG_IMG);
-        }
-
-        String uploadPath = mainImg ? uploadDir : uploadDir + "/detail";
-
-        File uploadFile = new File(uploadPath);
-        if(!uploadFile.exists()){
-            uploadFile.mkdirs();
-        }
-
-        String filename = uploadPath+"/"+file.getOriginalFilename();
-        Path path = Paths.get(filename);
-
-        try {
-            Files.write(path,file.getBytes());
-
-            // 파일의 형식과 크기를 가져오기
-            String imgType = file.getContentType();
-            long imgSize = file.getSize();
-
-            // 이미지 형식 검사
-            if (!imgType.equals("image/png") && !imgType.equals("image/jpeg")
-            && !imgType.equals("image/gif") && !imgType.equals("image/jpg")){
-                throw new GlobalException(ErrorCode.WRONG_IMG);
-            }
-
-            map.put("imgType",imgType);
-            map.put("imgSize",Long.toString(imgSize));
-            map.put("imgSrc",path.toString());
-
-        }catch (IOException e){
-            throw new GlobalException(ErrorCode.OVER_FILE);
-        }
-
-        log.info("저장된 이미지 경로 : ",path.toString());
-        return map;
-    }
 }

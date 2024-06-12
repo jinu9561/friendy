@@ -33,6 +33,7 @@ public class UserDetail {
     private LocalDateTime lastLoginDate;
 
     @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_seq")
     private Users user;
     @OneToMany(mappedBy = "userDetail" , cascade = CascadeType.ALL)
     private List<MeetupRecord> meetupRecord;

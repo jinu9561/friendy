@@ -25,6 +25,7 @@ public class EmailVerification {
     private LocalDateTime emailRegDate;
 
     @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_seq")  // 외래 키를 지정
     private Users user;
 
     public EmailVerification(Users user) {

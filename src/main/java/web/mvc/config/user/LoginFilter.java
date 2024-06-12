@@ -80,10 +80,14 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         Map<String, Object> map = new HashMap<>();
         Users users= customMemberDetails.getUsers();
         map.put("userId",users.getUserId() );
+        map.put("userPwd",users.getUserPwd());
         map.put("country",users.getCountry() );
         map.put("gender",users.getGender() );
         map.put("userName",users.getUserName() );
         map.put("userSeq",users.getUserSeq() );
+        map.put("nickName",users.getNickName() );
+        map.put("userJelly",users.getUserDetail().getUserJelly());
+
         if (!role.equals("ROLE_ADMIN")) {
             map.put("userState", users.getUserDetail().getUserState());
         }

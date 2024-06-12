@@ -27,6 +27,7 @@ public class ProfileDetailImg {
 
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "profile_seq")  // 외래 키를 지정
     private Profile profile;
 
     public ProfileDetailImg(Profile profile) {
