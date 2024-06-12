@@ -1,4 +1,4 @@
-package web.mvc.exception.user;
+package web.mvc.exception.common;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +18,8 @@ public enum ErrorCode {
     NOTFOUND_SMSTOKEN(606,"핸드폰 번호가 조회되지 않습니다"),
     WRONG_IMG(607,"이미지 파일형식이 올바르지 않습니다"),
     OVER_FILE(608,"파일의 크기가 초과되었습니다."),
-    NOTFOUND_PROFILE(609, "프로필 조회에 실패했습니다");
+    NOTFOUND_PROFILE(609, "프로필 조회에 실패했습니다"),
+    NOTFOUND_PLACE(610,"장소가 조회에 실패했습니다");
 
     private final int status;
     private final String message;

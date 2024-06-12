@@ -3,6 +3,7 @@ package web.mvc.entity.user;
 
 import jakarta.persistence.*;
 import lombok.*;
+import web.mvc.entity.place.PlaceRecommendation;
 import web.mvc.enums.users.Classification;
 import web.mvc.enums.users.Gender;
 
