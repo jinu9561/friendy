@@ -11,11 +11,8 @@ import web.mvc.entity.qna.Qna;
 import java.util.List;
 import java.util.Optional;
 
-@Slf4j
 @Repository
 public interface QnaRepository extends JpaRepository<Qna, Long> {
-
-    private Logger log = LoggerFactory.getLogger(QnaRepository.class);
 
     @Query("select q from Qna q left join fetch q.user where q.user.userSeq = ?1")
     public List<Qna> findByQnaByUser(Long userSeq);
