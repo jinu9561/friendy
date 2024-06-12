@@ -22,7 +22,7 @@ public class Profile {
     private Long profileSeq;
     @Column(length = 300)
     private String profileMainImg;
-    @Column(length = 10)
+    @Column(length = 100)
     private String profileMainImgType;
     @Column(length = 100)
     private String profileMainImgSize;
@@ -31,6 +31,7 @@ public class Profile {
     private ImgStatus imgStatus;
 
     @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_seq")  // 외래 키를 지정
     private Users user;
     @OneToMany(mappedBy = "profile" , cascade = CascadeType.ALL)
     private List<ProfileDetailImg> profileDetailImgList;
