@@ -1,20 +1,20 @@
 package web.mvc.entity.generalBoard;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import web.mvc.entity.user.Users;
 
 import java.time.LocalDateTime;
 
-@ToString //나중에 뺄수도(-> 무한루프 발생 가능성?)
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString
 @Setter
 @Getter
-@Entity
-@Table(name = "CommunityBoard")
+@Entity//서버 실행시에 해당 객체로 테이블 매핑생성
+@Builder
 public class CommunityBoard {
 
     @Id

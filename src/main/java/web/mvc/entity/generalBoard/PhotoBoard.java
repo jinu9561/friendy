@@ -1,19 +1,18 @@
 package web.mvc.entity.generalBoard;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import web.mvc.entity.user.Users;
 
 import java.time.LocalDateTime;
 
-
-@ToString //나중에 뺄수도(-> 무한루프 발생 가능성?)
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString
 @Setter
 @Getter
-@Entity
-@Table(name = "PhotoBoard")
+@Entity//서버 실행시에 해당 객체로 테이블 매핑생성
+@Builder
 public class PhotoBoard {
 
     @Id
@@ -46,4 +45,16 @@ public class PhotoBoard {
     @Column(name = "PHOTO_BOARD_LIKE")
     private int photoBoardLike;
 
+    // 엔티티가 저장되기 전에 호출되는 메서드
+    @PrePersist
+    protected void onCreate() {
+        this.photoBoardRegDate = LocalDateTime.now();
+        this.photoUpdateDate = LocalDateTime.now();
+    }
+
+    // 엔티티가 업데이트되기 전에 호출되는 메서드
+    @PreUpdate
+    protected void onUpdate() {
+        this.photoUpdateDate = LocalDateTime.now();
+    }
 }
