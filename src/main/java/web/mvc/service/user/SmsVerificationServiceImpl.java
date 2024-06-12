@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 import web.mvc.entity.user.SmsVerification;
 import web.mvc.entity.user.Users;
 import web.mvc.enums.users.State;
-import web.mvc.exception.user.ErrorCode;
+import web.mvc.exception.common.ErrorCode;
 import web.mvc.exception.common.GlobalException;
 import web.mvc.repository.user.SmsverificationRepository;
 import web.mvc.repository.user.UserRepository;

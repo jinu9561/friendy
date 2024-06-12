@@ -13,9 +13,8 @@ import web.mvc.dto.user.InterestDTO;
 import web.mvc.dto.user.UsersDTO;
 import web.mvc.entity.user.*;
 import web.mvc.enums.users.State;
-import web.mvc.exception.user.ErrorCode;
+import web.mvc.exception.common.ErrorCode;
 import web.mvc.exception.common.GlobalException;
-import web.mvc.repository.user.UserDetailRepository;
 import web.mvc.repository.user.UserRepository;
 
 import java.text.ParseException;

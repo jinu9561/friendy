@@ -9,7 +9,7 @@ import web.mvc.entity.user.ProfileDetailImg;
 import web.mvc.entity.user.UserDetail;
 import web.mvc.entity.user.Users;
 import web.mvc.exception.common.GlobalException;
-import web.mvc.exception.user.ErrorCode;
+import web.mvc.exception.common.ErrorCode;
 import web.mvc.repository.user.ProfileDetailImgRepository;
 import web.mvc.repository.user.ProfileRepository;
 import web.mvc.repository.user.UserDetailRepository;
