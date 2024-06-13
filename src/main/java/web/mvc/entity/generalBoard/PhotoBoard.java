@@ -18,7 +18,10 @@ import java.time.LocalDateTime;
 public class PhotoBoard {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    //시퀀스 전략을 사용하여 기본 키 값을 자동으로 생성하도록 설정. generator 속성의 값은 아래의 name과 일치해야 함.
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "photoBoardSeq")
+    //sequencName은 데이터베이스 시퀀스의 이름. name은 JPA에서 이 시퀀스를 식별하는 이름.
+    @SequenceGenerator(allocationSize = 1, sequenceName = "photoBoardSeq", name = "photoBoardSeq")
     @Column(name = "PHOTO_BOARD_SEQ")
     private Long photoBoardSeq;
 
@@ -36,12 +39,12 @@ public class PhotoBoard {
     private Long interestSeq;
 
     @CreationTimestamp
-    @Column(name = "PHORTO_BOARD_REGDATE", nullable = false)
+    @Column(name = "PHOTO_BOARD_REG_DATE", nullable = false)
     private LocalDateTime photoBoardRegDate;
 
     @UpdateTimestamp
-    @Column(name = "PHOTO_UPDATE_DATE", nullable = false)
-    private LocalDateTime photoUpdateDate;
+    @Column(name = "PHOTO_BOARD_UPDATE_DATE", nullable = false)
+    private LocalDateTime photoBoardUpdateDate;
 
     @Column(name = "PHOTO_BOARD_PWD", nullable = false)
     private String photoBoardPwd;
@@ -49,16 +52,5 @@ public class PhotoBoard {
     @Column(name = "PHOTO_BOARD_LIKE")
     private int photoBoardLike;
 
-//    // 엔티티가 저장되기 전에 호출되는 메서드
-//    @PrePersist
-//    protected void onCreate() {
-//        this.photoBoardRegDate = LocalDateTime.now();
-//        this.photoUpdateDate = LocalDateTime.now();
-//    }
-//
-//    // 엔티티가 업데이트되기 전에 호출되는 메서드
-//    @PreUpdate
-//    protected void onUpdate() {
-//        this.photoUpdateDate = LocalDateTime.now();
-//    }
+
 }

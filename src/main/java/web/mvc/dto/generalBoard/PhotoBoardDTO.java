@@ -20,17 +20,18 @@ public class PhotoBoardDTO {
     private Long interestSeq;
     private String photoBoardPwd;
     private int photoBoardLike;
+    private LocalDateTime photoBoardRegDate;
+    private LocalDateTime photoBoardUpdateDate;
 
     // 사용자가 보낸 DTO에서 엔티티로 변환하는 메서드
-    public PhotoBoard toPhotoBoardEntity(PhotoBoardDTO photoBoardDTO) {
+    public PhotoBoard toPhotoBoardEntity(PhotoBoardDTO photoBoardDTO, Users user) {
         return PhotoBoard.builder()
-                .photoBoardSeq(this.photoBoardSeq)
-                .user(Users.builder().userSeq(photoBoardDTO.getUserSeq()).build())
-                .photoBoardTitle(this.photoBoardTitle)
-                .photoImgSrc(this.photoImgSrc)
-                .interestSeq(this.interestSeq)
-                .photoBoardPwd(this.photoBoardPwd)
-                .photoBoardLike(this.photoBoardLike)
+                .user(user)
+                .photoBoardTitle(photoBoardDTO.getPhotoBoardTitle())
+                .photoImgSrc(photoBoardDTO.getPhotoImgSrc())
+                .interestSeq(photoBoardDTO.getInterestSeq())
+                .photoBoardPwd(photoBoardDTO.getPhotoBoardPwd())
+                .photoBoardLike(photoBoardDTO.getPhotoBoardLike())
                 .build();
     }
 
@@ -43,7 +44,9 @@ public class PhotoBoardDTO {
                 photoBoard.getPhotoImgSrc(),
                 photoBoard.getInterestSeq(),
                 photoBoard.getPhotoBoardPwd(),
-                photoBoard.getPhotoBoardLike()
+                photoBoard.getPhotoBoardLike(),
+                photoBoard.getPhotoBoardRegDate(),
+                photoBoard.getPhotoBoardUpdateDate()
         );
     }
 }

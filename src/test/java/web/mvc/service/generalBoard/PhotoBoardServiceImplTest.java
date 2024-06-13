@@ -13,4 +13,16 @@ class PhotoBoardServiceImplTest {
     @Test
     void createPhotoBoard() {
     }
+
+    @Test
+    void getPhotoBoardById() {
+    }
+
+    @Test
+    void updatePhotoBoard() {
+    }
+
+    @Test
+    void deletePhotoBoard() {
+    }
 }

@@ -1,10 +1,7 @@
 package web.mvc.service.generalBoard;
 
-
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import web.mvc.dto.generalBoard.PhotoBoardDTO;
@@ -24,9 +21,6 @@ public class PhotoBoardServiceImpl implements PhotoBoardService {
     private final PhotoBoardRepository photoBoardRepository;
     private final UserRepository userRepository;
 
-
-    /*Transactional이 적용된 메서드나 클래스는 트랜잭션 내에서 실행.
-    모든 데이터베이스 작업이 성공적으로 완료되면 트랜잭션이 커밋되고, 그렇지 않으면 롤백*/
     @Transactional(readOnly=true)
     @Override
     public List<PhotoBoardDTO> getAllPhotoBoards() {
@@ -38,45 +32,97 @@ public class PhotoBoardServiceImpl implements PhotoBoardService {
             throw new RuntimeException("사진이 없습니다.");
         }
 
-        return photoBoards.stream()
+        List<PhotoBoardDTO> photoBoardDTOs = photoBoards.stream()
                 .map(PhotoBoardDTO::fromPhotoBoardEntity)
                 .collect(Collectors.toList());
+
+        log.info("Fetched {} photo boards", photoBoardDTOs.size());
+        return photoBoardDTOs;
     }
+
     @Transactional
     @Override
     public PhotoBoardDTO createPhotoBoard(PhotoBoardDTO photoBoardDTO) {
-        log.info("PhotoBoardDTOseq = {}", photoBoardDTO.getPhotoBoardSeq());
-        PhotoBoard photoBoard = photoBoardDTO.toPhotoBoardEntity(photoBoardDTO);
-        PhotoBoard savedPhotoBoard = photoBoardRepository.save(photoBoard);
-        log.info("PhotoBoard created with ID: {}", savedPhotoBoard.getPhotoBoardSeq());
-        return PhotoBoardDTO.fromPhotoBoardEntity(savedPhotoBoard);
+        log.info("Creating PhotoBoard with title: {}", photoBoardDTO.getPhotoBoardTitle());
 
+        // 사용자 엔티티 조회
+        Users user = userRepository.findById(photoBoardDTO.getUserSeq())
+                .orElseThrow(() -> new RuntimeException("User not found with userid: " + photoBoardDTO.getUserSeq()));
+
+        // 조회된 사용자 객체를 변환 메서드에 전달하여 PhotoBoard 엔티티 생성
+        PhotoBoard photoBoard = photoBoardDTO.toPhotoBoardEntity(photoBoardDTO, user);
+
+        // PhotoBoard 엔티티 저장
+        PhotoBoard savedPhotoBoard = photoBoardRepository.save(photoBoard);
+        log.info("PhotoBoard created with SEQ: {}", savedPhotoBoard.getPhotoBoardSeq());
+
+        // 저장된 PhotoBoard 엔티티를 DTO로 변환하여 반환
+        PhotoBoardDTO createdPhotoBoardDTO = PhotoBoardDTO.fromPhotoBoardEntity(savedPhotoBoard);
+        log.info("PhotoBoardDTO created with SEQ: {}", createdPhotoBoardDTO.getPhotoBoardSeq());
+        return createdPhotoBoardDTO;
     }
 
-//    @Transactional
-//    @Override
-//    public PhotoBoardDTO getPhotoBoardById(Long photoBoardSeq) {
-//        PhotoBoard photoBoard = photoBoardRepository.findById(photoBoardSeq)
-//                .orElseThrow(() -> new RuntimeException("에러발생. exception 추후 수정"));
-//        return modelMapper.map(photoBoard, PhotoBoardDTO.class);
-//    }
-//
-//    @Transactional
-//    @Override
-//    public PhotoBoardDTO updatePhotoBoard(Long photoBoardSeq, PhotoBoardDTO photoBoardDTO) {
-//        PhotoBoard photoBoard = photoBoardRepository.findById(photoBoardSeq)
-//                .orElseThrow(() -> new RuntimeException("에러발생. exception 추후 수정"));
-//
-//        modelMapper.map(photoBoardDTO, photoBoard); //ModelMapper를 사용하여 photoBoardDTO의 값을 기존의 photoBoard 엔티티에 매핑
-//        photoBoard = photoBoardRepository.save(photoBoard);
-//        return modelMapper.map(photoBoard, PhotoBoardDTO.class);    //최종적으로 업데이트된 PhotoBoard 엔티티를 PhotoBoardDTO로 변환하여 반환
-//    }
-//
-//    @Transactional
-//    @Override
-//    public void deletePhotoBoard(Long photoBoardSeq) {
-//        PhotoBoard photoBoard = photoBoardRepository.findById(photoBoardSeq)
-//                .orElseThrow(() -> new RuntimeException("에러발생. exception 추후 수정"));
-//        photoBoardRepository.delete(photoBoard);
-//    }
+    @Transactional(readOnly = true)
+    @Override
+    public PhotoBoardDTO getPhotoBoardById(Long photoBoardSeq) {
+        log.info("Fetching photo board with SEQ: {}", photoBoardSeq);
+
+        // PhotoBoard 엔티티 조회
+        PhotoBoard photoBoard = photoBoardRepository.findById(photoBoardSeq)
+                .orElseThrow(() -> new RuntimeException("PhotoBoard not found with seq: " + photoBoardSeq));
+
+        // 엔티티를 DTO로 변환하여 반환
+        PhotoBoardDTO photoBoardDTO = PhotoBoardDTO.fromPhotoBoardEntity(photoBoard);
+        log.info("Fetched photo board with SEQ: {}", photoBoardDTO.getPhotoBoardSeq());
+        return photoBoardDTO;
+    }
+
+    @Transactional
+    @Override
+    public PhotoBoardDTO updatePhotoBoard(PhotoBoardDTO photoBoardDTO) {
+        long photoBoardSeq = photoBoardDTO.getPhotoBoardSeq();
+        log.info("Updating photo board with SEQ: {}", photoBoardSeq);
+
+        // 기존 PhotoBoard 엔티티 조회
+        PhotoBoard existingPhotoBoard = photoBoardRepository.findById(photoBoardSeq)
+                .orElseThrow(() -> new RuntimeException("PhotoBoard not found with seq: " + photoBoardSeq));
+
+        // 업데이트할 사용자 엔티티 조회
+        Users user = userRepository.findById(photoBoardDTO.getUserSeq())
+                .orElseThrow(() -> new RuntimeException("User not found with userid: " + photoBoardDTO.getUserSeq()));
+
+        // 엔티티 필드 업데이트
+        existingPhotoBoard.setPhotoBoardTitle(photoBoardDTO.getPhotoBoardTitle());
+        existingPhotoBoard.setPhotoImgSrc(photoBoardDTO.getPhotoImgSrc());
+        existingPhotoBoard.setInterestSeq(photoBoardDTO.getInterestSeq());
+        existingPhotoBoard.setPhotoBoardPwd(photoBoardDTO.getPhotoBoardPwd());
+        existingPhotoBoard.setPhotoBoardLike(photoBoardDTO.getPhotoBoardLike());
+        existingPhotoBoard.setUser(user);
+
+        // 엔티티 저장
+        PhotoBoard updatedPhotoBoard = photoBoardRepository.save(existingPhotoBoard);
+        log.info("PhotoBoard updated with SEQ: {}", updatedPhotoBoard.getPhotoBoardSeq());
+
+        // 저장된 엔티티를 DTO로 변환하여 반환
+        PhotoBoardDTO updatedPhotoBoardDTO = PhotoBoardDTO.fromPhotoBoardEntity(updatedPhotoBoard);
+        return updatedPhotoBoardDTO;
+    }
+
+    @Transactional
+    @Override
+    public String deletePhotoBoard(Long photoBoardSeq) {
+        log.info("Deleting photo board with SEQ: {}", photoBoardSeq);
+
+        // 삭제하려는 PhotoBoard 엔티티 조회
+        PhotoBoard photoBoard = photoBoardRepository.findById(photoBoardSeq)
+                .orElseThrow(() -> new RuntimeException("PhotoBoard not found with seq: " + photoBoardSeq));
+
+        // PhotoBoard 엔티티 삭제
+        photoBoardRepository.delete(photoBoard);
+        log.info("PhotoBoard deleted with SEQ: {}", photoBoardSeq);
+
+        String message = "PhotoBoard deleted successfully";
+        log.info(message);
+        return message;
+    }
 }
