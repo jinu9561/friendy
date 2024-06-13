@@ -81,6 +81,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         Users users= customMemberDetails.getUsers();
         map.put("userId",users.getUserId() );
         map.put("userPwd",users.getUserPwd());
+        map.put("userEmail",users.getEmail());
         map.put("country",users.getCountry() );
         map.put("gender",users.getGender() );
         map.put("userName",users.getUserName() );
