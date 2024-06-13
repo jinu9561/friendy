@@ -14,6 +14,7 @@ import java.util.Date;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class MeetUpBoard {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "meetup_seq")
@@ -39,8 +40,7 @@ public class MeetUpBoard {
     @UpdateTimestamp
     private Date meetUpUpdateTime;
 
-    @Column(length = 100)
-    private String meetUpPwd;
+    private int meetUpPwd;
 
     private int meetUpMaxEntry;
 
