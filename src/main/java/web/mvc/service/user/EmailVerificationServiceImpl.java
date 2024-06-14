@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+import web.mvc.dto.user.EmailVerificationDTO;
 import web.mvc.entity.user.EmailVerification;
 import web.mvc.entity.user.Users;
 import web.mvc.enums.users.State;
@@ -32,19 +33,22 @@ public class EmailVerificationServiceImpl implements EmailVerificationService {
     private String reContent ="다음 인증 코드를 사용하여 회원가입을 완료하세요: {code}";
     private String reSuccessMsg = "Email 인증번호 재발급이 완료 되었습니다";
     private String failMsg = "메일 발송을 실패했습니다";
+    private String reFailMsg = "회원 가입후 이용해 주세요";
 
 
     @Override
-    public boolean verifyEmail(String emailToken,Long userSeq) {
-        log.info("Verify email : {}", emailToken);
+    public boolean verifyEmail(EmailVerificationDTO emailVerificationDTO) {
+        log.info("Verify email : {}", emailVerificationDTO.getEmailToken());
         AtomicBoolean result = new AtomicBoolean(false);
 
-        emailVerificationRepository.findByEmailToken(emailToken,userSeq).ifPresent(
+        emailVerificationRepository.findByEmailToken(emailVerificationDTO.getEmailToken(),emailVerificationDTO.getUserId()).ifPresent(
                 emailVerification -> {
-                    Users users = userRepository.findById(userSeq).orElseThrow(()->new GlobalException(ErrorCode.NOTFOUND_ID));
-                    users.setRole("ROLE_USER");
-                    users.getUserDetail().setUserState(State.NOMAL);
-                    result.set(true);
+                    Users users = userRepository.findUserByUserId(emailVerificationDTO.getUserId());
+                    if(users != null){
+                        users.setRole("ROLE_USER");
+                        users.getUserDetail().setUserState(State.NOMAL);
+                        result.set(true);
+                    }
                 }
         );
 
@@ -81,18 +85,29 @@ public class EmailVerificationServiceImpl implements EmailVerificationService {
     }
 
     @Override
-    public String reEmailVerification(Long userSeq) {
+    public String reEmailVerification(EmailVerificationDTO emailVerificationDTO) {
 
-        Users user = userRepository.findById(userSeq).orElseThrow(()->new GlobalException(ErrorCode.NOTFOUND_ID));
-        String reCode = this.getEmailToken(userSeq);
+        Users user = userRepository.findUserByUserId(emailVerificationDTO.getUserId());
+        log.info("아이디 : " + emailVerificationDTO.getUserId());
+        log.info("user : " + user);
+        if(user == null){
+            log.info("해당 유저가 없다!");
+            return reFailMsg;
+        }
+
+
+        String reCode = this.getEmailToken(user.getUserSeq());
         reContent = reContent.replace("{code}",reCode);
 
         try{
-            this.sendEmailVerificationCode(user.getEmail(),reSubject,reContent);
+            this.sendEmailVerificationCode(emailVerificationDTO.getEmail(),reSubject,reContent);
         }catch (MessagingException e){
             return failMsg;
         }
         return reSuccessMsg;
+
+
+
     }
 
 

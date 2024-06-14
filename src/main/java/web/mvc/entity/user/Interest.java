@@ -20,7 +20,7 @@ public class Interest {
     private String interestCategory;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_seq")  // 외래 키를 지정
+    @JoinColumn(name = "profile_seq")  // 외래 키를 지정
     private Profile profile;
 
 }

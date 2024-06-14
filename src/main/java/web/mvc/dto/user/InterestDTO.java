@@ -16,5 +16,4 @@ public class InterestDTO {
     private Long interestSeq;
     private String interestCategory;
 
-
 }

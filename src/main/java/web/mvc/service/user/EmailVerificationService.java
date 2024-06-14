@@ -1,13 +1,14 @@
 package web.mvc.service.user;
 
 import jakarta.mail.MessagingException;
+import web.mvc.dto.user.EmailVerificationDTO;
 import web.mvc.entity.user.EmailVerification;
 import web.mvc.entity.user.Users;
 
 public interface EmailVerificationService {
 
     // 이메일 확인
-    public boolean verifyEmail(String emailToken,Long userSeq);
+    public boolean verifyEmail(EmailVerificationDTO emailVerificationDTO);
 
     // 이메일 토큰 저장
     public EmailVerification saveEmailToken(Users user);
@@ -19,5 +20,5 @@ public interface EmailVerificationService {
     public String getEmailToken(Long userSeq);
 
     // 이메일 재발급
-    public String reEmailVerification(Long userSeq);
+    public String reEmailVerification(EmailVerificationDTO emailVerificationDTO);
 }

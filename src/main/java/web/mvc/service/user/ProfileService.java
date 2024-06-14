@@ -1,5 +1,6 @@
 package web.mvc.service.user;
 
+import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
 import web.mvc.dto.user.ProfileDTO;
 
@@ -19,5 +20,11 @@ public interface ProfileService {
 
     // 프로필 자기소개 관심사 수정
     public String alterProfile(Long userSeq, ProfileDTO profileDTO);
+
+    // 메인 이미지 가져오기
+    public Resource getMainImg(String imgName);
+
+    // 디테일 이미지 가져오기
+    public Resource getDetailImg(String imgName);
 
 }

@@ -35,6 +35,7 @@ public class CustomMemberDetails implements UserDetails{
 //        });
         // 람다로 바꾸기
         authorities.add(()->users.getRole());
+
         log.info("getAuthorities..,{}", authorities);
 
         return authorities;

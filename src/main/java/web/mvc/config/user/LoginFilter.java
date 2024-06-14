@@ -4,7 +4,9 @@ import com.google.gson.Gson;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -12,6 +14,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import web.mvc.entity.user.Users;
+import web.mvc.repository.user.UserRepository;
 
 
 import java.io.IOException;
@@ -45,6 +48,8 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         String username = request.getParameter("userId");
         String password = request.getParameter("userPwd");
 
+
+
         log.info("username {} " , username);
         log.info("password {} " , password);
         //스프링 시큐리티에서 username과 password를 검증하기 위해서는 token에 담아야 함 // username, password , role 인수를 받는다  -> principal , credentials , authorities
@@ -63,7 +68,6 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         //UserDetailsS
         CustomMemberDetails customMemberDetails = (CustomMemberDetails) authentication.getPrincipal();
 
-        String username = customMemberDetails.getUsername();
 
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
         Iterator<? extends GrantedAuthority> iterator = authorities.iterator();
@@ -80,14 +84,8 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         Map<String, Object> map = new HashMap<>();
         Users users= customMemberDetails.getUsers();
         map.put("userId",users.getUserId() );
-        map.put("userPwd",users.getUserPwd());
-        map.put("userEmail",users.getEmail());
-        map.put("country",users.getCountry() );
-        map.put("gender",users.getGender() );
         map.put("userName",users.getUserName() );
         map.put("userSeq",users.getUserSeq() );
-        map.put("nickName",users.getNickName() );
-        map.put("userJelly",users.getUserDetail().getUserJelly());
 
         if (!role.equals("ROLE_ADMIN")) {
             map.put("userState", users.getUserDetail().getUserState());
@@ -110,7 +108,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         response.setStatus(401);
 
         Map<String, Object> map = new HashMap<>();
-        map.put("errMsg","정보를 다시 확인해 주세요.");
+        map.put("errMsg","인증되지 않은 사용자 입니다.");
 
         Gson gson= new Gson();
 

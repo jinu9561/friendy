@@ -31,7 +31,7 @@ public class UsersDTO {
     private Classification country;
     private Gender gender;
 
-    private List<InterestDTO> interestList;
+    private List<String> interestCategory;
     private UserDetailDTO userDetail;
 
 
