@@ -20,8 +20,10 @@ public class Profile {
     @GeneratedValue(strategy = GenerationType.SEQUENCE , generator = "profile_seq")
     @SequenceGenerator(name ="profile_seq" , allocationSize = 1 , sequenceName = "profile_seq")
     private Long profileSeq;
+    @Column(length = 100)
+    private String profileMainImgName;
     @Column(length = 300)
-    private String profileMainImg;
+    private String profileMainImgSrc;
     @Column(length = 100)
     private String profileMainImgType;
     @Column(length = 100)

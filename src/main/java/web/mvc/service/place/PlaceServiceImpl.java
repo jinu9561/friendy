@@ -38,6 +38,7 @@ public class PlaceServiceImpl implements PlaceService {
         List<PlaceRecommendationDTO> placeRecommendationDTOList = new ArrayList<>();
 
         for (PlaceRecommendation placeRecommendation : placeRecommendationList) {
+            // 디테일 이미지 가져오기
             List<PlaceDetailImgDTO> list = this.getPlaceDetailImg(placeRecommendation.getPlaceSeq());
 
             PlaceRecommendationDTO placeRecommendationDTO = PlaceRecommendationDTO.builder()

@@ -19,7 +19,7 @@ public class UserProfileDTO {
     private String nickName;
     private String email;
     private String phone;
-    private String profileMainImg;
+    private String profileMainImgName;
     private ImgStatus imgStatus;
     private String introduce;
 

@@ -23,19 +23,31 @@ public class ProfileController {
     }
 
     @PostMapping("/main/{userSeq}")
-    public ResponseEntity<?> uploadProfile(@PathVariable("userSeq") Long userSeq, @RequestParam("file") MultipartFile file) {
-
+    public ResponseEntity<?> uploadProfile(@PathVariable("userSeq") Long userSeq, @RequestParam("mainProfileImage") MultipartFile file) {
         return ResponseEntity.status(HttpStatus.OK).body(profileService.uploadMainPicture(userSeq,file));
     }
 
     @PostMapping("/detail/{userSeq}")
-    public ResponseEntity<?> uploadDetail(@PathVariable("userSeq") Long userSeq, @RequestParam("file") MultipartFile file) {
+    public ResponseEntity<?> uploadDetail(@PathVariable("userSeq") Long userSeq, @RequestParam("detailImage") MultipartFile file) {
         return ResponseEntity.status(HttpStatus.OK).body(profileService.uploadDetail(userSeq,file));
     }
 
     @PutMapping("/alter/{userSeq}")
     public ResponseEntity<?> alterProfile(@PathVariable("userSeq") Long userSeq, @RequestBody ProfileDTO profileDTO) {
+        log.info(" "+profileDTO);
         return ResponseEntity.status(HttpStatus.OK).body(profileService.alterProfile(userSeq,profileDTO));
+    }
+
+    @GetMapping("/main/img")
+    public ResponseEntity<?> getMainImg(@RequestParam String imgName) {
+        log.info("사진 불러오기");
+        return ResponseEntity.status(HttpStatus.OK).body(profileService.getMainImg(imgName));
+    }
+
+    @GetMapping("/detail/img")
+    public ResponseEntity<?> getDetailImg(@RequestParam String imgName) {
+        log.info("사진 등록");
+        return ResponseEntity.status(HttpStatus.OK).body(profileService.getDetailImg(imgName));
     }
 
 

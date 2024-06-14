@@ -53,6 +53,7 @@ public class CommonServiceImpl implements CommonService{
             map.put("imgType",imgType);
             map.put("imgSize",Long.toString(imgSize));
             map.put("imgSrc",path.toString());
+            map.put("imgName",file.getOriginalFilename());
 
         }catch (IOException e){
             throw new GlobalException(ErrorCode.OVER_FILE);

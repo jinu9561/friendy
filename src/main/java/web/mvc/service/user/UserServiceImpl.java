@@ -9,12 +9,14 @@ import org.springframework.context.event.EventListener;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import web.mvc.dto.user.AdminDTO;
+import web.mvc.dto.user.EmailVerificationDTO;
 import web.mvc.dto.user.InterestDTO;
 import web.mvc.dto.user.UsersDTO;
 import web.mvc.entity.user.*;
 import web.mvc.enums.users.State;
 import web.mvc.exception.common.ErrorCode;
 import web.mvc.exception.common.GlobalException;
+import web.mvc.repository.user.EmaillVerificationRepository;
 import web.mvc.repository.user.UserRepository;
 
 import java.text.ParseException;
@@ -40,7 +42,12 @@ public class UserServiceImpl implements UserService {
     private String failMsg = "메일 발송을 실패했습니다";
     private String registerMsg = "해당 이메일로 인증 코드를 보냈습니다 확인해 주세요";
     private String updateMsg ="수정에 성공했습니다";
-
+    private String findPasswordMsg = "해당 이메일로 비밀번호 변경 확인 코드를 보냈습니다 확인해 주세요";
+    private String findSubject = "Friendy 회원님의 비밀번호 변경 확인 입니다.";
+    private String findContent = "회원님의 비밀번호 변경 확인 코드 입니다. : {code}";
+    private String alertMsg = "변경이 완료되었습니다";
+    private String alertFailMsg = "비밀번호가 일치 하지않습니다";
+    private String resignMsg ="탈퇴를 완료했습니다";
 
     @EventListener(ApplicationReadyEvent.class)
     public void handleApplicationReadyEvent(ApplicationReadyEvent event) {
@@ -56,7 +63,7 @@ public class UserServiceImpl implements UserService {
             try {
                 birth = formatter.parse(adminDTO.getBirth());
             } catch (ParseException e) {
-                //throw new GlobalException(ErrorCode.WRONG_DATE);
+                throw new GlobalException(ErrorCode.WRONG_DATE);
             }
 
             String encodePwd = passwordEncoder.encode(adminDTO.getUserPwd());
@@ -125,11 +132,12 @@ public class UserServiceImpl implements UserService {
 
             // user에 관심사 저장
             List<Interest> savedList  = user.getProfile().getInterestList();
-            List<InterestDTO> interests = usersDTO.getInterestList();
+            List<String> interests = usersDTO.getInterestCategory();
+            log.info(interests.toString());
 
-            for(InterestDTO i : interests){
+            for(String i : interests){
                 Interest interest = Interest.builder()
-                        .interestCategory(i.getInterestCategory())
+                        .interestCategory(i)
                         .profile(profile) // Associate the interest with the profile
                         .build();
                 savedList.add(interest);
@@ -180,5 +188,53 @@ public class UserServiceImpl implements UserService {
 
         return updateMsg;
     }
+
+    @Override
+    public String findPasswordProve(UsersDTO usersDTO) {
+        Users user = userRepository.findUserByUserId(usersDTO.getUserId());
+        if(user==null){
+            throw new GlobalException(ErrorCode.NOTFOUND_ID);
+        }
+
+        findContent = findContent.replace("{code}", user.getUserPwd());
+        try{
+            emailVerificationService.sendEmailVerificationCode(usersDTO.getEmail(),findSubject,findContent);
+        }catch (MessagingException m){
+            return failMsg;
+        }
+
+
+        return findPasswordMsg;
+    }
+
+    @Override
+    public String alterPassword(EmailVerificationDTO emailVerificationDTO) {
+
+       Users user = userRepository.findUserByUserId(emailVerificationDTO.getUserId());
+
+       if(user==null){
+           throw new GlobalException(ErrorCode.NOTFOUND_ID);
+       }
+
+       if(!emailVerificationDTO.getUserPwd().equals(emailVerificationDTO.getUserPwdCheck())){
+           return alertFailMsg;
+       }
+
+        log.info("alterPassword : " + emailVerificationDTO.getUserPwd());
+
+        // 새 비밀번호 암호화
+        String encodePwd  = passwordEncoder.encode(emailVerificationDTO.getUserPwd());
+        user.setUserPwd(encodePwd);
+
+        return alertMsg;
+    }
+
+    @Override
+    public String resign(Long userSeq) {
+        Users user = userRepository.findById(userSeq).orElseThrow(()->new GlobalException(ErrorCode.NOTFOUND_ID));
+        user.getUserDetail().setUserState(State.TEMPORARY_STOP);
+        return resignMsg;
+    }
+
 
 }

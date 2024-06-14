@@ -17,14 +17,15 @@ public class EmailController {
 
     private final EmailVerificationService emailVerificationService;
 
-    @PostMapping("/{userSeq}")
-    public ResponseEntity<?> verifyEmail(@RequestBody EmailVerificationDTO emailVerificationDTO, @PathVariable Long userSeq) {
+    @PostMapping("")
+    public ResponseEntity<?> verifyEmail(@RequestBody EmailVerificationDTO emailVerificationDTO) {
         log.info("token: " + emailVerificationDTO.getEmailToken());
-        return ResponseEntity.status(HttpStatus.CREATED).body(emailVerificationService.verifyEmail(emailVerificationDTO.getEmailToken(),userSeq));
+        return ResponseEntity.status(HttpStatus.CREATED).body(emailVerificationService.verifyEmail(emailVerificationDTO));
     }
 
-    @GetMapping("/reissue/{userSeq}")
-    public ResponseEntity<?> reEmailVerification(@PathVariable Long userSeq) {
-        return ResponseEntity.status(HttpStatus.OK).body(emailVerificationService.reEmailVerification(userSeq));
+    @PostMapping("/reissue")
+    public ResponseEntity<?> reEmailVerification(@RequestBody EmailVerificationDTO emailVerificationDTO) {
+        log.info("이메일 재발급");
+        return ResponseEntity.status(HttpStatus.OK).body(emailVerificationService.reEmailVerification(emailVerificationDTO));
     }
 }

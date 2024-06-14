@@ -12,4 +12,11 @@ public class EmailVerificationDTO {
 
     private Long emailVerificationSeq;
     private String emailToken;
+    private String userId;
+
+    private String userPwd;
+    private String userPwdCheck;
+
+    private String email;
+
 }

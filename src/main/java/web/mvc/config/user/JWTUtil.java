@@ -2,9 +2,11 @@ package web.mvc.config.user;
 
 import io.jsonwebtoken.Jwts;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import web.mvc.entity.user.Users;
+import web.mvc.repository.user.UserRepository;
 
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
@@ -16,6 +18,9 @@ import java.util.Date;
 public class JWTUtil {
 
     private SecretKey secretKey;
+    @Autowired
+    private UserRepository userRepository;
+
     // 여기서 ${}안에는 propertie의 키값이고 해당하는 value를 가져온다
     public JWTUtil(@Value("${spring.jwt.secret}")String secret) {
         secretKey = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8), Jwts.SIG.HS256.key().build().getAlgorithm());
@@ -61,4 +66,6 @@ public class JWTUtil {
                 .signWith(secretKey) // signature에 사용할 내용, 암호화 알고리즘의 바탕이 되는 준비물
                 .compact();
     }
+
+
 }

@@ -17,6 +17,8 @@ public class ProfileDetailImg {
     @GeneratedValue(strategy = GenerationType.SEQUENCE , generator = "profile_detailImg_seq")
     @SequenceGenerator(name ="profile_detailImg_seq" , allocationSize = 1 , sequenceName = "profile_detailImg_seq")
     private Long profileDetailImgSeq;
+    @Column(length = 100)
+    private String profileDetailImgName;
     @Column(length = 300)
     private String profileDetailImgSrc;
     @Column(length = 10)

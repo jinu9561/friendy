@@ -12,6 +12,7 @@ import web.mvc.enums.users.ImgStatus;
 public class ProFileDetailImgDTO {
 
     private Long profileDetailImgSeq;
+    private String profileDetailImgName;
     private String profileDetailImgSrc;
     private String profileDetailImgType;
     private String profileDetailImgSize;

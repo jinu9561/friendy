@@ -4,6 +4,8 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import web.mvc.dto.user.ProfileDTO;
@@ -58,12 +60,13 @@ public class ProfileServiceImpl implements ProfileService {
         map.put("gender",user.getGender());
         map.put("userJelly",user.getUserDetail().getUserJelly());
         map.put("introduce",profile.getIntroduce());
-        map.put("profileMainImg",profile.getProfileMainImg());
+        map.put("profileMainImgName",profile.getProfileMainImgName());
 
         List<ProFileDetailImgDTO> profileDetailImgDTOList = profile.getProfileDetailImgList().stream()
                 .map(img -> {
                     ProFileDetailImgDTO dto = new ProFileDetailImgDTO();
                     dto.setProfileDetailImgSeq(img.getProfileDetailImgSeq());
+                    dto.setProfileDetailImgName(img.getProfileDetailImgName());
                     dto.setProfileDetailImgSrc(img.getProfileDetailImgSrc());
                     dto.setProfileDetailImgType(img.getProfileDetailImgType());
                     dto.setProfileDetailImgSize(img.getProfileDetailImgSize());
@@ -89,9 +92,11 @@ public class ProfileServiceImpl implements ProfileService {
         Profile profile = profileRepository.findByUserSeq(userSeq).orElseThrow(()->new GlobalException(ErrorCode.NOTFOUND_PROFILE));
         Map<String, String>map =commonService.uploadFile(true,file,uploadDir);
 
-        profile.setProfileMainImg(map.get("imgSrc"));
+        profile.setProfileMainImgName(map.get("imgName"));
+        profile.setProfileMainImgSrc(map.get("imgSrc"));
         profile.setProfileMainImgSize(map.get("imgSize"));
         profile.setProfileMainImgType(map.get("imgType"));
+        log.info(map.get("imgName"));
         profile.setImgStatus(ImgStatus.PENDING);
 
         return uploadImgMsg;
@@ -104,6 +109,7 @@ public class ProfileServiceImpl implements ProfileService {
         ProfileDetailImg profileDetailImg = new ProfileDetailImg(profile);
 
         profileDetailImg.setProfileDetailImgSrc(map.get("imgSrc"));
+        profileDetailImg.setProfileDetailImgName(map.get("imgName"));
         profileDetailImg.setProfileDetailImgType(map.get("imgType"));
         profileDetailImg.setProfileDetailImgSize(map.get("imgSize"));
         profileDetailImg.setImgStatus(ImgStatus.PENDING);
@@ -117,23 +123,41 @@ public class ProfileServiceImpl implements ProfileService {
     public String alterProfile(Long userSeq, ProfileDTO profileDTO) {
         Profile profile = profileRepository.findByUserSeq(userSeq).orElseThrow(()->new GlobalException(ErrorCode.NOTFOUND_PROFILE));
 
+        List<String> interests = profileDTO.getInterestCategory();
         // 기존 관심목록 삭제
-        interestRepository.deleteByProfileSeq(profile.getProfileSeq());
+        if(!interests.isEmpty()){
+            interestRepository.deleteByProfileSeq(profile.getProfileSeq());
 
-        // 새로운 관심사 목록을 추가
-        List<InterestDTO> interests = profileDTO.getInterestList();
-        List<Interest> newInterestList = interests.stream()
-                .map(i -> Interest.builder()
-                        .interestCategory(i.getInterestCategory())
-                        .profile(profile)
-                        .build())
-                .collect(Collectors.toList());
+            // 새로운 관심사 목록을 추가
+            List<Interest> newInterestList = interests.stream()
+                    .map(i -> Interest.builder()
+                            .interestCategory(i)
+                            .profile(profile)
+                            .build())
+                    .collect(Collectors.toList());
 
+            profile.setInterestList(newInterestList);
 
-        profile.setInterestList(newInterestList);
-        profile.setIntroduce(profileDTO.getIntroduce());
+        }
+
+        if(profileDTO.getIntroduce()!=null){
+            profile.setIntroduce(profileDTO.getIntroduce());
+        }
+
 
         return uploadMsg;
+    }
+
+    @Override
+    public Resource getMainImg(String imgName) {
+        Resource resource = new FileSystemResource(uploadDir+"\\"+imgName);
+        return resource;
+    }
+
+    @Override
+    public Resource getDetailImg(String imgName) {
+        Resource resource = new FileSystemResource(uploadDir+"/detail"+"\\"+imgName);
+        return resource;
     }
 
 }

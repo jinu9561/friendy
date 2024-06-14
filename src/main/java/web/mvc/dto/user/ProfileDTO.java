@@ -16,6 +16,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class ProfileDTO {
 
     private Long profileSeq;
@@ -26,6 +27,6 @@ public class ProfileDTO {
     private Users user;
     private ImgStatus imgStatus;
 
-    private List<InterestDTO> interestList;
+    private List<String> interestCategory;
 
 }

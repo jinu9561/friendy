@@ -11,6 +11,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
@@ -100,7 +101,7 @@ public class SecurityConfig {
         http.logout(logout ->
                 logout.logoutUrl("/logout") // 로그아웃요청 url
                         .addLogoutHandler(customLogoutHandler)
-                        .logoutSuccessUrl("/users/logoutTest")); // 로그 아웃 성공시 가야되는 url
+                        .logoutSuccessUrl("/users/logout")); // 로그 아웃 성공시 가야되는 url
 
         return http.build();
     }

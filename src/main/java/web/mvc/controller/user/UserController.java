@@ -6,9 +6,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import web.mvc.dto.user.EmailVerificationDTO;
 import web.mvc.dto.user.UsersDTO;
 import web.mvc.service.user.UserService;
-
 
 
 @RestController
@@ -19,8 +19,8 @@ public class UserController {
 
     private final UserService userService;
 
-    @GetMapping("/logoutTest")
-    public ResponseEntity<?> logoutTest(){
+    @GetMapping("/logout")
+    public ResponseEntity<?> logoutMsg(){
         return ResponseEntity.status(HttpStatus.OK).body("로그아웃 완료");
     }
 
@@ -40,7 +40,19 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(userService.alter(userSeq,usersDTO));
     }
 
+    @PostMapping("/password")
+    public ResponseEntity<?> findPasswordProve(@RequestBody UsersDTO usersDTO){
+        return ResponseEntity.status(HttpStatus.OK).body(userService.findPasswordProve(usersDTO));
+    }
 
+    @PostMapping("/alter/password")
+    public ResponseEntity<?> alterPassword(@RequestBody EmailVerificationDTO emailVerificationDTO){
+        return ResponseEntity.status(HttpStatus.OK).body(userService.alterPassword(emailVerificationDTO));
+    }
 
+    @GetMapping("/resign/{userSeq}")
+    public ResponseEntity<?> resign(@PathVariable Long userSeq){
+        return ResponseEntity.status(HttpStatus.OK).body(userService.resign(userSeq));
+    }
 
 }
