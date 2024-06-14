@@ -39,7 +39,10 @@ public class Report {
     private String reportDescription; // 신고할 내용
     @CreationTimestamp
     private LocalDateTime reportRegDate;
+
+    @Column(nullable = false, columnDefinition = "int default 0") // 디폴트값 0
     private int reportStatus; // 0=처리중, 1=처리완료
+    @Column(nullable = false, columnDefinition = "int default 0") // 디폴트값 0
     private int reportResult; // 0=신고 미적용, 1=3일정지, 2=영구정지
 
 

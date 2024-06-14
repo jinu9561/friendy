@@ -25,7 +25,7 @@ public class AdminReportServiceImpl implements AdminReportService {
     public List<Report> findAllReportList() {
         List<Report> list = reportRepository.findAll();
 
-        log.info("list", list);
+        log.info("Report list : {}", list);
 
         return list;
     }
@@ -35,7 +35,7 @@ public class AdminReportServiceImpl implements AdminReportService {
         Report report = reportRepository.findById(reportSeq)
                 .orElseThrow(()->new GlobalException(ErrorCode.NOTFOUND_ID));
 
-        log.info("report", report);
+        log.info("report : {}", report);
 
         return report;
     }
@@ -44,26 +44,32 @@ public class AdminReportServiceImpl implements AdminReportService {
     public String getReportedUrl(Report report) {
         String url = report.getReportUrl();
 
-        log.info("url", url);
+        log.info("url : {}", url);
 
         return "url";
     }
 
     @Override
     public Report updateReportStatus(Report report) {
-        Report updatedReport = reportRepository.updateReportStatus(report.getReportStatus(), report.getReportSeq());
-
-        log.info("updatedStatusReport", updatedReport);
-
+        int rowsUpdated = reportRepository.updateReportStatus(report.getReportStatus(), report.getReportSeq());
+        if (rowsUpdated == 0) {
+            throw new GlobalException(ErrorCode.NOTFOUND_ID);
+        }
+        Report updatedReport = reportRepository.findById(report.getReportSeq())
+                .orElseThrow(() -> new GlobalException(ErrorCode.NOTFOUND_ID));
+        log.info("Updated status report: {}", updatedReport);
         return updatedReport;
     }
 
     @Override
     public Report updateReportResult(Report report) {
-        Report updatedReport = reportRepository.updateReportStatus(report.getReportResult(), report.getReportSeq());
-
-        log.info("updatedResultReport", updatedReport);
-
+        int rowsUpdated = reportRepository.updateReportResult(report.getReportResult(), report.getReportSeq());
+        if (rowsUpdated == 0) {
+            throw new GlobalException(ErrorCode.NOTFOUND_ID);
+        }
+        Report updatedReport = reportRepository.findById(report.getReportSeq())
+                .orElseThrow(() -> new GlobalException(ErrorCode.NOTFOUND_ID));
+        log.info("Updated result report: {}", updatedReport);
         return updatedReport;
     }
 
