@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 public class FriendList {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY ,generator = "friends_list_seq")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE ,generator = "friends_list_seq")
     @SequenceGenerator(name ="friends_list_seq" , allocationSize = 1 , sequenceName = "friends_list_seq")
     private Long friendsListSeq;
 

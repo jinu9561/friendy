@@ -14,7 +14,7 @@ import lombok.Setter;
 public class ReportType {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY ,generator = "report_type_seq")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE ,generator = "report_type_seq")
     @SequenceGenerator(name ="report_type_seq" , allocationSize = 1 , sequenceName = "report_type_seq")
     private Long reportTypeSeq;
 

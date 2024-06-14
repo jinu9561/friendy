@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 @Setter
 public class Report {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY ,generator = "report_seq")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE ,generator = "report_seq")
     @SequenceGenerator(name ="report_seq" , allocationSize = 1 , sequenceName = "report_seq")
     private Long reportSeq;
 
@@ -33,7 +33,7 @@ public class Report {
     @JoinColumn(name = "report_type_seq")  // 외래키 지정
     private ReportType reportType; // 신고할 게시물의 유형 (게시판 종류 || 댓글 || 채팅방 || 프로필)
 
-    @Column(length = 100)
+    @Column(length = 500)
     private String reportUrl; // 신고할 게시물의 url (프로필 신고시에는 url null)
     @Column(length = 1000)
     private String reportDescription; // 신고할 내용
