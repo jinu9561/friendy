@@ -26,6 +26,9 @@ public interface AdminEventService {
     //이벤트 삭제
     void deleteEvent(Long eventSeq);
 
+    //이벤트 세부 사진 삭제
+    void deleteEventDetail(Long eventDetailImgSeq);
+
     //이벤트 전체검색(데드라인 순으로)
     List<EventDTO> selectAllByDeadlLine();
 

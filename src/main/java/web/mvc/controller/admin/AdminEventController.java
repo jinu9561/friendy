@@ -25,7 +25,6 @@ public class AdminEventController {
     @PostMapping("/create")
     public ResponseEntity<?> createEvent(@ModelAttribute EventDTO eventDTO, @RequestParam("file") MultipartFile file) {
         //return ResponseEntity.status(HttpStatus.OK).body(eventService.createEvent(eventDTO));
-        log.info("여기는 오나?");
         String result = adminEventService.createEvent(eventDTO,file);
         if ("이벤트 등록이 완료되었습니다.".equals(result)) {
             return ResponseEntity.status(HttpStatus.CREATED).body(result);
@@ -37,7 +36,6 @@ public class AdminEventController {
     //세부사진 등록
     @PostMapping("/picture/insert")
     public ResponseEntity<?> uploadEventDetail(@RequestParam Long eventSeq ,@RequestParam("file") MultipartFile file){
-        log.info("세부사진 등록 되는지 확인");
         return ResponseEntity.status(HttpStatus.OK).body(adminEventService.uploadEventDetail(eventSeq,file));
     }
 
@@ -46,8 +44,6 @@ public class AdminEventController {
     @PutMapping("/update/{eventSeq}")
     public ResponseEntity<?> updateEvent(@PathVariable Long eventSeq, @ModelAttribute EventDTO eventDTO,
                                          @RequestParam("file") MultipartFile file){
-        log.info("이벤트수정확인");
-
         return ResponseEntity.status(HttpStatus.OK).body(adminEventService.updateEvent(eventSeq, eventDTO, file));
     }
 
@@ -59,12 +55,19 @@ public class AdminEventController {
         return ResponseEntity.status(HttpStatus.OK).body(adminEventService.updateEventDetail(eventDetailImgSeq,file,eventDetailImgDTO));
     }
 
+
     //삭제
     @DeleteMapping("/delete/{eventSeq}")
     public String deleteEvent(@PathVariable Long eventSeq){
         adminEventService.deleteEvent(eventSeq);
-        log.info("이벤트삭제확인");
         return "삭제되었습니다";
+    }
+
+    //이벤트 세부 사진 삭제
+    @DeleteMapping("/picture/delete/{eventDetailImgSeq}")
+    public String deleteEventDetail(@PathVariable Long eventDetailImgSeq){
+        adminEventService.deleteEventDetail(eventDetailImgSeq);
+        return "세부 이미지 삭제되었습니다.";
     }
 
     //전체검색(데드라인 순으로)
