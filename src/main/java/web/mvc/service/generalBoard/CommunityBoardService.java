@@ -6,8 +6,12 @@ import java.util.List;
 
 public interface CommunityBoardService {
     CommunityBoardDTO createCommunityBoard(CommunityBoardDTO communityBoardDTO);
+
     CommunityBoardDTO getCommunityBoardById(Long commBoardSeq);
+
     List<CommunityBoardDTO> getAllCommunityBoards();
-    CommunityBoardDTO updateCommunityBoard(Long commBoardSeq, CommunityBoardDTO communityBoardDTO);
-    void deleteCommunityBoard(Long commBoardSeq);
+
+    CommunityBoardDTO updateCommunityBoard(CommunityBoardDTO communityBoardDTO);
+
+    String deleteCommunityBoard(Long commBoardSeq);
 }
