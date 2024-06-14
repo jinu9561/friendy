@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 public class FriendRequest {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY ,generator = "friend_request_seq")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE ,generator = "friend_request_seq")
     @SequenceGenerator(name ="friend_request_seq" , allocationSize = 1 , sequenceName = "friend_request_seq")
     private Long friendRequestSeq;
 

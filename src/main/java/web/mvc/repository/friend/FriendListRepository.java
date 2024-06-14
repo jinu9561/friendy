@@ -16,7 +16,7 @@ import java.util.Optional;
 public interface FriendListRepository extends JpaRepository<FriendList, Long> {
 
     /**
-     * 친구 등록
+     * 친구 등록시 이미 등록한 친구인지 검사
      * (유저번호와 친구의 유저번호가 존재하는 테이블이 존재하면 등록 불가)
      **/
     @Query("SELECT fl FROM FriendList fl WHERE (fl.user = :user AND fl.friendUser = :friendUser) OR (fl.user = :friendUser AND fl.friendUser = :user)")
