@@ -1,5 +1,6 @@
 package web.mvc.repository.report;
 
+import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -14,14 +15,16 @@ public interface ReportRepository extends JpaRepository<Report, Long> {
      * 신고상태 변경
      */
     @Modifying
+    @Transactional
     @Query("update Report r set r.reportStatus = :reportStatus where r.reportSeq = :reportSeq")
-    Report updateReportStatus(@Param("reportStatus") int reportStatus, @Param("reportSeq") Long reportSeq);
+    int updateReportStatus( @Param("reportStatus") int reportStatus, @Param("reportSeq") Long reportSeq );
 
     /**
      * 신고결과 변경
      */
     @Modifying
+    @Transactional
     @Query("update Report r set r.reportResult = :reportResult where r.reportSeq = :reportSeq")
-    Report updateReportResult(@Param("reportResult") int reportResult, @Param("reportSeq") Long reportSeq);
+    int updateReportResult( @Param("reportResult") int reportResult, @Param("reportSeq") Long reportSeq );
 
 }
