@@ -5,8 +5,10 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import web.mvc.entity.user.Users;
 
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Setter
@@ -39,6 +41,8 @@ public class MeetUpBoard {
 
     @UpdateTimestamp
     private Date meetUpUpdateTime;
+
+    private String meetUpPeopleList;
 
     private int meetUpPwd;
 

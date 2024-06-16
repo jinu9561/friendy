@@ -30,6 +30,9 @@ public interface MeetUpBoardRepository extends JpaRepository<MeetUpBoard, Long> 
       List<MeetUpBoard> findMeetUPBoardByMeetUpName(String meetUpName);
 
 
+    @Query("select p from MeetUpBoard p where p.meetUpSeq =?1")
+        MeetUpBoard findMeetUpBoardByMeetUpSeq(Long meetupSeq);
+
 
     @Query("select p from MeetUpBoard p where p.meetUpName= ?1")
     MeetUpBoard selectMeetUpByMeetUpName (String meetUpName);
@@ -42,9 +45,15 @@ public interface MeetUpBoardRepository extends JpaRepository<MeetUpBoard, Long> 
     int updatePartyStatus(Long partySeq);
 
 
-    @Query("select  p.meetUpSeq  from MeetUpBoard p where p.meetUpDeadLine = ?1")
+    @Query("select  p.meetUpSeq  from MeetUpBoard p where p.meetUpDeadLine = ?1 ")
     List<Long> findByPartySeqByDeadLine(Date partDeadLine);
 
     @Query("select  p  from MeetUpBoard p where p.meetUpSeq=?1")
     MeetUpBoard findPwdBySeq(Long meetUpSeq);
+
+
+    @Modifying
+    @Query("update MeetUpBoard  p set p.meetUpPeopleList= ?1 where p.meetUpSeq=?2")
+    int addMeetUpPeopleList(String meetUpPeopleList , Long meetUpSeq);
+
 }

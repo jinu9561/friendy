@@ -1,6 +1,9 @@
 package web.mvc.service.meetUpBoard;
 
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -36,7 +39,27 @@ public class MeetUpBoardServiceImpl implements MeetUpBoardService {
     @Override
     public String createParty(MeetUpBoardDTO meetUpBoardDTO) throws Exception {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH");
+        System.out.println("여기가맞냐 "+meetUpBoardDTO.getMeetUpDeadLine());
         Date date = formatter.parse(meetUpBoardDTO.getMeetUpDeadLine());
+
+//        List<String> peopleList = new ObjectMapper().readValue(meetUpBoardDTO.getMeetUpPeopleList(), new TypeReference<List<String>>() {});
+//        System.out.println(peopleList+"명단 이거 맞음 ?");
+        
+        List<String> list =meetUpBoardDTO.getMeetUpPeopleList();
+        System.out.println("리스트"+list);
+        ObjectMapper objectMapper = new ObjectMapper();
+        String meetUpPeopleListJson;
+        try {
+            meetUpPeopleListJson = objectMapper.writeValueAsString(list);
+            System.out.println("JSON: " + meetUpPeopleListJson);
+
+        } catch (JsonProcessingException e) {
+            // Handle JSON processing exception
+            throw new GlobalException(ErrorCode.JSON_PROCESSING_ERROR);
+        }
+        
+
+
         try {
             date = formatter.parse(meetUpBoardDTO.getMeetUpDeadLine());
         } catch (ParseException e) {
@@ -52,6 +75,7 @@ public class MeetUpBoardServiceImpl implements MeetUpBoardService {
                 .meetUpPwd(meetUpBoardDTO.getMeetUpPwd())
                 .meetUpDeadLine(date)
                 .meetUpMaxEntry(meetUpBoardDTO.getMeetUpMaxEntry())
+                .meetUpPeopleList(meetUpPeopleListJson)
                 .meetUpStatus(meetUpBoardDTO.getMeetUpStatus())
                 .build();
 
@@ -142,6 +166,14 @@ public class MeetUpBoardServiceImpl implements MeetUpBoardService {
     }
 
     @Override
+    public MeetUpBoard findMeetUpByBoardSeq(Long meetUpSeq) {
+
+        MeetUpBoard meetUpBoardInfo =meetUpBoardRepository.findMeetUpBoardByMeetUpSeq(meetUpSeq);
+
+        return meetUpBoardInfo;
+    }
+
+    @Override
     public List<MeetUpBoard> findByMeetUpName(String meetUpName) {
 
         List<MeetUpBoard> resultList=meetUpBoardRepository.findMeetUPBoardByMeetUpName(meetUpName);
@@ -149,6 +181,10 @@ public class MeetUpBoardServiceImpl implements MeetUpBoardService {
 
         return null;
     }
+
+
+
+
 
     @Override
     public List<MeetUpBoard> selectAll() {
