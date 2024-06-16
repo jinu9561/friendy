@@ -23,6 +23,8 @@ public interface MeetUpBoardService {
     MeetUpBoard  findMeetUpByMeetUpName(String meetUpName);
 
 
+    MeetUpBoard findMeetUpByBoardSeq(Long meetUpSeq);
+
     List<MeetUpBoard> findByMeetUpName(String meetUpName);
     List<MeetUpBoard> selectAll();
 
