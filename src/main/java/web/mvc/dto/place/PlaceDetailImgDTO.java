@@ -15,5 +15,6 @@ public class PlaceDetailImgDTO {
     private String placeDetailImgSrc;
     private String placeDetailImgType;
     private String placeDetailImgSize;
+    private String placeDetailImgName;
 
 }

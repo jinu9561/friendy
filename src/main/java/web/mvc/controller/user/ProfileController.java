@@ -60,10 +60,10 @@ public class ProfileController {
         return ResponseEntity.status(HttpStatus.OK).body(profileService.deleteMainImg(userSeq));
     }
 
-    @DeleteMapping("/detail/img")
-    public ResponseEntity<?> deleteDetailImg(@RequestBody ProFileDetailImgDTO proFileDetailImgDTO) {
-        return ResponseEntity.status(HttpStatus.OK).body(profileService.deleteDetailImg(proFileDetailImgDTO));
+    @DeleteMapping("/detail/img/{profileDetailImgSeq}")
+    public ResponseEntity<?> deleteDetailImg(@PathVariable Long profileDetailImgSeq) {
+        return ResponseEntity.status(HttpStatus.OK).body(profileService.deleteDetailImg(profileDetailImgSeq));
     }
-    /// \commti
+
 
 }

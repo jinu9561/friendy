@@ -253,8 +253,8 @@ public class ProfileServiceImpl implements ProfileService {
     }
 
     @Override
-    public String deleteDetailImg(ProFileDetailImgDTO proFileDetailImgDTO) {
-        profileDetailImgRepository.deleteById(proFileDetailImgDTO.getProfileDetailImgSeq());
+    public String deleteDetailImg(Long profileDetailImgSeq) {
+        profileDetailImgRepository.deleteById(profileDetailImgSeq);
 
         return deleteMsg;
     }

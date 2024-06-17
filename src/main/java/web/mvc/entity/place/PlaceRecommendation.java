@@ -30,6 +30,8 @@ public class PlaceRecommendation {
     private String placeMainImgType;
     @Column(length = 100)
     private String placeMainImgSize;
+    @Column(length = 100)
+    private String placeMainImgName;
 
     @OneToMany(mappedBy = "placeRecommendation" , cascade = CascadeType.ALL)
     private List<PlaceDetailImg> placeDetailImgList;

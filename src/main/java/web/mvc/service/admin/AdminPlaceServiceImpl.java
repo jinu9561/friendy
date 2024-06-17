@@ -50,6 +50,7 @@ public class AdminPlaceServiceImpl implements AdminPlaceService{
                     .placeAddress(recommendation.getPlaceAddress())
                     .placeDescription(recommendation.getPlaceDescription())
                     .placeMainImg(recommendation.getPlaceMainImg())
+                    .placeMainImgName(recommendation.getPlaceMainImgName())
                     .placeDetailImgList(detailImgDTOList)
                     .build();
             list.add(dto);
@@ -70,6 +71,7 @@ public class AdminPlaceServiceImpl implements AdminPlaceService{
                         .placeMainImg(map.get("imgSrc"))
                         .placeMainImgSize(map.get("imgSize"))
                         .placeMainImgType(map.get("imgType"))
+                        .placeMainImgName(map.get("imgName"))
                         .build();
 
 
@@ -91,6 +93,7 @@ public class AdminPlaceServiceImpl implements AdminPlaceService{
         placeDetailImg.setPlaceDetailImgSrc(map.get("imgSrc"));
         placeDetailImg.setPlaceDetailImgType(map.get("imgType"));
         placeDetailImg.setPlaceDetailImgSize(map.get("imgSize"));
+        placeDetailImg.setPlaceDetailImgName(map.get("imgName"));
 
         placeDetailImgRepository.save(placeDetailImg);
 
