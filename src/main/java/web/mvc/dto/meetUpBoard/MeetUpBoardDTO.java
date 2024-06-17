@@ -2,6 +2,8 @@ package web.mvc.dto.meetUpBoard;
 
 
 import lombok.*;
+import web.mvc.entity.meetUpBoard.MeetUpBoardDetailImg;
+
 import java.util.Date;
 import java.util.List;
 
@@ -14,9 +16,10 @@ import java.util.List;
 public class MeetUpBoardDTO {
     private Long meetUpSeq;
     private Long userSeq;
+    private Long interestSeq;
     private String meetUpName;
     private String meetUpDesc;
-    private Long meetUpMainImg;
+    private MeetUpBoardDetailImg meetUpBoardDetailImg;
     private List<String> meetUpPeopleList;
     private int meetUpPwd;
     private int checkPwd;

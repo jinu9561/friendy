@@ -15,7 +15,6 @@ import java.util.Date;
 public class ChattingRoomDTO {
     Long chattingroomSeq;
     String userId;
-    Long chattingRoomImgSeq;
     String roomId;
     String chattingRoomId;
 

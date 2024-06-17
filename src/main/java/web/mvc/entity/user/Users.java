@@ -3,6 +3,9 @@ package web.mvc.entity.user;
 
 import jakarta.persistence.*;
 import lombok.*;
+import web.mvc.entity.chatting.MessageLog;
+import web.mvc.entity.meetUpBoard.MeetUpBoard;
+import web.mvc.entity.meetUpBoard.MeetUpRequest;
 import web.mvc.entity.place.PlaceRecommendation;
 import web.mvc.enums.users.Classification;
 import web.mvc.enums.users.Gender;
@@ -56,6 +59,13 @@ public class Users {
     private  EmailVerification emailVerification;
     @OneToOne(mappedBy = "user" , cascade = CascadeType.ALL)
     private  SmsVerification smsVerification;
+    @OneToMany(mappedBy ="user", cascade = CascadeType.ALL)
+    private List<MeetUpBoard> meetUpBoardList;
+    @OneToMany(mappedBy = "user" , cascade = CascadeType.ALL)
+    private List<MessageLog> messageLogList;
+    @OneToOne(mappedBy = "user" , cascade = CascadeType.ALL)
+    private MeetUpRequest meetUpRequest;
+
 
 
 }
