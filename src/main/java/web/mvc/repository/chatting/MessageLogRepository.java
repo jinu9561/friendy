@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface MessageLogRepository extends JpaRepository<MessageLog, Long> {
 
-    @Query("select m from MessageLog m where m.roomId =?1")
+    @Query("select m from MessageLog m where m.chattingroom.roomId =?1")
     List<MessageLog> findMessageLogByRoomId (String roomId);
 
 }

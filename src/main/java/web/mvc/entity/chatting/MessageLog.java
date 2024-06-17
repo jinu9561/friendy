@@ -2,7 +2,9 @@ package web.mvc.entity.chatting;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.apache.catalina.User;
 import org.hibernate.annotations.CreationTimestamp;
+import web.mvc.entity.user.Users;
 
 import java.util.Date;
 
@@ -20,10 +22,12 @@ public class MessageLog {
     private Long MessageSeq;
 
     @JoinColumn(name = "member_seq")
-    private Long userSeq;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Users user;
 
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "chattingroom_seq")
-    private String roomId;
+    private ChattingRoom chattingroom;
 
     private String chattingContent;
 

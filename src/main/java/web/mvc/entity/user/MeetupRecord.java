@@ -4,6 +4,7 @@ package web.mvc.entity.user;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import web.mvc.entity.meetUpBoard.MeetUpBoard;
 
 import java.time.LocalDateTime;
 
@@ -21,7 +22,9 @@ public class MeetupRecord {
     private Long meetUpRecordSeq;
     @CreationTimestamp
     private LocalDateTime userRegDate;
-
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "meetup_seq")
+    private MeetUpBoard meetUpBoard;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_seq")  // 외래 키를 지정
     private UserDetail userDetail;
