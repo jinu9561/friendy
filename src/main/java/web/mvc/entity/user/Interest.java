@@ -22,5 +22,6 @@ public class Interest {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "profile_seq")  // 외래 키를 지정
     private Profile profile;
+    //수정해야함
 
 }
