@@ -37,6 +37,7 @@ public class EventController {
     //이벤트 1개 상세검색(eventSeq로 - 배너에서 사용)
     @GetMapping("/detail/{eventSeq}")
     public List<EventDTO> getEventByEventSeq(@PathVariable Long eventSeq){
+
         return eventService.selectEventByEventSeq(eventSeq);
     }
 
