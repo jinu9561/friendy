@@ -64,6 +64,6 @@ public class ProfileController {
     public ResponseEntity<?> deleteDetailImg(@RequestBody ProFileDetailImgDTO proFileDetailImgDTO) {
         return ResponseEntity.status(HttpStatus.OK).body(profileService.deleteDetailImg(proFileDetailImgDTO));
     }
-
+    /// \commti
 
 }
