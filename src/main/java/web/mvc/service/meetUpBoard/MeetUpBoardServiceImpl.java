@@ -10,14 +10,19 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import web.mvc.dto.chat.ChattingRoomDTO;
 import web.mvc.dto.meetUpBoard.MeetUpBoardDTO;
 import web.mvc.dto.meetUpBoard.MeetUpDeleteDTO;
 import web.mvc.dto.meetUpBoard.MeetUpUpdateDTO;
+import web.mvc.entity.chatting.ChattingRoom;
 import web.mvc.entity.meetUpBoard.MeetUpBoard;
+import web.mvc.entity.user.Users;
 import web.mvc.exception.common.ErrorCode;
 import web.mvc.exception.common.GlobalException;
 import web.mvc.repository.meetUpBoard.MeetUpBoardDetailImgRepository;
 import web.mvc.repository.meetUpBoard.MeetUpBoardRepository;
+import web.mvc.repository.user.UserRepository;
+import web.mvc.service.chatting.ChattingRoomService;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -25,6 +30,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -34,19 +40,20 @@ public class MeetUpBoardServiceImpl implements MeetUpBoardService {
 
     private final MeetUpBoardRepository meetUpBoardRepository;
     private final MeetUpBoardDetailImgRepository meetUpBoardDetailImgRepository;
-
+    private final ChattingRoomService chattingRoomService;
+    private final UserRepository userRepository;
 
     @Override
     public String createParty(MeetUpBoardDTO meetUpBoardDTO) throws Exception {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH");
-        System.out.println("여기가맞냐 "+meetUpBoardDTO.getMeetUpDeadLine());
+        System.out.println("여기가맞냐 " + meetUpBoardDTO.getMeetUpDeadLine());
         Date date = formatter.parse(meetUpBoardDTO.getMeetUpDeadLine());
 
 //        List<String> peopleList = new ObjectMapper().readValue(meetUpBoardDTO.getMeetUpPeopleList(), new TypeReference<List<String>>() {});
 //        System.out.println(peopleList+"명단 이거 맞음 ?");
-        
-        List<String> list =meetUpBoardDTO.getMeetUpPeopleList();
-        System.out.println("리스트"+list);
+
+        List<String> list = meetUpBoardDTO.getMeetUpPeopleList();
+        System.out.println("리스트" + list);
         ObjectMapper objectMapper = new ObjectMapper();
         String meetUpPeopleListJson;
         try {
@@ -57,7 +64,6 @@ public class MeetUpBoardServiceImpl implements MeetUpBoardService {
             // Handle JSON processing exception
             throw new GlobalException(ErrorCode.JSON_PROCESSING_ERROR);
         }
-        
 
 
         try {
@@ -82,6 +88,17 @@ public class MeetUpBoardServiceImpl implements MeetUpBoardService {
         System.out.println("그럼 여기까지 ?여기까지왔냐 ");
         try {
             meetUpBoardRepository.save(meetUpBoard);
+            Optional<Users> optionalUsers = userRepository.findById(meetUpBoardDTO.getUserSeq());
+            if (optionalUsers.isPresent()) {
+                Users users = optionalUsers.get();
+                String userId= users.getUserId();
+                ChattingRoomDTO chattingRoomDTO = ChattingRoomDTO.builder()
+                
+                        .userId(userId)
+                        .build();
+                chattingRoomService.createChattingRoom(chattingRoomDTO);
+                System.out.println("채팅방생성파티보드");
+            }
             return "성공";
         } catch (NumberFormatException e) {
             System.out.println("에러메세지?" + e.getMessage());
@@ -168,7 +185,7 @@ public class MeetUpBoardServiceImpl implements MeetUpBoardService {
     @Override
     public MeetUpBoard findMeetUpByBoardSeq(Long meetUpSeq) {
 
-        MeetUpBoard meetUpBoardInfo =meetUpBoardRepository.findMeetUpBoardByMeetUpSeq(meetUpSeq);
+        MeetUpBoard meetUpBoardInfo = meetUpBoardRepository.findMeetUpBoardByMeetUpSeq(meetUpSeq);
 
         return meetUpBoardInfo;
     }
@@ -176,14 +193,11 @@ public class MeetUpBoardServiceImpl implements MeetUpBoardService {
     @Override
     public List<MeetUpBoard> findByMeetUpName(String meetUpName) {
 
-        List<MeetUpBoard> resultList=meetUpBoardRepository.findMeetUPBoardByMeetUpName(meetUpName);
-        System.out.println("검색결과: " +resultList     );
+        List<MeetUpBoard> resultList = meetUpBoardRepository.findMeetUPBoardByMeetUpName(meetUpName);
+        System.out.println("검색결과: " + resultList);
 
         return null;
     }
-
-
-
 
 
     @Override
