@@ -15,18 +15,18 @@ import web.mvc.exception.common.ErrorCode;
 public class GlobalExceptionHandler {
 
 
-    @ExceptionHandler(HttpMessageNotReadableException.class)
-    public ResponseEntity<?> exception(HttpMessageNotReadableException e) {
-        System.out.println("메세지 테스트"+ErrorCode.WRONG_TYPE.getMessage());
-
-        HttpHeaders resHeaders = new HttpHeaders();
-        resHeaders.add("Content-Type", "application/json;charset=UTF-8");
-
-        return new ResponseEntity<>(ErrorCode.WRONG_TYPE.getMessage(), resHeaders,HttpStatus.BAD_REQUEST);
-
-
-//        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body();
-    }
+//    @ExceptionHandler(HttpMessageNotReadableException.class)
+//    public ResponseEntity<?> exception(HttpMessageNotReadableException e) {
+//        System.out.println("메세지 테스트"+ErrorCode.WRONG_TYPE.getMessage());
+//
+//        HttpHeaders resHeaders = new HttpHeaders();
+//        resHeaders.add("Content-Type", "application/json;charset=UTF-8");
+//
+//        return new ResponseEntity<>(ErrorCode.WRONG_TYPE.getMessage(), resHeaders,HttpStatus.BAD_REQUEST);
+//
+//
+////        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body();
+//    }
 
 
 }

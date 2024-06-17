@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import web.mvc.dto.user.ProFileDetailImgDTO;
 import web.mvc.dto.user.ProfileDTO;
 import web.mvc.service.user.ProfileService;
 
@@ -16,6 +17,7 @@ import web.mvc.service.user.ProfileService;
 public class ProfileController {
 
     private final ProfileService profileService;
+
 
     @GetMapping("/{userSeq}")
     public ResponseEntity<?> getProfile(@PathVariable("userSeq") Long userSeq) {
@@ -40,16 +42,28 @@ public class ProfileController {
 
     @GetMapping("/main/img")
     public ResponseEntity<?> getMainImg(@RequestParam String imgName) {
-        log.info("사진 불러오기");
         return ResponseEntity.status(HttpStatus.OK).body(profileService.getMainImg(imgName));
     }
 
     @GetMapping("/detail/img")
     public ResponseEntity<?> getDetailImg(@RequestParam String imgName) {
-        log.info("사진 등록");
         return ResponseEntity.status(HttpStatus.OK).body(profileService.getDetailImg(imgName));
     }
 
+    @PutMapping("/alter/password/{userSeq}")
+    public ResponseEntity<?> alterPassword(@PathVariable("userSeq") Long userSeq, @RequestBody ProfileDTO profileDTO) {
+        return ResponseEntity.status(HttpStatus.OK).body(profileService.alterPassword(userSeq,profileDTO));
+    }
+
+    @DeleteMapping("/main/img/{userSeq}")
+    public ResponseEntity<?> deleteMainImg(@PathVariable("userSeq") Long userSeq) {
+        return ResponseEntity.status(HttpStatus.OK).body(profileService.deleteMainImg(userSeq));
+    }
+
+    @DeleteMapping("/detail/img")
+    public ResponseEntity<?> deleteDetailImg(@RequestBody ProFileDetailImgDTO proFileDetailImgDTO) {
+        return ResponseEntity.status(HttpStatus.OK).body(profileService.deleteDetailImg(proFileDetailImgDTO));
+    }
 
 
 }

@@ -2,6 +2,7 @@ package web.mvc.service.user;
 
 import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
+import web.mvc.dto.user.ProFileDetailImgDTO;
 import web.mvc.dto.user.ProfileDTO;
 
 import java.util.Map;
@@ -26,5 +27,14 @@ public interface ProfileService {
 
     // 디테일 이미지 가져오기
     public Resource getDetailImg(String imgName);
+
+    // 패스워드 바꾸기
+    public String alterPassword(Long userSeq, ProfileDTO profileDTO);
+
+    // 메인 이미지 삭제
+    public String deleteMainImg(Long userSeq);
+
+    // 디테일 이미지 삭제
+    public String deleteDetailImg(ProFileDetailImgDTO proFileDetailImgDTO);
 
 }

@@ -6,8 +6,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import web.mvc.dto.user.JellyTransactionDTO;
 import web.mvc.dto.user.ProfileDTO;
 import web.mvc.entity.user.Interest;
 import web.mvc.entity.user.Profile;
@@ -25,6 +27,7 @@ import web.mvc.repository.user.UserRepository;
 import web.mvc.service.common.CommonService;
 
 
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,15 +44,20 @@ public class ProfileServiceImpl implements ProfileService {
     private final ProfileDetailImgRepository profileDetailImgRepository;
     private final InterestRepository interestRepository;
     private final CommonService commonService;
+    private final PasswordEncoder passwordEncoder;
 
     @Value("${profile.save.dir}")
     private String uploadDir;
     private String uploadImgMsg = "사진 등록에 성공했습니다. 관리자의 승인을 기다려주세요!";
-    private String uploadMsg ="업로드에 성공했습니다";
+    private String alertFailMsg = "비밀번호가 일치 하지않습니다";
+    private String alertMsg = "변경이 완료되었습니다";
+    private String deleteMsg = "삭제가 완료되었습니다";
 
     @Override
     public Map<String, Object> getProfile(Long userSeq) {
         Map<String, Object> map = new HashMap<String,Object>();
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
         Users user = userRepository.findById(userSeq).orElseThrow(()->new GlobalException(ErrorCode.NOTFOUND_ID));
         Profile profile = profileRepository.findByUserSeq(user.getUserSeq()).orElseThrow(()->new GlobalException(ErrorCode.NOTFOUND_PROFILE));
@@ -61,6 +69,16 @@ public class ProfileServiceImpl implements ProfileService {
         map.put("userJelly",user.getUserDetail().getUserJelly());
         map.put("introduce",profile.getIntroduce());
         map.put("profileMainImgName",profile.getProfileMainImgName());
+        map.put("profileMainApprove",profile.getImgStatus());
+        map.put("userState",user.getUserDetail().getUserState());
+
+        // 개인정보 수정때문에 추가한 내용
+        map.put("address", user.getAddress());
+        map.put("phone", user.getPhone());
+        map.put("email",user.getEmail());
+
+
+
 
         List<ProFileDetailImgDTO> profileDetailImgDTOList = profile.getProfileDetailImgList().stream()
                 .map(img -> {
@@ -70,6 +88,7 @@ public class ProfileServiceImpl implements ProfileService {
                     dto.setProfileDetailImgSrc(img.getProfileDetailImgSrc());
                     dto.setProfileDetailImgType(img.getProfileDetailImgType());
                     dto.setProfileDetailImgSize(img.getProfileDetailImgSize());
+                    dto.setImgStatus(img.getImgStatus());
                     return dto;
                 }).collect(Collectors.toList());
         map.put("profileDetailImgList",profileDetailImgDTOList);
@@ -82,6 +101,18 @@ public class ProfileServiceImpl implements ProfileService {
                     return dto;
                 }).collect(Collectors.toList());
         map.put("interestList",interestDTOList);
+
+        List<JellyTransactionDTO> jellyTransactionDTOList = user.getJellyTransactionList().stream()
+                .map(jellyTransaction -> {
+                    JellyTransactionDTO dto = new JellyTransactionDTO();
+                    dto.setTransactionSeq(jellyTransaction.getTransactionSeq());
+                    dto.setTransactionType(jellyTransaction.getTransactionType());
+                    dto.setAmount(jellyTransaction.getAmount());
+                    dto.setTransactionDate(jellyTransaction.getTransactionDate().format(formatter));
+                    dto.setJellyAmount(jellyTransaction.getJellyAmount());
+                    return dto;
+                }).toList();
+        map.put("purchaseHistory",jellyTransactionDTOList);
 
 
         return map;
@@ -121,8 +152,11 @@ public class ProfileServiceImpl implements ProfileService {
 
     @Override
     public String alterProfile(Long userSeq, ProfileDTO profileDTO) {
+
+        Users user = userRepository.findById(userSeq).orElseThrow(()->new GlobalException(ErrorCode.NOTFOUND_ID));
         Profile profile = profileRepository.findByUserSeq(userSeq).orElseThrow(()->new GlobalException(ErrorCode.NOTFOUND_PROFILE));
 
+        log.info("profilDTO : "+profileDTO);
         List<String> interests = profileDTO.getInterestCategory();
         // 기존 관심목록 삭제
         if(!interests.isEmpty()){
@@ -140,12 +174,38 @@ public class ProfileServiceImpl implements ProfileService {
 
         }
 
-        if(profileDTO.getIntroduce()!=null){
+        if(profileDTO.getIntroduce()!=null && !profileDTO.getIntroduce().trim().isEmpty()){
             profile.setIntroduce(profileDTO.getIntroduce());
+        }else{
+            profile.setIntroduce(profile.getIntroduce());
+        }
+
+        if (profileDTO.getAddress() != null && !profileDTO.getAddress().trim().isEmpty()) {
+            user.setAddress(profileDTO.getAddress());
+        } else {
+            user.setAddress(user.getAddress());
+        }
+
+        if (profileDTO.getPhone() != null && !profileDTO.getPhone().trim().isEmpty()) {
+            user.setPhone(profileDTO.getPhone());
+        } else {
+            user.setPhone(user.getPhone());
+        }
+
+        if (profileDTO.getEmail() != null && !profileDTO.getEmail().trim().isEmpty()) {
+            user.setEmail(profileDTO.getEmail());
+        } else {
+            user.setEmail(user.getEmail());
+        }
+
+        if (profileDTO.getNickName() != null && !profileDTO.getNickName().trim().isEmpty()) {
+            user.setNickName(profileDTO.getNickName());
+        } else {
+            user.setNickName(user.getNickName());
         }
 
 
-        return uploadMsg;
+        return alertMsg;
     }
 
     @Override
@@ -158,6 +218,45 @@ public class ProfileServiceImpl implements ProfileService {
     public Resource getDetailImg(String imgName) {
         Resource resource = new FileSystemResource(uploadDir+"/detail"+"\\"+imgName);
         return resource;
+    }
+
+    @Override
+    public String alterPassword(Long userSeq, ProfileDTO profileDTO) {
+
+        Users user = userRepository.findById(userSeq).orElseThrow(()->new GlobalException(ErrorCode.NOTFOUND_ID));
+
+        if(!profileDTO.getUserPwd().equals(profileDTO.getUserPwdCheck())){
+            return alertFailMsg;
+        }
+
+
+        // 새 비밀번호 암호화
+        String encodePwd  = passwordEncoder.encode(profileDTO.getUserPwd());
+        user.setUserPwd(encodePwd);
+
+        return alertMsg;
+    }
+
+    @Override
+    public String deleteMainImg(Long userSeq) {
+        Profile profile = profileRepository.findByUserSeq(userSeq)
+                .orElseThrow(()->new GlobalException(ErrorCode.NOTFOUND_PROFILE));
+
+        profile.setProfileMainImgSrc("");
+        profile.setProfileMainImgSize("");
+        profile.setProfileMainImgType("");
+        profile.setProfileMainImgName("");
+
+        profile.setImgStatus(ImgStatus.PENDING);
+
+        return deleteMsg;
+    }
+
+    @Override
+    public String deleteDetailImg(ProFileDetailImgDTO proFileDetailImgDTO) {
+        profileDetailImgRepository.deleteById(proFileDetailImgDTO.getProfileDetailImgSeq());
+
+        return deleteMsg;
     }
 
 }

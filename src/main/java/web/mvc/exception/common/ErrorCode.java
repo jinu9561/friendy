@@ -20,7 +20,9 @@ public enum ErrorCode {
     OVER_FILE(608,"파일의 크기가 초과되었습니다."),
     NOTFOUND_PROFILE(609, "프로필 조회에 실패했습니다"),
     NOTFOUND_PLACE(610,"장소가 조회에 실패했습니다"),
-    WRONG_TYPE(611, "비밀번호는 숫자로 입력해주세요.");
+    WRONG_TYPE(611, "비밀번호는 숫자로 입력해주세요."),
+    NOTFOUND_TRANSACTION(612,"주문 내역 조회에 실패했습니다.");
+
     private final int status;
     private final String message;
 }

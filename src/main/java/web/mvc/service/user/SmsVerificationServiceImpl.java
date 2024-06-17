@@ -12,6 +12,7 @@ import net.nurigo.sdk.message.service.DefaultMessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import web.mvc.dto.user.SmsVerificationDTO;
 import web.mvc.entity.user.SmsVerification;
 import web.mvc.entity.user.Users;
 import web.mvc.enums.users.State;
@@ -52,7 +53,7 @@ public class SmsVerificationServiceImpl implements SmsVerificationService {
     }
 
     @Override
-    public String sendSms(Long userSeq) {
+    public String sendSms(Long userSeq, SmsVerificationDTO smsVerificationDTO) {
         Users users = userRepository.findById(userSeq).orElseThrow(()->new GlobalException(ErrorCode.NOTFOUND_ID));
 
         SmsVerification smsVerification = new SmsVerification(users);
@@ -60,7 +61,7 @@ public class SmsVerificationServiceImpl implements SmsVerificationService {
         content = content.replace("{code}", savedSms.getSmsToken());
 
         Message message = new Message();
-        String phoneNum = users.getPhone().replaceAll("-","");
+        String phoneNum = smsVerificationDTO.getPhoneNumber().replaceAll("-","");
         // 전송할 메시지 설정
         message.setFrom(fromPhone);
         message.setTo(phoneNum);
@@ -81,14 +82,14 @@ public class SmsVerificationServiceImpl implements SmsVerificationService {
     }
 
     @Override
-    public String reSMSVerification(Long userSeq) {
+    public String reSMSVerification(Long userSeq,SmsVerificationDTO smsVerificationDTO) {
         Users user = userRepository.findById(userSeq).orElseThrow(()->new GlobalException(ErrorCode.NOTFOUND_ID));
         String smsCode = this.getSMSToken(userSeq);
 
         content = content.replace("{code}", smsCode);
 
         Message message = new Message();
-        String phoneNum = user.getPhone().replaceAll("-","");
+        String phoneNum = smsVerificationDTO.getPhoneNumber().replaceAll("-","");
         // 전송할 메시지 설정
         message.setFrom(fromPhone);
         message.setTo(phoneNum);
