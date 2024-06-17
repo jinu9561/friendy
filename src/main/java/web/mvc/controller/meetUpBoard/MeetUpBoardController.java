@@ -51,6 +51,9 @@ public class MeetUpBoardController {
         return ResponseEntity.status(HttpStatus.OK).body(list);
     }
 
+    @PutMapping("/invite")
+//    public ResponseEntity<?> inviteMeetUpBoard(@)
+
 
 
     @GetMapping("/select/{meetUpName}")

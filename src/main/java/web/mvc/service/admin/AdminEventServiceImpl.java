@@ -147,6 +147,12 @@ public class AdminEventServiceImpl implements AdminEventService {
         eventRepository.deleteByEventStatus(eventSeq);
     }
 
+    //이벤트 세부 사진 삭제
+    @Override
+    public void deleteEventDetail(Long eventDetailImgSeq) {
+        eventDetailImgRepository.deleteByEventDetailImgSeq(eventDetailImgSeq);
+    }
+
 
     //전체검색(데드라인 순으로)
     @Override
