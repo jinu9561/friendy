@@ -16,7 +16,6 @@ public class ChattingRoomDetailImg {
     @SequenceGenerator(allocationSize = 1, sequenceName = "chattingroomImg_seq", name = "chattingroomImg_seq")
     private int chattingroomImg;
 
-
     @Column(length = 200)
     private String chattingRoomImgSrc;
 
