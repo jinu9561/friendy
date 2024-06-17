@@ -27,6 +27,16 @@ public class ProfileDTO {
     private Users user;
     private ImgStatus imgStatus;
 
+    //개인정보 수정
+    private String address;
+    private String phone;
+    private String email;
+    private String nickName;
+    private String userPwd;
+    private String userPwdCheck;
+
+
+
     private List<String> interestCategory;
 
 }

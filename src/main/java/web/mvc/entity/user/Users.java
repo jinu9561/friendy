@@ -7,6 +7,7 @@ import web.mvc.entity.place.PlaceRecommendation;
 import web.mvc.enums.users.Classification;
 import web.mvc.enums.users.Gender;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 

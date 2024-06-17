@@ -11,11 +11,15 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class JellyTransactionDTO {
 
     private Long transactionSeq;
     private Transaction transactionType;
+
     private String jellyAmount;
-    private LocalDateTime transactionDate;
+    private String amount;
+    private String userId;
+    private String transactionDate;
 
 }

@@ -11,5 +11,8 @@ public class SmsVerificationDTO {
 
     private Long smsVerificationSeq;
     private String smsToken;
+    private String phoneNumber;
+
+    private String userId;
 
 }

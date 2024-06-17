@@ -22,10 +22,15 @@ public class JellyTransaction {
     private Transaction transactionType;
     @Column(length = 300)
     private String jellyAmount;
+    @Column(length = 300)
+    private String amount;
     @CreationTimestamp
     private LocalDateTime transactionDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_seq")  // 외래 키를 지정
     private Users user;
+
+    @OneToOne(mappedBy = "jellyTransaction" , cascade = CascadeType.ALL)
+    private Refund refund;
 }
