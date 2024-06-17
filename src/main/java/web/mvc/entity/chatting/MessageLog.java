@@ -1,11 +1,10 @@
 package web.mvc.entity.chatting;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import org.apache.catalina.User;
 import org.hibernate.annotations.CreationTimestamp;
+import web.mvc.entity.user.Users;
 
 import java.util.Date;
 
@@ -14,17 +13,21 @@ import java.util.Date;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
+@ToString
 public class MessageLog {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "meesageLog_seq")
-    @SequenceGenerator(allocationSize = 1, sequenceName = "meesageLog_seq", name = "meesageLog_seq")
-    private Long MeseageSeq;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "messageLog_seq")
+    @SequenceGenerator(allocationSize = 1, sequenceName = "messageLog_seq", name = "messageLog_seq")
+    private Long MessageSeq;
 
     @JoinColumn(name = "member_seq")
-    private Long userSeq;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Users user;
 
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "chattingroom_seq")
-    private Long chattingRoomUrl;
+    private ChattingRoom chattingroom;
 
     private String chattingContent;
 

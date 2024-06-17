@@ -22,6 +22,7 @@ public interface MeetUpBoardService {
 
     MeetUpBoard  findMeetUpByMeetUpName(String meetUpName);
 
+   List<MeetUpBoard> findMeetUpByInterest(String interest);
 
     MeetUpBoard findMeetUpByBoardSeq(Long meetUpSeq);
 

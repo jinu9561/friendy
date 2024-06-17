@@ -22,9 +22,8 @@ public enum ErrorCode {
     NOTFOUND_PLACE(610,"장소가 조회에 실패했습니다"),
     WRONG_TYPE(611, "비밀번호는 숫자로 입력해주세요."),
     NOTFOUND_TRANSACTION(612,"주문 내역 조회에 실패했습니다."),
-    JSON_PROCESSING_ERROR(700,"파싱에러"),
-    MAX_ENTRY(701,"이미 인원이 가득찬 소모임입니다");
-
+    MAX_ENTRY(700, "최대인원입니다"),
+    JSON_PROCESSING_ERROR(701,"파싱에러");
     private final int status;
     private final String message;
 }

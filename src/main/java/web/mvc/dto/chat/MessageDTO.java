@@ -13,7 +13,8 @@ import java.util.Date;
 @ToString
 public class MessageDTO {
 
-    Long chatRoomId;
+    String chatRoomId;
+    Long userSeq;
     String sender;
     String chattingContent;
     Date chattingCreateDate;

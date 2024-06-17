@@ -1,9 +1,11 @@
 package web.mvc.entity.meetUpBoard;
 
 import jakarta.persistence.*;
+import kotlin.Lazy;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
+import web.mvc.entity.user.Users;
 
 import java.util.Date;
 
@@ -21,11 +23,14 @@ public class MeetUpRequest {
     @SequenceGenerator(allocationSize = 1, sequenceName = "meetuprequest_seq", name = "meetuprequest_seq")
     private Long meetUpRequestSeq;
 
-    @JoinColumn(name="meetup_seq")
-    private Long meetUpSeq;
 
-    @Column(name ="user_seq")
-    private Long userSeq;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="meetup_seq")
+    private MeetUpBoard meetUpBoard;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name ="user_seq")
+    private Users user;
 
     @ColumnDefault("0")
     private int meetUpRequestStatus;

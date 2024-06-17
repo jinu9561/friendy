@@ -10,9 +10,12 @@ import web.mvc.dto.meetUpBoard.MeetUpBoardDTO;
 import web.mvc.dto.meetUpBoard.MeetUpDeleteDTO;
 import web.mvc.dto.meetUpBoard.MeetUpUpdateDTO;
 import web.mvc.entity.meetUpBoard.MeetUpBoard;
+import web.mvc.entity.user.Interest;
+import web.mvc.repository.user.InterestRepository;
 import web.mvc.service.meetUpBoard.MeetUpBoardService;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -21,13 +24,14 @@ import java.util.List;
 public class MeetUpBoardController {
 
     private final MeetUpBoardService meetUpBoardService;
-
+    private final InterestRepository interestRepository;
 
     @PostMapping(value = "/create", produces = "application/json; charset=UTF-8")
     //게시글 생성
     public ResponseEntity<?> createPartyBoard(@RequestBody MeetUpBoardDTO meetUpBoardDTO) throws Exception{
         //입력된 타입이 안맞으면 @RequestBody에서 애초에 걸러져버림. .
         System.out.println("여기도 못가는거 맞지 ");
+        System.out.println("받아온시퀀스"+meetUpBoardDTO.getUserSeq());
 
     String result =meetUpBoardService.createParty(meetUpBoardDTO);
         System.out.println(result+"결과");
@@ -64,6 +68,27 @@ public class MeetUpBoardController {
         MeetUpBoard meet =meetUpBoardService.findMeetUpByMeetUpName(meetUpName);
         System.out.println("결과물"+meet);
        return ResponseEntity.status(HttpStatus.OK).body(meet);
+    }
+
+    @GetMapping("/select/{interest}")
+    public ResponseEntity<?>  selectAllByInterest(@PathVariable Long interest){
+
+        System.out.println(interest+"들어온인터레스트");
+        Optional<Interest> interestOptional = interestRepository.findById(interest);
+        System.out.println("이게 null 이니?"+interestOptional);
+        if(interestOptional.isPresent()){
+
+            Interest forInterest= interestOptional.get();
+            String interestCate= forInterest.getInterestCategory();
+            List<MeetUpBoard> meet=meetUpBoardService.findMeetUpByInterest(interestCate);
+            return ResponseEntity.status(HttpStatus.OK).body(meet);
+
+        }
+
+
+
+
+        return ResponseEntity.status(HttpStatus.OK).body("ok");
     }
 
     @DeleteMapping("/delete")

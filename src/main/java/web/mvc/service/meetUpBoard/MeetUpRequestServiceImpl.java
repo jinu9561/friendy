@@ -2,6 +2,7 @@ package web.mvc.service.meetUpBoard;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.catalina.User;
 import org.json.JSONArray;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,7 +41,9 @@ public class MeetUpRequestServiceImpl implements MeetUpRequestService {
         String nowEntryList = meetUpBoardInfo.getMeetUpPeopleList();
         JSONArray jsonArray = new JSONArray(nowEntryList);
         List<Object> list = jsonArray.toList();
-
+        Users users= Users.builder()
+                .userSeq(meetUpRequestDTO.getUserSeq())
+                .build();
         int count = 0;
         for (Object obj : list) {
             System.out.println(obj);
@@ -52,8 +55,8 @@ public class MeetUpRequestServiceImpl implements MeetUpRequestService {
         } else if (maxEntry >= count) {
             System.out.println("여기?");
             MeetUpRequest meetUpRequest = MeetUpRequest.builder()
-                    .meetUpSeq(meetUpRequestDTO.getMeetUpSeq())
-                    .userSeq(meetUpRequestDTO.getUserSeq()).
+                    .meetUpBoard(meetUpBoardInfo)
+                    .user(users).
                     build();
 
             meetUpRequestRepository.save(meetUpRequest);
