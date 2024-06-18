@@ -1,5 +1,6 @@
 package web.mvc.service.admin;
 
+import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
 import web.mvc.dto.event.EventDTO;
 import web.mvc.dto.event.EventDetailImgDTO;
@@ -22,6 +23,12 @@ public interface AdminEventService {
 
     //이벤트 세부 사진 수정
     String updateEventDetail(Long eventDetailImgSeq, MultipartFile file, EventDetailImgDTO eventDetailImgDTO);
+
+    //이벤트 메인 사진 가져오기
+    public Resource getMainImg(String imgName);
+
+    //이벤트 세부 사진 가져오기
+    public Resource getDetailImg(String imgName);
 
     //이벤트 삭제
     void deleteEvent(Long eventSeq);

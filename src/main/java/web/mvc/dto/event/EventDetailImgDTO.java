@@ -12,6 +12,8 @@ public class EventDetailImgDTO {
 
     private Long eventDetailImgSeq;
 
+    private String eventDetailImgName;
+
     private String eventDetailImgSrc;
 
     private String eventDetailImgSize;
