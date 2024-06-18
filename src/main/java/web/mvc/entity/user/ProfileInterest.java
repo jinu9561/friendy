@@ -30,4 +30,5 @@ public class ProfileInterest {
         this.interest = interest;
         this.profile = profile;
     }
+    // 추가된 엔티티
 }
