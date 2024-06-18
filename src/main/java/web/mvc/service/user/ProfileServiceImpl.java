@@ -11,19 +11,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import web.mvc.dto.user.JellyTransactionDTO;
 import web.mvc.dto.user.ProfileDTO;
-import web.mvc.entity.user.Interest;
-import web.mvc.entity.user.Profile;
-import web.mvc.entity.user.ProfileDetailImg;
-import web.mvc.entity.user.Users;
+import web.mvc.entity.user.*;
 import web.mvc.dto.user.InterestDTO;
 import web.mvc.dto.user.ProFileDetailImgDTO;
 import web.mvc.enums.users.ImgStatus;
 import web.mvc.exception.common.ErrorCode;
 import web.mvc.exception.common.GlobalException;
-import web.mvc.repository.user.InterestRepository;
-import web.mvc.repository.user.ProfileDetailImgRepository;
-import web.mvc.repository.user.ProfileRepository;
-import web.mvc.repository.user.UserRepository;
+import web.mvc.repository.user.*;
 import web.mvc.service.common.CommonService;
 
 
@@ -42,9 +36,10 @@ public class ProfileServiceImpl implements ProfileService {
     private final ProfileRepository profileRepository;
     private final UserRepository userRepository;
     private final ProfileDetailImgRepository profileDetailImgRepository;
-    private final InterestRepository interestRepository;
+    private final ProfileInterestRepository profileInterestRepository;
     private final CommonService commonService;
     private final PasswordEncoder passwordEncoder;
+    private final InterestRepository interestRepository;
 
     @Value("${profile.save.dir}")
     private String uploadDir;
@@ -91,14 +86,16 @@ public class ProfileServiceImpl implements ProfileService {
                 }).collect(Collectors.toList());
         map.put("profileDetailImgList",profileDetailImgDTOList);
 
-//        List<InterestDTO> interestDTOList = profile.getProfileInterestList().stream()
-//                .map(profileInterest -> {
-//                    InterestDTO dto = new InterestDTO();
-//                    dto.setInterestSeq(interest.getInterestSeq());
-//                    dto.setInterestCategory(interest.getInterestCategory());
-//                    return dto;
-//                }).collect(Collectors.toList());
-//        map.put("interestList",interestDTOList);//
+        List<ProfileInterest> profileInterestList = profileInterestRepository.findByProfileSeq(profile.getProfileSeq());
+
+        List<InterestDTO> interestDTOList = profileInterestList.stream()
+                .map(profileInterest -> {
+                    InterestDTO dto = new InterestDTO();
+                    dto.setInterestSeq(profileInterest.getInterest().getInterestSeq());
+                    dto.setInterestCategory(profileInterest.getInterest().getInterestCategory());
+                    return dto;
+                }).collect(Collectors.toList());
+        map.put("interestList",interestDTOList);//
 
         List<JellyTransactionDTO> jellyTransactionDTOList = user.getJellyTransactionList().stream()
                 .map(jellyTransaction -> {
@@ -156,21 +153,20 @@ public class ProfileServiceImpl implements ProfileService {
 
         log.info("profilDTO : "+profileDTO);
         List<String> interests = profileDTO.getInterestCategory();
+
         // 기존 관심목록 삭제
-//        if(!interests.isEmpty()){
-//            interestRepository.deleteByProfileSeq(profile.getProfileSeq());
-//
-//            // 새로운 관심사 목록을 추가
-//            List<Interest> newInterestList = interests.stream()
-//                    .map(i -> Interest.builder()
-//                            .interestCategory(i)
-//                            //.profile(profile)
-//                            .build())
-//                    .collect(Collectors.toList());
-//
-//            //profile.setInterestList(newInterestList);
-//
-//        }
+        if(!interests.isEmpty()){
+            profileInterestRepository.deleteByProfileSeq(profile.getProfileSeq());
+
+            // 새로운 관심사 목록을 추가
+            for(String i : interests){
+                Interest interest = interestRepository.findByInterestCategory(i);
+                ProfileInterest saveInterest = new ProfileInterest(interest,profile);
+                profile.getProfileInterestList().add(saveInterest);
+            }
+
+
+        }
 
         if(profileDTO.getIntroduce()!=null && !profileDTO.getIntroduce().trim().isEmpty()){
             profile.setIntroduce(profileDTO.getIntroduce());
@@ -201,7 +197,6 @@ public class ProfileServiceImpl implements ProfileService {
         } else {
             user.setNickName(user.getNickName());
         }
-
 
         return alertMsg;
     }
