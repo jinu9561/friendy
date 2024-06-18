@@ -78,8 +78,6 @@ public class ProfileServiceImpl implements ProfileService {
         map.put("email",user.getEmail());
 
 
-
-
         List<ProFileDetailImgDTO> profileDetailImgDTOList = profile.getProfileDetailImgList().stream()
                 .map(img -> {
                     ProFileDetailImgDTO dto = new ProFileDetailImgDTO();
@@ -93,8 +91,8 @@ public class ProfileServiceImpl implements ProfileService {
                 }).collect(Collectors.toList());
         map.put("profileDetailImgList",profileDetailImgDTOList);
 
-//        List<InterestDTO> interestDTOList = profile.getInterestList().stream()
-//                .map(interest -> {
+//        List<InterestDTO> interestDTOList = profile.getProfileInterestList().stream()
+//                .map(profileInterest -> {
 //                    InterestDTO dto = new InterestDTO();
 //                    dto.setInterestSeq(interest.getInterestSeq());
 //                    dto.setInterestCategory(interest.getInterestCategory());

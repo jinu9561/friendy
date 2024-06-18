@@ -37,13 +37,14 @@ public class Profile {
     private Users user;
     @OneToMany(mappedBy = "profile" , cascade = CascadeType.ALL)
     private List<ProfileDetailImg> profileDetailImgList;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "interest")
-    private Interest interest;
+    @OneToMany(mappedBy = "profile" , cascade = CascadeType.ALL)
+    private List<ProfileInterest> profileInterestList;
 
     public Profile(Users user) {
         this.user = user;
         this.profileDetailImgList = new ArrayList<>();
+        this.profileInterestList = new ArrayList<>();
+
     }
 
 }

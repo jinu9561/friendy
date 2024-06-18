@@ -18,11 +18,11 @@ public class Interest {
     @GeneratedValue(strategy = GenerationType.SEQUENCE , generator = "interest_seq")
     @SequenceGenerator(name ="interest_seq" , allocationSize = 1 , sequenceName = "interest_seq")
     private Long interestSeq;
-    @Column(length = 10)
+    @Column(length = 100)
     private String interestCategory;
 
     @OneToMany(mappedBy = "interest")
-    List<Profile> profileList;
+    List<ProfileInterest> profileInterestList;
 
 
 
