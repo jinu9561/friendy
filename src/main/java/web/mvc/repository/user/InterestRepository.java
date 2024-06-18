@@ -9,11 +9,11 @@ import java.util.List;
 
 public interface InterestRepository extends JpaRepository<Interest, Long> {
 
-    @Modifying
-    @Query("delete from Interest i where i.profile.profileSeq = ?1")
-    public int deleteByProfileSeq(Long profileSeq);
-
-    @Query("select i from Interest i where i.profile.profileSeq = ?1")
-    public List<Interest> findByProfileSeq(Long profileSeq);
+//    @Modifying
+//    @Query("delete from Interest i where i.profile.profileSeq = ?1")
+//    public int deleteByProfileSeq(Long profileSeq);
+//
+//    @Query("select i from Interest i where i.profile.profileSeq = ?1")
+//    public List<Interest> findByProfileSeq(Long profileSeq);
 
 }

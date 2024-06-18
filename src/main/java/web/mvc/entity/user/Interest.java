@@ -4,6 +4,8 @@ package web.mvc.entity.user;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @Getter
 @Setter
 @Entity
@@ -19,9 +21,11 @@ public class Interest {
     @Column(length = 10)
     private String interestCategory;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "profile_seq")  // 외래 키를 지정
-    private Profile profile;
-    //수정해야함
+    @OneToMany(mappedBy = "interest")
+    List<Profile> profileList;
+
+
+
+
 
 }
