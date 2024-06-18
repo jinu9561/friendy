@@ -42,11 +42,10 @@ public class ChattingRoomController {
     }
 
 
-    @GetMapping("/joinRoom/{roomId}")
-    public ResponseEntity<?> joinRoom(@PathVariable String roomId){
+    @GetMapping("/joinRoom/{chattingRoomSeq}")
+    public ResponseEntity<?> joinRoom(@PathVariable Long chattingRoomSeq){
 
-        System.out.println("룸아이디"+roomId);
-        List<MessageLog> messageLogList= chattingRoomService.findMessageLog(roomId);
+        List<MessageLog> messageLogList= chattingRoomService.findMessageLog(chattingRoomSeq);
 
         System.out.println("출력된 메세지 로그"+messageLogList.toString());
         

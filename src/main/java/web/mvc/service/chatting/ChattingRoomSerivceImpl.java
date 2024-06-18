@@ -48,11 +48,11 @@ public class ChattingRoomSerivceImpl implements ChattingRoomService {
     public String deleteChatRoom(ChattingRoom chattingRoom) {
         return null;
     }
+    //채팅룸에서 나가기 버튼 누르면 해당 방의 채팅 내역 삭제. 유저 시퀀스의
 
     @Override
-    public List<MessageLog> findMessageLog(String roomId) {
-
-        List<MessageLog> list= messageLogRepository.findMessageLogByRoomId(roomId);
+    public List<MessageLog> findMessageLog(Long chattingRoomSeq) {
+        List<MessageLog> list= messageLogRepository.findMessageLogByRoomId(chattingRoomSeq);
         return list;
     }
 }
