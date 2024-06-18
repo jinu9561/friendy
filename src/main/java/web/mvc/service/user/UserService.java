@@ -1,6 +1,10 @@
 package web.mvc.service.user;
 
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import web.mvc.dto.user.EmailVerificationDTO;
 import web.mvc.dto.user.UsersDTO;
 
@@ -25,6 +29,18 @@ public interface UserService {
 
     // 회원 탈퇴
     public String resign(Long userSeq);
+
+    // 이메일 중복 체크
+    public boolean duplicateEmailCheck(String email);
+
+
+    // 전화번호 중복 체크
+    public boolean duplicatePhoneCheck(String phone);
+
+
+    // 닉네임 중복 체크
+    public boolean duplicateNickNameCheck(String nickName);
+
 
 
 }

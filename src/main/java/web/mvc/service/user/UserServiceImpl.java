@@ -236,5 +236,35 @@ public class UserServiceImpl implements UserService {
         return resignMsg;
     }
 
+    @Override
+    public boolean duplicateEmailCheck(String email) {
+        if(userRepository.findUserByEmail(email)!= null){
+            // 해당 id가 있다
+            return  true;
+        }
+
+        return false;
+    }
+
+    @Override
+    public boolean duplicatePhoneCheck(String phone) {
+        if(userRepository.findUserByPhone(phone)!= null){
+            // 해당 id가 있다
+            return  true;
+        }
+
+        return false;
+    }
+
+    @Override
+    public boolean duplicateNickNameCheck(String nickName) {
+        if(userRepository.findUserByNickName(nickName)!= null){
+            // 해당 id가 있다
+            return  true;
+        }
+
+        return false;
+    }
+
 
 }
