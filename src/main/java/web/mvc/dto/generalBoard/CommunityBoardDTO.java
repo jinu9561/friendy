@@ -23,6 +23,7 @@ public class CommunityBoardDTO {
     private String boardPwd;
     private LocalDateTime boardRegDate;
     private LocalDateTime boardUpdateDate;
+    private int commBoardCount;
 
     // 사용자가 보낸 DTO에서 엔티티로 변환하는 메서드
     public CommunityBoard toCommunityBoardEntity(CommunityBoardDTO communityBoardDTO, Users user) {
@@ -47,7 +48,8 @@ public class CommunityBoardDTO {
                 communityBoard.getBoardLike(),
                 communityBoard.getBoardPwd(),
                 communityBoard.getBoardRegDate(),
-                communityBoard.getBoardUpdateDate()
+                communityBoard.getBoardUpdateDate(),
+                communityBoard.getCommBoardCount()
         );
     }
 }
