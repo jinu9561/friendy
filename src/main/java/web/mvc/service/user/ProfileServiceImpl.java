@@ -98,7 +98,7 @@ public class ProfileServiceImpl implements ProfileService {
 //                    dto.setInterestCategory(interest.getInterestCategory());
 //                    return dto;
 //                }).collect(Collectors.toList());
-//        map.put("interestList",interestDTOList);
+//        map.put("interestList",interestDTOList);//
 
         List<JellyTransactionDTO> jellyTransactionDTOList = user.getJellyTransactionList().stream()
                 .map(jellyTransaction -> {
