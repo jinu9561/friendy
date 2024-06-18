@@ -181,19 +181,34 @@ public class ProfileServiceImpl implements ProfileService {
         }
 
         if (profileDTO.getPhone() != null && !profileDTO.getPhone().trim().isEmpty()) {
-            user.setPhone(profileDTO.getPhone());
+            if(userRepository.findUserByPhone(profileDTO.getPhone()) == null){
+                user.setPhone(profileDTO.getPhone());
+            }else{
+                return "등록된 전화번호입니다";
+            }
+
         } else {
             user.setPhone(user.getPhone());
         }
 
         if (profileDTO.getEmail() != null && !profileDTO.getEmail().trim().isEmpty()) {
-            user.setEmail(profileDTO.getEmail());
+            if(userRepository.findUserByEmail(profileDTO.getEmail()) == null){
+                user.setEmail(profileDTO.getEmail());
+            }else{
+                return "등록된 이메일입니다";
+            }
+
         } else {
             user.setEmail(user.getEmail());
         }
 
         if (profileDTO.getNickName() != null && !profileDTO.getNickName().trim().isEmpty()) {
-            user.setNickName(profileDTO.getNickName());
+            if(userRepository.findUserByNickName(profileDTO.getNickName()) == null){
+                user.setNickName(profileDTO.getNickName());
+            }else{
+                return "등록된 닉네임입니다";
+            }
+
         } else {
             user.setNickName(user.getNickName());
         }
