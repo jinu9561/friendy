@@ -131,16 +131,16 @@ public class UserServiceImpl implements UserService {
             user.setProfile(profile);
 
             // user에 관심사 저장
-            List<Interest> savedList  = user.getProfile().getInterestList();
+//            List<Interest> savedList  = user.getProfile().getInterestList();
             List<String> interests = usersDTO.getInterestCategory();
             log.info(interests.toString());
 
             for(String i : interests){
                 Interest interest = Interest.builder()
                         .interestCategory(i)
-                        .profile(profile) // Associate the interest with the profile
+                        //.profile(profile) // Associate the interest with the profile
                         .build();
-                savedList.add(interest);
+                //savedList.add(interest);
             }
 
             // db에 유저 저장

@@ -93,14 +93,14 @@ public class ProfileServiceImpl implements ProfileService {
                 }).collect(Collectors.toList());
         map.put("profileDetailImgList",profileDetailImgDTOList);
 
-        List<InterestDTO> interestDTOList = profile.getInterestList().stream()
-                .map(interest -> {
-                    InterestDTO dto = new InterestDTO();
-                    dto.setInterestSeq(interest.getInterestSeq());
-                    dto.setInterestCategory(interest.getInterestCategory());
-                    return dto;
-                }).collect(Collectors.toList());
-        map.put("interestList",interestDTOList);
+//        List<InterestDTO> interestDTOList = profile.getInterestList().stream()
+//                .map(interest -> {
+//                    InterestDTO dto = new InterestDTO();
+//                    dto.setInterestSeq(interest.getInterestSeq());
+//                    dto.setInterestCategory(interest.getInterestCategory());
+//                    return dto;
+//                }).collect(Collectors.toList());
+//        map.put("interestList",interestDTOList);
 
         List<JellyTransactionDTO> jellyTransactionDTOList = user.getJellyTransactionList().stream()
                 .map(jellyTransaction -> {
@@ -159,20 +159,20 @@ public class ProfileServiceImpl implements ProfileService {
         log.info("profilDTO : "+profileDTO);
         List<String> interests = profileDTO.getInterestCategory();
         // 기존 관심목록 삭제
-        if(!interests.isEmpty()){
-            interestRepository.deleteByProfileSeq(profile.getProfileSeq());
-
-            // 새로운 관심사 목록을 추가
-            List<Interest> newInterestList = interests.stream()
-                    .map(i -> Interest.builder()
-                            .interestCategory(i)
-                            .profile(profile)
-                            .build())
-                    .collect(Collectors.toList());
-
-            profile.setInterestList(newInterestList);
-
-        }
+//        if(!interests.isEmpty()){
+//            interestRepository.deleteByProfileSeq(profile.getProfileSeq());
+//
+//            // 새로운 관심사 목록을 추가
+//            List<Interest> newInterestList = interests.stream()
+//                    .map(i -> Interest.builder()
+//                            .interestCategory(i)
+//                            //.profile(profile)
+//                            .build())
+//                    .collect(Collectors.toList());
+//
+//            //profile.setInterestList(newInterestList);
+//
+//        }
 
         if(profileDTO.getIntroduce()!=null && !profileDTO.getIntroduce().trim().isEmpty()){
             profile.setIntroduce(profileDTO.getIntroduce());
@@ -253,8 +253,8 @@ public class ProfileServiceImpl implements ProfileService {
     }
 
     @Override
-    public String deleteDetailImg(ProFileDetailImgDTO proFileDetailImgDTO) {
-        profileDetailImgRepository.deleteById(proFileDetailImgDTO.getProfileDetailImgSeq());
+    public String deleteDetailImg(Long profileDetailImgSeq) {
+        profileDetailImgRepository.deleteById(profileDetailImgSeq);
 
         return deleteMsg;
     }

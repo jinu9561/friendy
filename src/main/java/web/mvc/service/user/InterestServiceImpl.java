@@ -103,16 +103,16 @@ public class InterestServiceImpl implements InterestService {
 
         Profile profile = profileRepository.findByUserSeq(userSeq).orElseThrow(()->new GlobalException(ErrorCode.NOTFOUND_PROFILE));
 
-        List<Interest> interestList = interestRepository.findByProfileSeq(profile.getProfileSeq());
-        List<String> interestCategoryList = usersDTO.getInterestCategory();
-
-        for(int i = 0; i< interestList.size(); i++) {
-            String interestCategory = interestCategoryList.get(i);
-            Interest interest = interestList.get(i);
-            interest.setInterestCategory(interestCategory);
-        }
-
-        interestRepository.saveAll(interestList);
+//        List<Interest> interestList = interestRepository.findByProfileSeq(profile.getProfileSeq());
+//        List<String> interestCategoryList = usersDTO.getInterestCategory();
+//
+//        for(int i = 0; i< interestList.size(); i++) {
+//            String interestCategory = interestCategoryList.get(i);
+//            Interest interest = interestList.get(i);
+//            interest.setInterestCategory(interestCategory);
+//        }
+//
+//        interestRepository.saveAll(interestList);
 
         return alterMsg;
     }

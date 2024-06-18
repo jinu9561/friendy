@@ -22,6 +22,7 @@ public class PlaceRecommendationDTO {
     private String placeMainImg;
     private String placeMainImgType;
     private String placeMainImgSize;
+    private String placeMainImgName;
 
     List<PlaceDetailImgDTO> placeDetailImgList = new ArrayList<>();
 }
