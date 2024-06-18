@@ -19,6 +19,7 @@ public class EventDTO {
     private String eventName;
     private String eventContent;
     private String eventMainImg;
+    private String eventMainImgName;
     private String eventRegDate;
     private String eventUpdateTime;
     private String eventDeadLine;

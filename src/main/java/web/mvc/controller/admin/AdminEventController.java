@@ -56,6 +56,19 @@ public class AdminEventController {
     }
 
 
+    //이벤트 메인 사진 가져오기
+    @GetMapping("/main/img")
+    public ResponseEntity<?> getMainImg(@RequestParam String imgName) {
+        return ResponseEntity.status(HttpStatus.OK).body(adminEventService.getMainImg(imgName));
+    }
+
+    //이벤트 세부 사진 가져오기
+    @GetMapping("/detail/img")
+    public ResponseEntity<?> getDetailImg(@RequestParam String imgName) {
+        return ResponseEntity.status(HttpStatus.OK).body(adminEventService.getDetailImg(imgName));
+    }
+
+
     //삭제
     @DeleteMapping("/delete/{eventSeq}")
     public String deleteEvent(@PathVariable Long eventSeq){

@@ -3,6 +3,8 @@ package web.mvc.service.admin;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -54,7 +56,7 @@ public class AdminEventServiceImpl implements AdminEventService {
 
         Map<String,String> map = commonService.uploadFile(true,file,uploadDir);
 
-        //하이폰 제거
+        //하이픈 제거
         String date = eventDTO.getEventDeadLine().replaceAll("-","");
         try{
             deadLine = formatter.parse(date);
@@ -62,6 +64,7 @@ public class AdminEventServiceImpl implements AdminEventService {
                     .eventName(eventDTO.getEventName())
                     .eventContent(eventDTO.getEventContent())
                     .eventMainImg(map.get("imgSrc"))
+                    .eventMainImgName(map.get("imgName"))
                     .eventDeadLine(deadLine)
                     .eventMaxEntry(eventDTO.getEventMaxEntry())
                     .eventStatus(eventDTO.getEventStatus())
@@ -88,6 +91,7 @@ public class AdminEventServiceImpl implements AdminEventService {
         eventDetailImg.setEventDetailImgSrc(map.get("imgSrc"));
         eventDetailImg.setEventDetailImgType(map.get("imgType"));
         eventDetailImg.setEventDetailImgSize(map.get("imgSize"));
+        eventDetailImg.setEventDetailImgName(map.get("imgName"));
 
         eventDetailImgRepository.save(eventDetailImg);
 
@@ -138,6 +142,20 @@ public class AdminEventServiceImpl implements AdminEventService {
             eventDetailImg.setEventDetailImgSize(map.get("imgSize"));
         }
         return alterMsg;
+    }
+
+    //이벤트 메인 사진 가져오기
+    @Override
+    public Resource getMainImg(String imgName) {
+        Resource resource = new FileSystemResource(uploadDir+"\\"+imgName);
+        return resource;
+    }
+
+    //이벤트 세부 사진 가져오기
+    @Override
+    public Resource getDetailImg(String imgName) {
+        Resource resource = new FileSystemResource(uploadDir+"/detail"+"\\"+imgName);
+        return resource;
     }
 
 

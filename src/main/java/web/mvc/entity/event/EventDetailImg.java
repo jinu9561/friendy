@@ -14,6 +14,8 @@ public class EventDetailImg {
     @GeneratedValue(strategy = GenerationType.SEQUENCE , generator = "event_detailImg_seq")
     @SequenceGenerator(name ="event_detailImg_seq" , allocationSize = 1 , sequenceName = "event_detailImg_seq")
     private Long eventDetailImgSeq;
+    @Column(length = 100)
+    private String eventDetailImgName;
     @Column(length = 300)
     private String eventDetailImgSrc;
     @Column(length = 100)
