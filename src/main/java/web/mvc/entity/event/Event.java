@@ -33,6 +33,9 @@ public class Event {
     @Column(length = 500)
     private String eventMainImg;
 
+    @Column(length = 100)
+    private String eventMainImgName;
+
     private int eventMaxEntry;
 
     private EventStatus eventStatus;
