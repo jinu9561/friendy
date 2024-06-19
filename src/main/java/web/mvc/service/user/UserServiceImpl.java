@@ -29,8 +29,8 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
 @Slf4j
+@Transactional
 public class UserServiceImpl implements UserService {
 
     private final PasswordEncoder passwordEncoder;
@@ -41,7 +41,6 @@ public class UserServiceImpl implements UserService {
 
     private final AdminDTO adminDTO;
     private String subject ="Friendy 가입 인증코드 입니다!";
-    private String content ="다음 인증 코드를 사용하여 회원가입을 완료하세요: {code}";
     private String failMsg = "메일 발송을 실패했습니다";
     private String registerMsg = "해당 이메일로 인증 코드를 보냈습니다 확인해 주세요";
     private String updateMsg ="수정에 성공했습니다";
@@ -69,7 +68,7 @@ public class UserServiceImpl implements UserService {
                 throw new GlobalException(ErrorCode.WRONG_DATE);
             }
 
-            String encodePwd = passwordEncoder.encode(adminDTO.getUserPwd());
+            String encodePwd  = passwordEncoder.encode(adminDTO.getUserPwd());
 
             Users admin = Users.builder()
                     .userId(adminDTO.getUserId())
@@ -84,6 +83,16 @@ public class UserServiceImpl implements UserService {
                     .gender(adminDTO.getGender())
                     .Role("ROLE_ADMIN")
                     .build();
+
+            // 저장하기 전에 UserDetail, profile 생성
+            UserDetail userDetail = new UserDetail(admin);
+            Profile profile = new Profile(admin);
+            userDetail.setUserState(State.CERTIFIED);
+
+            // user에 userDetail, profile  저장
+            admin.setUserDetail(userDetail);
+            admin.setProfile(profile);
+
 
             Users savedAdmin = userRepository.save(admin);
         }
@@ -150,8 +159,10 @@ public class UserServiceImpl implements UserService {
             // 이메일 인증을 위한 emailVerification 저장
             EmailVerification savedEmailVerification = emailVerificationService.saveEmailToken(savedUsers);
             // 이메일 인증토큰 보내기
+            String content ="다음 인증 코드를 사용하여 회원가입을 완료하세요: {code}";
             content = content.replace("{code}", savedEmailVerification.getEmailToken());
-            emailVerificationService.sendEmailVerificationCode(user.getEmail(),subject,content);
+            log.info("이메일 인증 번호 : "+ savedEmailVerification.getEmailToken());
+            emailVerificationService.sendEmailVerificationCode(savedUsers.getEmail(),subject,content);
 
             log.info("savedUsers = {}", savedUsers);
 

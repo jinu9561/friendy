@@ -4,6 +4,8 @@ import lombok.*;
 import org.springframework.stereotype.Component;
 import web.mvc.enums.users.ImgStatus;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @Builder
@@ -22,5 +24,6 @@ public class UserProfileDTO {
     private String profileMainImgName;
     private ImgStatus imgStatus;
     private String introduce;
+    private LocalDateTime regDate;
 
 }
