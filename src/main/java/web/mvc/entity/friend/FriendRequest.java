@@ -22,11 +22,11 @@ public class FriendRequest {
     @SequenceGenerator(name ="friend_request_seq" , allocationSize = 1 , sequenceName = "friend_request_seq")
     private Long friendRequestSeq;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "sender_seq")  // 외래키 지정
     private Users sender; // 친구 요청 보낸 유저
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "receiver_seq")  // 외래키 지정
     private Users receiver; // 요청 받은 유저
 

@@ -21,15 +21,15 @@ public class Report {
     @SequenceGenerator(name ="report_seq" , allocationSize = 1 , sequenceName = "report_seq")
     private Long reportSeq;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "sender_seq")  // 외래키 지정
     private Users sender; // 신고한 유저
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "receiver_seq")  // 외래키 지정
     private Users receiver; // 신고당한 유저
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "report_type_seq")  // 외래키 지정
     private ReportType reportType; // 신고할 게시물의 유형 (게시판 종류 || 댓글 || 채팅방 || 프로필)
 

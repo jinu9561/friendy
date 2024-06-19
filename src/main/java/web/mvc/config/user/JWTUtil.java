@@ -39,6 +39,12 @@ public class JWTUtil {
         log.info("getIds(String token)  re = {}" ,re);
         return re;
     }
+    public Long getUserSeq(String token) {
+        log.info("getUserSeq(String token)  call");
+        Long re = Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("userSeq", Long.class);
+        log.info("getUserSeq(String token)  re = {}" ,re);
+        return re;
+    }
 
     public String getRole(String token) {
         log.info("getRole(String token)  call");
@@ -59,6 +65,7 @@ public class JWTUtil {
         log.info("createJwt  call");
         return Jwts.builder()
                 .claim("userName", users.getUserName()) //이름  claim -> payload 데이터 설정
+                .claim("userSeq", users.getUserSeq()) //pk
                 .claim("userId", users.getUserId()) //아이디
                 .claim("role", role)
                 .issuedAt(new Date(System.currentTimeMillis()))  // 발급 시간 설정
