@@ -39,7 +39,7 @@ public class SmsVerificationServiceImpl implements SmsVerificationService {
     @Autowired
     private SmsverificationRepository smsverificationRepository;
 
-    private String content ="다음 인증 코드를 사용하여 본인인증을 완료하세요: {code}";
+
     private DefaultMessageService messageService;
 
     private String smsMeg = "본인 인증을 위해 회원 번호로 인증번호를 전송하였습니다.";
@@ -58,6 +58,7 @@ public class SmsVerificationServiceImpl implements SmsVerificationService {
 
         SmsVerification smsVerification = new SmsVerification(users);
         SmsVerification savedSms = smsverificationRepository.save(smsVerification);
+        String content ="다음 인증 코드를 사용하여 본인인증을 완료하세요: {code}";
         content = content.replace("{code}", savedSms.getSmsToken());
 
         Message message = new Message();
@@ -86,6 +87,7 @@ public class SmsVerificationServiceImpl implements SmsVerificationService {
         Users user = userRepository.findById(userSeq).orElseThrow(()->new GlobalException(ErrorCode.NOTFOUND_ID));
         String smsCode = this.getSMSToken(userSeq);
 
+        String content ="다음 인증 코드를 사용하여 본인인증을 완료하세요: {code}";
         content = content.replace("{code}", smsCode);
 
         Message message = new Message();

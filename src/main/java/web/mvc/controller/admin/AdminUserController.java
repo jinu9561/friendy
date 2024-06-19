@@ -6,9 +6,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import web.mvc.dto.user.*;
-import web.mvc.enums.users.State;
 import web.mvc.service.admin.AdminUserService;
-import web.mvc.service.user.UserService;
+
 
 @RestController
 @RequiredArgsConstructor
