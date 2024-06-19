@@ -56,16 +56,18 @@ public class JWTFilter extends OncePerRequestFilter {
         String userName = jwtUtil.getUsername(token);
         String userId = jwtUtil.getId(token);
         String role = jwtUtil.getRole(token);
+        Long userSeq = jwtUtil.getUserSeq(token);
         
         //userEntity를 생성하여 값 set
         Users users = new Users();
+        users.setUserSeq(userSeq);
         users.setUserId(userId);
         users.setUserName(userName);
         users.setRole(role);
-        
+
         //UserDetails에 회원 정보 객체 담기
         CustomMemberDetails customMemberDetails = new CustomMemberDetails(users);
-        
+
         //스프링 시큐리티 인증 토큰 생성 userDetail, password , role 인수를 받는다  -> principal , credentials , authorities
         Authentication authToken = new UsernamePasswordAuthenticationToken(customMemberDetails, null, customMemberDetails.getAuthorities());
         //세션에 사용자 등록 - 세션이 만들어짐.

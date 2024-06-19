@@ -22,11 +22,11 @@ public class FriendList {
     @SequenceGenerator(name ="friends_list_seq" , allocationSize = 1 , sequenceName = "friends_list_seq")
     private Long friendsListSeq;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_seq")  // 외래키 지정
     private Users user;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "friend_user_seq")  // 외래키 지정
     private Users friendUser; // 친구의 정보
 
@@ -37,5 +37,4 @@ public class FriendList {
     private LocalDateTime friendRegDate;
     @CreationTimestamp
     private LocalDateTime friendUpdateDate;
-
 }

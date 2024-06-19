@@ -21,14 +21,16 @@ public interface FriendService {
     /**
      * 친구 요청 수락
      * @param friendRequestSeq 친구 요청 ID
+     * @param user 요청을 수락하는 유저
      */
-    void acceptFriendRequest(Long friendRequestSeq);
+    void acceptFriendRequest(Long friendRequestSeq, Users user);
 
     /**
      * 친구 요청 거절
      * @param friendRequestSeq 친구 요청 ID
+     * @param user 요청을 거절하는 유저
      */
-    void rejectFriendRequest(Long friendRequestSeq);
+    void rejectFriendRequest(Long friendRequestSeq, Users user);
 
     /**
      * 친구 삭제
@@ -50,5 +52,4 @@ public interface FriendService {
      * @return 친구 목록
      */
     List<FriendList> getAllFriends(Users user);
-
 }

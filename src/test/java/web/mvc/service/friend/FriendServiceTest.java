@@ -60,7 +60,7 @@ public class FriendServiceTest {
     @Test
     void testAcceptFriendRequest() {
         FriendRequest friendRequest = friendService.sendFriendRequest(sender, receiver);
-        friendService.acceptFriendRequest(friendRequest.getFriendRequestSeq());
+        friendService.acceptFriendRequest(friendRequest.getFriendRequestSeq(), receiver);
 
         Optional<FriendList> friendship = friendListRepository.findFriendship(sender, receiver);
         if (friendship.isPresent()) {
@@ -73,7 +73,7 @@ public class FriendServiceTest {
     @Test
     void testRejectFriendRequest() {
         FriendRequest friendRequest = friendService.sendFriendRequest(sender, receiver);
-        friendService.rejectFriendRequest(friendRequest.getFriendRequestSeq());
+        friendService.rejectFriendRequest(friendRequest.getFriendRequestSeq(), receiver);
 
         Optional<FriendRequest> rejectedRequest = friendRequestRepository.findById(friendRequest.getFriendRequestSeq());
         if (rejectedRequest.isPresent()) {
@@ -86,7 +86,7 @@ public class FriendServiceTest {
     @Test
     void testDeleteFriend() {
         FriendRequest friendRequest = friendService.sendFriendRequest(sender, receiver);
-        friendService.acceptFriendRequest(friendRequest.getFriendRequestSeq());
+        friendService.acceptFriendRequest(friendRequest.getFriendRequestSeq(), receiver);
 
         friendService.deleteFriend(sender, receiver);
 
@@ -101,7 +101,7 @@ public class FriendServiceTest {
     @Test
     void testBlockFriend() {
         FriendRequest friendRequest = friendService.sendFriendRequest(sender, receiver);
-        friendService.acceptFriendRequest(friendRequest.getFriendRequestSeq());
+        friendService.acceptFriendRequest(friendRequest.getFriendRequestSeq(), receiver);
 
         friendService.blockFriend(sender, receiver);
 
@@ -116,7 +116,7 @@ public class FriendServiceTest {
     @Test
     void testGetAllFriends() {
         FriendRequest friendRequest = friendService.sendFriendRequest(sender, receiver);
-        friendService.acceptFriendRequest(friendRequest.getFriendRequestSeq());
+        friendService.acceptFriendRequest(friendRequest.getFriendRequestSeq(), receiver);
 
         List<FriendList> friends = friendService.getAllFriends(sender);
         log.info("All Friends: {}", friends);

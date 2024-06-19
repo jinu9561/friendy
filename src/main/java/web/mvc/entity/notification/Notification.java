@@ -22,7 +22,7 @@ public class Notification {
     @SequenceGenerator(name = "notification_seq", sequenceName = "notification_seq", allocationSize = 1)
     private Long notificationSeq;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_seq")  // 외래키 지정
     private Users user;
 
