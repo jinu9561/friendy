@@ -55,8 +55,30 @@ public class MeetUpBoardController {
         return ResponseEntity.status(HttpStatus.OK).body(list);
     }
 
-    @PutMapping("/invite")
+//    @PutMapping("/invite")
 //    public ResponseEntity<?> inviteMeetUpBoard(@)
+
+    @GetMapping("/interestList")
+    public ResponseEntity<?> findAllInterestList(){
+        List<Interest> interestList=interestRepository.findAll();
+        return ResponseEntity.status(HttpStatus.OK).body(interestList);
+    }
+
+    @GetMapping("/selectAll")
+    public ResponseEntity<?> findAllMeetUp(){
+        List<MeetUpBoard> meetUpBoardList= meetUpBoardService.selectAll();
+
+        for (MeetUpBoard board : meetUpBoardList) {
+            // 각 MeetUpBoard 객체의 정보를 출력합니다.
+            System.out.println(board.getMeetUpName());
+
+            // 필요에 따라 특정 속성에 접근하여 사용할 수 있습니다.
+            // 예시: System.out.println(board.getSomeProperty());
+        }
+        System.out.println("meetUpBoaadList"+meetUpBoardList);
+
+        return ResponseEntity.status(HttpStatus.OK).body(meetUpBoardList);
+    }
 
 
 
@@ -90,6 +112,11 @@ public class MeetUpBoardController {
 
         return ResponseEntity.status(HttpStatus.OK).body("ok");
     }
+
+
+
+
+
 
     @DeleteMapping("/delete")
     //게시글 삭제

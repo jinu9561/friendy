@@ -231,7 +231,11 @@ public class MeetUpBoardServiceImpl implements MeetUpBoardService {
 
     @Override
     public List<MeetUpBoard> selectAll() {
-        return null;
+
+
+        List<MeetUpBoard> meetUpBoardList= meetUpBoardRepository.findAll();
+        System.out.println("meetUpBoardList"+meetUpBoardList);
+        return meetUpBoardList;
     }
 
     @Override
