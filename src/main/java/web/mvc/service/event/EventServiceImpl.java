@@ -43,6 +43,7 @@ public class EventServiceImpl implements EventService{
                     .eventSeq(event.getEventSeq())
                     .eventName(event.getEventName())
                     .eventMainImg(event.getEventMainImg())
+                    .eventMainImgName(event.getEventMainImgName())
                     .eventDeadLine(deadLine)
                     .build();
             eventDTOList.add(dto);
@@ -98,6 +99,7 @@ public class EventServiceImpl implements EventService{
                     .eventContent(event.getEventContent())
                     .eventMainImg(event.getEventMainImg())
                     .eventMainImgName(event.getEventMainImgName())
+
                     .eventRegDate(eventRegDate)
                     .eventUpdateTime(eventUpDate)
                     .eventDeadLine(deadLine)
