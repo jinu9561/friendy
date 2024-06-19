@@ -28,7 +28,7 @@ public interface EventRepository extends JpaRepository<Event, Long> {
     int deleteByEventStatus(Long eventSeq);
 
     //전체검색(데드라인 순으로 검색)
-    @Query("select e from Event e order by e.eventDeadLine desc")
+    @Query("select e from Event e order by e.eventDeadLine asc")
     List<Event> findAllByEventDeadLine();
 
     //전체검색(등록일 순으로 검색)

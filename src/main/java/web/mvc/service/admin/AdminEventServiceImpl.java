@@ -189,6 +189,7 @@ public class AdminEventServiceImpl implements AdminEventService {
                     .eventSeq(event.getEventSeq())
                     .eventName(event.getEventName())
                     .eventMainImg(event.getEventMainImg())
+                    .eventMainImgName(event.getEventMainImgName())
                     .eventDeadLine(deadLine)
                     .eventStatus(event.getEventStatus()) // 관리자 데드라인 검색만 넣음 (EventServiceImpl에는 없음)
                     .build();
