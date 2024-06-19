@@ -32,8 +32,14 @@ public class PhotoBoard {
     @Column(name = "PHOTO_BOARD_TITLE", nullable = false)
     private String photoBoardTitle;
 
-    @Column(name = "PHOTO_IMG_SRC", nullable = false)
-    private String photoImgSrc;
+    @Column(name = "PHOTO_Main_IMG_SRC", nullable = true)
+    private String photoMainImgSrc;
+
+    @Column(name = "PHOTO_Main_IMG_TYPE", nullable = true)
+    private String photoMainImgType;
+
+    @Column(name = "PHOTO_Main_IMG_SIZE", nullable = true)
+    private String photoMainImgSize;
 
     @Column(name = "INTEREST_SEQ", nullable = false)
     private Long interestSeq;
@@ -52,5 +58,7 @@ public class PhotoBoard {
     @Column(name = "PHOTO_BOARD_LIKE")
     private int photoBoardLike;
 
+    @Column(name = "PHOTO_BOARD_COUNT")
+    private int photoBoardCount;
 
 }

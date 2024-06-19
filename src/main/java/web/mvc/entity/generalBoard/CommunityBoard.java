@@ -52,4 +52,6 @@ public class CommunityBoard {
     @Column(name = "BOARD_PWD", nullable = false)
     private String boardPwd;
 
+    @Column(name = "COMM_BOARD_COUNT", nullable = false)
+    private int commBoardCount;
 }
