@@ -25,11 +25,16 @@ public class CustomLogoutHandler implements LogoutHandler {
     public void logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
 
         // 뷰에서 localStorage에 있는 걸 꺼내서 form형식으로 보내줘야 된다.
+
         String userId = request.getParameter("userId");
         Users user = userRepository.findUserByUserId(userId);
 
-        user.getUserDetail().setLastLoginDate(LocalDateTime.now());
-        userRepository.save(user);
+        if (!user.getRole().equals("ROLE_ADMIN")) {
+            user.getUserDetail().setLastLoginDate(LocalDateTime.now());
+            userRepository.save(user);
+        }
+
+
 
         SecurityContextHolder.clearContext();
 

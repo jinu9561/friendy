@@ -83,13 +83,11 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
         Map<String, Object> map = new HashMap<>();
         Users users= customMemberDetails.getUsers();
+
         map.put("userId",users.getUserId() );
         map.put("userName",users.getUserName() );
         map.put("userSeq",users.getUserSeq() );
-
-        if (!role.equals("ROLE_ADMIN")) {
-            map.put("userState", users.getUserDetail().getUserState());
-        }
+        
 
 
         Gson gson= new Gson();

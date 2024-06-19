@@ -20,9 +20,9 @@ import web.mvc.repository.user.UserRepository;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 @Service
-@Transactional
 @RequiredArgsConstructor
 @Slf4j
+@Transactional
 public class EmailVerificationServiceImpl implements EmailVerificationService {
 
     private final EmaillVerificationRepository emailVerificationRepository;
