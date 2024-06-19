@@ -22,6 +22,8 @@ public class PlaceDetailImg {
     private String placeDetailImgType;
     @Column(length = 100)
     private String placeDetailImgSize;
+    @Column(length = 100)
+    private String placeDetailImgName;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "place_seq")

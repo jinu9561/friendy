@@ -4,6 +4,8 @@ package web.mvc.entity.user;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @Getter
 @Setter
 @Entity
@@ -16,11 +18,14 @@ public class Interest {
     @GeneratedValue(strategy = GenerationType.SEQUENCE , generator = "interest_seq")
     @SequenceGenerator(name ="interest_seq" , allocationSize = 1 , sequenceName = "interest_seq")
     private Long interestSeq;
-    @Column(length = 10)
+    @Column(length = 100)
     private String interestCategory;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "profile_seq")  // 외래 키를 지정
-    private Profile profile;
+    @OneToMany(mappedBy = "interest")
+    List<ProfileInterest> profileInterestList;
+
+
+
+
 
 }

@@ -35,6 +35,6 @@ public interface ProfileService {
     public String deleteMainImg(Long userSeq);
 
     // 디테일 이미지 삭제
-    public String deleteDetailImg(ProFileDetailImgDTO proFileDetailImgDTO);
+    public String deleteDetailImg(Long profileDetailImgSeq);
 
 }

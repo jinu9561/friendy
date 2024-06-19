@@ -55,4 +55,19 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(userService.resign(userSeq));
     }
 
+    @PostMapping("/email/{email}")
+    public ResponseEntity<?> duplicateEmailCheck(@PathVariable String email){
+        return ResponseEntity.status(HttpStatus.OK).body(userService.duplicateEmailCheck(email));
+    }
+
+    @PostMapping("/phone/{phone}")
+    public ResponseEntity<?> duplicatePhoneCheck(@PathVariable String phone){
+        return ResponseEntity.status(HttpStatus.OK).body(userService.duplicatePhoneCheck(phone));
+    }
+
+    @PostMapping("/nickName/{nickName}")
+    public ResponseEntity<?> duplicateNickNameCheck(@PathVariable String nickName){
+        return ResponseEntity.status(HttpStatus.OK).body(userService.duplicateNickNameCheck(nickName));
+    }
+
 }

@@ -25,15 +25,18 @@ public class MessageLogServiceImpl implements MessageLogService{
 
     @Override
     public void insertMessage(MessageDTO messageDTO) {
-
+        System.out.println("여기인가요");
         Users users = Users.builder().
                 userSeq(messageDTO.getUserSeq()).
                 build();
 
 
         ChattingRoom chattingRoom= ChattingRoom.builder().
-                roomId(messageDTO.getChatRoomId()).
+                chattingroomSeq(messageDTO.getChattingRoomSeq()).
                 build();
+
+        System.out.println("MessageLogServiceImpl chattingRoom.getChattingroomSeq  =  "+chattingRoom.getChattingroomSeq());
+        System.out.println("MessageLogServiceImpl users.getUserSeq  =  " + users.getUserSeq());
 
         MessageLog messageLog = MessageLog.builder().
         chattingContent(messageDTO.getChattingContent())

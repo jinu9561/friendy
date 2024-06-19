@@ -18,7 +18,7 @@ public interface ChattingRoomService {
     String deleteChatRoom(ChattingRoom chattingRoom);
 
 
-    List<MessageLog> findMessageLog(String roomId );
+    List<MessageLog> findMessageLog(Long chattingRoomSeq );
 
 
 }

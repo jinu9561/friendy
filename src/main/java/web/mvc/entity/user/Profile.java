@@ -38,12 +38,13 @@ public class Profile {
     @OneToMany(mappedBy = "profile" , cascade = CascadeType.ALL)
     private List<ProfileDetailImg> profileDetailImgList;
     @OneToMany(mappedBy = "profile" , cascade = CascadeType.ALL)
-    private List<Interest> interestList;
+    private List<ProfileInterest> profileInterestList;
 
     public Profile(Users user) {
         this.user = user;
         this.profileDetailImgList = new ArrayList<>();
-        this.interestList = new ArrayList<>();
+        this.profileInterestList = new ArrayList<>();
+
     }
 
 }

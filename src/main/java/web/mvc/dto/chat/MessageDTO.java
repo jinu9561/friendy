@@ -13,6 +13,7 @@ import java.util.Date;
 @ToString
 public class MessageDTO {
 
+    Long chattingRoomSeq;
     String chatRoomId;
     Long userSeq;
     String sender;

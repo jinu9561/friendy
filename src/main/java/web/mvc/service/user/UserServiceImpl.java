@@ -10,17 +10,18 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import web.mvc.dto.user.AdminDTO;
 import web.mvc.dto.user.EmailVerificationDTO;
-import web.mvc.dto.user.InterestDTO;
 import web.mvc.dto.user.UsersDTO;
 import web.mvc.entity.user.*;
 import web.mvc.enums.users.State;
 import web.mvc.exception.common.ErrorCode;
 import web.mvc.exception.common.GlobalException;
-import web.mvc.repository.user.EmaillVerificationRepository;
+import web.mvc.repository.user.InterestRepository;
+import web.mvc.repository.user.ProfileInterestRepository;
 import web.mvc.repository.user.UserRepository;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -35,6 +36,8 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
     private final EmailVerificationService emailVerificationService;
+    private final InterestRepository interestRepository;
+    private final ProfileInterestRepository profileInterestRepository;
 
     private final AdminDTO adminDTO;
     private String subject ="Friendy 가입 인증코드 입니다!";
@@ -131,16 +134,13 @@ public class UserServiceImpl implements UserService {
             user.setProfile(profile);
 
             // user에 관심사 저장
-            List<Interest> savedList  = user.getProfile().getInterestList();
             List<String> interests = usersDTO.getInterestCategory();
-            log.info(interests.toString());
+            Profile savedProfile = user.getProfile();
 
             for(String i : interests){
-                Interest interest = Interest.builder()
-                        .interestCategory(i)
-                        .profile(profile) // Associate the interest with the profile
-                        .build();
-                savedList.add(interest);
+                Interest interest = interestRepository.findByInterestCategory(i);
+                ProfileInterest saveInterest = new ProfileInterest(interest,savedProfile);
+                savedProfile.getProfileInterestList().add(saveInterest);
             }
 
             // db에 유저 저장
@@ -234,6 +234,36 @@ public class UserServiceImpl implements UserService {
         Users user = userRepository.findById(userSeq).orElseThrow(()->new GlobalException(ErrorCode.NOTFOUND_ID));
         user.getUserDetail().setUserState(State.TEMPORARY_STOP);
         return resignMsg;
+    }
+
+    @Override
+    public boolean duplicateEmailCheck(String email) {
+        if(userRepository.findUserByEmail(email)!= null){
+            // 해당 id가 있다
+            return  true;
+        }
+
+        return false;
+    }
+
+    @Override
+    public boolean duplicatePhoneCheck(String phone) {
+        if(userRepository.findUserByPhone(phone)!= null){
+            // 해당 id가 있다
+            return  true;
+        }
+
+        return false;
+    }
+
+    @Override
+    public boolean duplicateNickNameCheck(String nickName) {
+        if(userRepository.findUserByNickName(nickName)!= null){
+            // 해당 id가 있다
+            return  true;
+        }
+
+        return false;
     }
 
 
