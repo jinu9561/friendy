@@ -22,6 +22,8 @@ public class UserProfileDetailDTO {
     private String profileDetailImgName;
     private ImgStatus imgStatus;
     private Long profileSeq;
+    private Long profileDetailImgSeq;
+
 
 
 }

@@ -3,8 +3,10 @@ package web.mvc.dto.user;
 import lombok.*;
 import org.springframework.stereotype.Component;
 import web.mvc.enums.users.ImgStatus;
+import web.mvc.enums.users.State;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -25,5 +27,10 @@ public class UserProfileDTO {
     private ImgStatus imgStatus;
     private String introduce;
     private LocalDateTime regDate;
+    private int userRate;
+    private LocalDateTime lastLoginDate;
+    private State userState;
+
+
 
 }

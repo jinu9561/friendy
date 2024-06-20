@@ -66,6 +66,8 @@ public class ProfileServiceImpl implements ProfileService {
         map.put("profileMainImgName",profile.getProfileMainImgName());
         map.put("profileMainApprove",profile.getImgStatus());
         map.put("userState",user.getUserDetail().getUserState());
+        // 매너 온도
+        map.put("userRate",user.getUserDetail().getUserRate());
 
         // 개인정보 수정때문에 추가한 내용
         map.put("address", user.getAddress());
