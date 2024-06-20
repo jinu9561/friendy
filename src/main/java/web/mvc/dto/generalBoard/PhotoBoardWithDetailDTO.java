@@ -4,20 +4,19 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 
 import web.mvc.entity.generalBoard.PhotoBoard;
-
 import web.mvc.entity.user.Users;
 
 import java.time.LocalDateTime;
 import java.util.List;
-
+import java.util.stream.Collectors;
 
 @Setter
 @Getter
 @ToString
-@AllArgsConstructor // 모든 멤버를 인자(parameter)로 받아 DTO 객체를 생성
+@AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class PhotoBoardDTO {
+public class PhotoBoardWithDetailDTO {
 
     private Long photoBoardSeq;
     private Long userSeq;
@@ -26,15 +25,13 @@ public class PhotoBoardDTO {
     private Long interestSeq;
     private String photoBoardPwd;
     private int photoBoardLike;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss") //Json으로 보낼 때, LocalDateTime을 String으로 변환
-    private LocalDateTime photoBoardRegDate;    //자동변환
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
-    private LocalDateTime photoBoardUpdateDate; //자동변환
+    private LocalDateTime photoBoardRegDate;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    private LocalDateTime photoBoardUpdateDate;
     private int photoBoardCount;
+    private List<DetailImagesDTO> detailImagesDTOS;
 
-
-
-    // 사용자가 보낸 DTO에서 엔티티로 변환하는 메서드
     public PhotoBoard toPhotoBoardEntity(Users user) {
         return PhotoBoard.builder()
                 .user(user)
@@ -47,10 +44,8 @@ public class PhotoBoardDTO {
                 .build();
     }
 
-
-    // 엔티티에서 사용자에게 보낼 DTO로 변환하는 정적 메서드
-    public static PhotoBoardDTO fromPhotoBoardEntity(PhotoBoard photoBoard) {
-        return PhotoBoardDTO.builder()
+    public static PhotoBoardWithDetailDTO fromPhotoBoardEntity(PhotoBoard photoBoard) {
+        return PhotoBoardWithDetailDTO.builder()
                 .photoBoardSeq(photoBoard.getPhotoBoardSeq())
                 .userSeq(photoBoard.getUser().getUserSeq())
                 .photoBoardTitle(photoBoard.getPhotoBoardTitle())
@@ -61,6 +56,9 @@ public class PhotoBoardDTO {
                 .photoBoardRegDate(photoBoard.getPhotoBoardRegDate())
                 .photoBoardUpdateDate(photoBoard.getPhotoBoardUpdateDate())
                 .photoBoardCount(photoBoard.getPhotoBoardCount())
+                .detailImagesDTOS(photoBoard.getDetailImages().stream()
+                        .map(DetailImagesDTO::fromPhotoBoardDetailImgEntity)
+                        .collect(Collectors.toList()))
                 .build();
     }
 }

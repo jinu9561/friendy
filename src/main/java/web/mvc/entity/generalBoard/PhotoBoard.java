@@ -7,6 +7,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import web.mvc.entity.user.Users;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -27,22 +28,23 @@ public class PhotoBoard {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "USER_SEQ", nullable = false)
-    private Users user;
+    private Users user; //PhotoBoard 테이블에 외래 키(Foreign Key) 컬럼인 USER_SEQ를 생성하여 Users 테이블의 기본 키와 연결.
+    //테이블에 Users객체가 직접 저장되는 거 아님.
 
     @Column(name = "PHOTO_BOARD_TITLE", nullable = false)
     private String photoBoardTitle;
 
-    @Column(name = "PHOTO_Main_IMG_SRC", nullable = true)
-    private String photoMainImgSrc;
-
-    @Column(name = "PHOTO_Main_IMG_TYPE", nullable = true)
-    private String photoMainImgType;
-
-    @Column(name = "PHOTO_Main_IMG_SIZE", nullable = true)
-    private String photoMainImgSize;
+    @Column(name = "PHOTO_BOARD_MAIN_IMG_NAME", nullable = true)
+    private String photoBoardMainImgName;
 
     @Column(name = "INTEREST_SEQ", nullable = false)
     private Long interestSeq;
+
+    @Column(name = "PHOTO_BOARD_PWD", nullable = false)
+    private String photoBoardPwd;
+
+    @Column(name = "PHOTO_BOARD_LIKE")
+    private int photoBoardLike;
 
     @CreationTimestamp
     @Column(name = "PHOTO_BOARD_REG_DATE", nullable = false)
@@ -52,13 +54,11 @@ public class PhotoBoard {
     @Column(name = "PHOTO_BOARD_UPDATE_DATE", nullable = false)
     private LocalDateTime photoBoardUpdateDate;
 
-    @Column(name = "PHOTO_BOARD_PWD", nullable = false)
-    private String photoBoardPwd;
-
-    @Column(name = "PHOTO_BOARD_LIKE")
-    private int photoBoardLike;
-
     @Column(name = "PHOTO_BOARD_COUNT")
     private int photoBoardCount;
 
+    @OneToMany(mappedBy = "photoBoard", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<DetailImages> detailImages;
 }
+
+
