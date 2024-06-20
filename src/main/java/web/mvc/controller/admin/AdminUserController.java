@@ -32,18 +32,45 @@ public class AdminUserController {
         return ResponseEntity.status(HttpStatus.OK).body(adminUserService.getProfileList());
     }
 
-    @GetMapping("/profile/detail")
-    public ResponseEntity<?> getProfileDetail(){
-        return ResponseEntity.status(HttpStatus.OK).body(adminUserService.getProfileDetail());
+    @GetMapping("/regDate")
+    public ResponseEntity<?> getProfileListByRegDate(){
+        return ResponseEntity.status(HttpStatus.OK).body(adminUserService.getProfileListByRegDate());
+    }
+
+    @GetMapping("/update")
+    public ResponseEntity<?> getProfileListByUpdate(){
+        return ResponseEntity.status(HttpStatus.OK).body(adminUserService.getProfileListByUpdate());
+    }
+
+    @GetMapping("/lastLogin")
+    public ResponseEntity<?> getProfileListByLastLogin(){
+        return ResponseEntity.status(HttpStatus.OK).body(adminUserService.getProfileListByLastLogin());
+    }
+
+    @GetMapping("/userRate")
+    public ResponseEntity<?> getProfileListByUserRate(){
+        return ResponseEntity.status(HttpStatus.OK).body(adminUserService.getProfileListByUserRate());
+    }
+
+    @GetMapping("/profile/detail/{userSeq}")
+    public ResponseEntity<?> getProfileDetail(@PathVariable Long userSeq){
+        return ResponseEntity.status(HttpStatus.OK).body(adminUserService.getProfileDetail(userSeq));
+    }
+
+
+    @GetMapping("/profile/{userSeq}")
+    public ResponseEntity<?> getUserProfile(@PathVariable Long userSeq){
+        return ResponseEntity.status(HttpStatus.OK).body(adminUserService.getUserProfile(userSeq));
     }
 
     @PutMapping("/profile")
     public ResponseEntity<?> alterProfileState(@RequestBody UserProfileDTO userProfileDTO){
+        log.info(userProfileDTO.toString());
         return ResponseEntity.status(HttpStatus.OK).body(adminUserService.alterProfileState(userProfileDTO));
     }
 
-    @PutMapping("/profile/detail")
-    public ResponseEntity<?> alterProfileDetailState(@RequestBody UserProfileDetailDTO userProfileDetailDTO){
-        return ResponseEntity.status(HttpStatus.OK).body(adminUserService.alterProfileDetail(userProfileDetailDTO));
+    @PutMapping("/profile/detail/{userSeq}")
+    public ResponseEntity<?> alterProfileDetailState(@PathVariable Long userSeq,@RequestBody UserProfileDetailDTO userProfileDetailDTO){
+        return ResponseEntity.status(HttpStatus.OK).body(adminUserService.alterProfileDetail(userSeq,userProfileDetailDTO));
     }
 }
