@@ -17,5 +17,5 @@ public interface EventService {
     List<EventDTO> selectEventByEventSeq(Long eventSeq);
 
     //배너창 세부 이벤트 사진 가져오기
-    public List<EventDetailImgDTO> getEventDetailImg(Long eventSeq, MultipartFile file, EventDetailImgDTO eventDetailImgDTO);
+    public List<EventDetailImgDTO> getEventDetailImg(Long eventSeq);
 }
