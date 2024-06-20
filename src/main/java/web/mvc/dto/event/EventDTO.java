@@ -26,6 +26,7 @@ public class EventDTO {
     private int eventMaxEntry;
     private EventStatus eventStatus;
     private List<EventDetailImgDTO> eventDetailImgList;
+    private List<EventDetailImgDTO> eventDetailImgDTOList;
 
 
 }

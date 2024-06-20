@@ -93,17 +93,20 @@ public class EventServiceImpl implements EventService{
             String eventRegDate = event.getEventRegDate().format(formatter1);
             String deadLine = formatter2.format(event.getEventDeadLine());
             String eventUpDate = event.getEventRegDate().format(formatter3);
+
+            List<EventDetailImgDTO> eventDetailImgDTOList = this.getEventDetailImg(event.getEventSeq());
+
             EventDTO dto = EventDTO.builder()
                     .eventSeq(event.getEventSeq())
                     .eventName(event.getEventName())
                     .eventContent(event.getEventContent())
                     .eventMainImg(event.getEventMainImg())
                     .eventMainImgName(event.getEventMainImgName())
-
                     .eventRegDate(eventRegDate)
                     .eventUpdateTime(eventUpDate)
                     .eventDeadLine(deadLine)
                     .eventMaxEntry(event.getEventMaxEntry())
+                    .eventDetailImgDTOList(eventDetailImgDTOList)
                     .build();
             eventDTOList.add(dto);
         }
@@ -111,9 +114,11 @@ public class EventServiceImpl implements EventService{
         return eventDTOList;
     }
 
+
+
     //배너창 세부 이벤트 사진 가져오기
     @Override
-    public List<EventDetailImgDTO> getEventDetailImg(Long eventSeq, MultipartFile file, EventDetailImgDTO eventDetailImgDTO) {
+    public List<EventDetailImgDTO> getEventDetailImg(Long eventSeq) {
         List<EventDetailImgDTO> eventDetailImgDTOList = new ArrayList<>();
         List<EventDetailImg> eventDetailImgList = eventDetailImgRepository.findByEventSeq(eventSeq);
 

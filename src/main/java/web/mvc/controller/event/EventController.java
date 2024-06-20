@@ -43,9 +43,8 @@ public class EventController {
 
     //배너창 세부 이벤트 사진 가져오기
     @PutMapping("/picture/{eventDetailImgSeq}")
-    public ResponseEntity<?> getEventDetailImg(@PathVariable Long eventDetailImgSeq, @RequestParam("file") MultipartFile file,
-                                               @ModelAttribute EventDetailImgDTO eventDetailImgDTO){
-        return ResponseEntity.status(HttpStatus.OK).body(eventService.getEventDetailImg(eventDetailImgSeq,file,eventDetailImgDTO));
+    public ResponseEntity<?> getEventDetailImg(@PathVariable Long eventDetailImgSeq){
+        return ResponseEntity.status(HttpStatus.OK).body(eventService.getEventDetailImg(eventDetailImgSeq));
     }
 
 }
