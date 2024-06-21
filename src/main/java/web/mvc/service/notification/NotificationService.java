@@ -1,5 +1,6 @@
 package web.mvc.service.notification;
 
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import web.mvc.entity.notification.Notification;
 import web.mvc.entity.user.Users;
 
@@ -32,6 +33,14 @@ public interface NotificationService {
      */
     String getNotificatedUrl(Notification notification);
 
-    public Notification getNotificationById(Long notificationSeq);
+    Notification getNotificationById(Long notificationSeq);
 
+    void sendNotification(String message);
+
+    /**
+     * 알림 추가 메소드
+     * */
+    void addNotification(Users user, String message);
+
+    SseEmitter addUser(Users user);
 }

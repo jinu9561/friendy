@@ -1,24 +1,31 @@
 package web.mvc.controller.notification;
 
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
+import web.mvc.config.user.CustomMemberDetails;
 import web.mvc.entity.notification.Notification;
 import web.mvc.entity.user.Users;
 import web.mvc.service.notification.NotificationService;
+import web.mvc.service.notification.SseEmitterService;
 
+import java.io.IOException;
 import java.security.Principal;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/notification")
 @Slf4j
 public class NotificationController {
-
-    private final NotificationService notificationServicel;
 
     private final NotificationService notificationService;
 
@@ -73,4 +80,29 @@ public class NotificationController {
         String url = notificationService.getNotificatedUrl(notification);
         return ResponseEntity.status(HttpStatus.OK).body(url);
     }
+
+    @GetMapping(value = "/stream", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    public SseEmitter stream(Principal principal) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        log.info("@@@authentication = {}" , authentication);
+
+        //시큐리티에 저장된 정보 조회
+        String name = authentication.getName();//아이디
+        log.info("Authentication getName =  {} " , name);
+        log.info("Authentication  authentication.getPrincipal() =  {} " ,  authentication.getPrincipal());
+
+        CustomMemberDetails cu =  (CustomMemberDetails)authentication.getPrincipal();
+        log.info("cu.getUsers().getUserSeq = {}", cu.getUsers().getUserSeq());
+        log.info("cu.getUsers().getUserId = {}", cu.getUsers().getUserId());
+
+        return notificationService.addUser(cu.getUsers());
+    }
 }
+
+
+
+
+
+
+
+
