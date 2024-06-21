@@ -44,4 +44,25 @@ public class AdminPlaceController {
                                               @ModelAttribute PlaceDetailImgDTO placeDetailImgDTO){
         return ResponseEntity.status(HttpStatus.OK).body(adminPlaceService.alterPlaceDetail(placeDetailImgSeq,file,placeDetailImgDTO));
     }
+
+    @DeleteMapping("/delete/{placeSeq}")
+    public ResponseEntity<?> deletePlace(@PathVariable Long placeSeq){
+        return  ResponseEntity.status(HttpStatus.OK).body(adminPlaceService.deletePlace(placeSeq));
+    }
+
+    @DeleteMapping("/delete/main/{placeSeq}")
+    public ResponseEntity<?> deleteMainlImg(@PathVariable Long placeSeq){
+        return  ResponseEntity.status(HttpStatus.OK).body(adminPlaceService.deleteMainlImg(placeSeq));
+    }
+
+    @DeleteMapping("/delete/detail/{placeDetailImgSeq}")
+    public ResponseEntity<?> deleteDetailImg(@PathVariable Long placeDetailImgSeq){
+        return  ResponseEntity.status(HttpStatus.OK).body(adminPlaceService.deleteDetailImg(placeDetailImgSeq));
+    }
+
+    @GetMapping("/{placeSeq}")
+    public ResponseEntity<?> getPlace(@PathVariable Long placeSeq){
+        return ResponseEntity.status(HttpStatus.OK).body(adminPlaceService.getPlace(placeSeq));
+    }
+
 }
