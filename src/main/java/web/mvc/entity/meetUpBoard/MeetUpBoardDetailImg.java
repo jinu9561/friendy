@@ -12,6 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+
 public class MeetUpBoardDetailImg {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "meetup_detail_img_seq")
@@ -19,8 +20,13 @@ public class MeetUpBoardDetailImg {
     private Long meetUpDetailImgSeq;
 
     // MeetUpBoard 엔티티의 meetUpDetailImgSeq 필드를 mappedBy에 설정
-    @OneToMany(mappedBy = "meetUpDetailImgSeq", cascade = CascadeType.ALL)
-    private List<MeetUpBoard> meetUpBoard;
+    @JoinColumn(name = "meetup_seq")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private MeetUpBoard meetUpBoard;
+
+
+    @Column(length = 500)
+    private String meetUpDetailImgName;
 
     @Column(length = 200)
     private String meetUpDetailImgSrc;
