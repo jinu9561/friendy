@@ -1,6 +1,9 @@
 package web.mvc.service.meetUpBoard;
 
 
+import org.springframework.core.io.Resource;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.multipart.MultipartFile;
 import web.mvc.dto.meetUpBoard.MeetUpBoardDTO;
 import web.mvc.dto.meetUpBoard.MeetUpDeleteDTO;
 import web.mvc.dto.meetUpBoard.MeetUpUpdateDTO;
@@ -14,13 +17,16 @@ import java.util.List;
 public interface MeetUpBoardService {
 
 
-    String createParty(MeetUpBoardDTO meetUpBoardDTO) throws  Exception;
+    String createParty(MeetUpBoardDTO meetUpBoardDTO , List<MultipartFile> file) throws  Exception;
 
-    String updateBoard(MeetUpUpdateDTO meetUpUpdateDTO) throws  Exception;
+    String updateBoard(MeetUpUpdateDTO meetUpUpdateDTO , List<MultipartFile> file) throws  Exception;
 
     String deleteBoard(MeetUpDeleteDTO meetUpDeleteDTO);
 
     MeetUpBoard  findMeetUpByMeetUpName(String meetUpName);
+
+
+    Resource getDetailImg(String imgName);
 
    List<MeetUpBoard> findMeetUpByInterest(String interest);
 
@@ -30,6 +36,9 @@ public interface MeetUpBoardService {
     List<MeetUpBoard> selectAll();
 
     List<Date> findByPartySeq();
+
+//    Long insertImage(Long meetUpSeq , MultipartFile multipartFile);
+
 
     void checkDeadLine();
 
