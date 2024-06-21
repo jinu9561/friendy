@@ -4,9 +4,11 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.core.annotation.Order;
 import web.mvc.entity.user.Users;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -54,4 +56,9 @@ public class CommunityBoard {
 
     @Column(name = "COMM_BOARD_COUNT", nullable = false)
     private int commBoardCount;
+
+    @OneToMany(mappedBy="communityBoard",fetch = FetchType.LAZY,cascade = CascadeType.REMOVE)
+    @OrderBy("replySeq asc")//댓글 번호 오름차순 정렬
+    private List<Reply> replyList;
+
 }

@@ -6,6 +6,8 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import web.mvc.entity.user.Users;
 
+import java.time.LocalDateTime;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
@@ -35,16 +37,10 @@ public class Reply {
 
     @CreationTimestamp
     @Column(name = "REPLY_REG_DATE", nullable = false)
-    private String replyRegDate;
+    private LocalDateTime replyRegDate;
 
     @UpdateTimestamp
     @Column(name = "REPLY_UPDATE_DATE", nullable = false)
-    private String replyUpdateDate;
-
-    @Column(name = "REPLY_LIKE", nullable = false)
-    private int replyLike;
-
-    @Column(name = "REPLY_PWD", nullable = false)
-    private String replyPwd;
+    private LocalDateTime replyUpdateDate;
 
 }

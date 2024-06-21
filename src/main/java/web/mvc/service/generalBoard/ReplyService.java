@@ -1,18 +1,22 @@
 package web.mvc.service.generalBoard;
 
-import web.mvc.dto.generalBoard.ReplyDTO;
+import web.mvc.dto.generalBoard.ReplyReqDTO;
+import web.mvc.dto.generalBoard.ReplyResDTO;
+import web.mvc.entity.generalBoard.Reply;
 
 import java.util.List;
 
 public interface ReplyService {
 
-    ReplyDTO createReply(ReplyDTO replyDTO);
+    ReplyResDTO addReply(Long boardSeq, ReplyReqDTO replyReqDTO);
 
-    ReplyDTO getReplyById(Long replySeq);
+    public Reply getReplyById(Long replySeq);
 
-    List<ReplyDTO> getRepliesByBoardSeq(Long boardSeq);
+    public List<Reply> getRepliesByCommBoardId(Long commBoardSeq);
 
-    ReplyDTO updateReply(ReplyDTO replyDTO);
+    ReplyResDTO updateReply(Long replyId, ReplyReqDTO replyReqDTO);
 
-    String deleteReply(Long replySeq);
+    public String deleteReply(Long replySeq);
+
+
 }

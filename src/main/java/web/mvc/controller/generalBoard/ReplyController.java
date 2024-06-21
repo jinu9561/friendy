@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import web.mvc.dto.generalBoard.ReplyDTO;
+import web.mvc.dto.generalBoard.ReplyReqDTO;
 import web.mvc.service.generalBoard.ReplyService;
 
 import java.util.List;
@@ -19,27 +19,27 @@ public class ReplyController {
 
     // 게시물에 대한 모든 댓글 조회
     @GetMapping("/board/{boardSeq}")
-    public ResponseEntity<List<ReplyDTO>> getRepliesByBoardSeq(@PathVariable Long boardSeq){
+    public ResponseEntity<List<ReplyReqDTO>> getRepliesByBoardSeq(@PathVariable Long boardSeq){
         return ResponseEntity.ok(replyService.getRepliesByBoardSeq(boardSeq));
     }
 
     //댓글 생성
     @PostMapping("/")
-    public ResponseEntity<ReplyDTO> createReply(@RequestBody ReplyDTO replyDTO){
-        return ResponseEntity.ok(replyService.createReply(replyDTO));
+    public ResponseEntity<ReplyReqDTO> createReply(@RequestBody ReplyReqDTO replyReqDTO){
+        return ResponseEntity.ok(replyService.createReply(replyReqDTO));
     }
 
     //특정 id(replySeq)를 가진 댓글 조회
     @GetMapping("/{replySeq}")
-    public ResponseEntity<ReplyDTO> getReplyById(@PathVariable Long replySeq){
+    public ResponseEntity<ReplyReqDTO> getReplyById(@PathVariable Long replySeq){
         return ResponseEntity.ok(replyService.getReplyById(replySeq));
     }
 
     //특정 id(replySeq)를 가진 댓글 수정
     @PutMapping("/{replySeq}")
-    public ResponseEntity<ReplyDTO> updateReply(@PathVariable Long replySeq, @RequestBody ReplyDTO replyDTO){
-        replyDTO.setReplySeq(replySeq);
-        return ResponseEntity.ok(replyService.updateReply(replyDTO));
+    public ResponseEntity<ReplyReqDTO> updateReply(@PathVariable Long replySeq, @RequestBody ReplyReqDTO replyReqDTO){
+        replyReqDTO.setReplySeq(replySeq);
+        return ResponseEntity.ok(replyService.updateReply(replyReqDTO));
     }
 
     //특정 id(replySeq)를 가진 댓글 삭제
