@@ -4,11 +4,17 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import web.mvc.entity.notification.Notification;
 import web.mvc.entity.user.Users;
 import web.mvc.repository.notification.NotificationRepository;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 @Service
 @RequiredArgsConstructor
@@ -16,6 +22,8 @@ import java.util.List;
 @Slf4j
 public class NotificationServiceImpl implements NotificationService {
 
+    private final Map<Users, SseEmitter> userEmitters = new ConcurrentHashMap<>();
+    private final ExecutorService executor = Executors.newSingleThreadExecutor();
     private final NotificationRepository notificationRepository;
 
     @Override
@@ -47,5 +55,46 @@ public class NotificationServiceImpl implements NotificationService {
     @Override
     public Notification getNotificationById(Long notificationSeq) {
         return notificationRepository.findById(notificationSeq).orElse(null);
+    }
+
+    @Override
+    public void sendNotification(String message) {
+        // This method is no longer used in the new implementation
+    }
+
+    @Override
+    public void addNotification(Users user, String message) {
+        Notification notification = new Notification();
+        notification.setUser(user);
+        notification.setNotificationMessage(message);
+        notification.setNotificationRegDate(LocalDateTime.now());
+        notification.setIsChecked(0); // 읽지 않은 상태로 설정
+        Notification savedNotification = notificationRepository.save(notification);
+
+        sendRealTimeNotification(savedNotification);
+    }
+
+    private void sendRealTimeNotification(Notification notification) {
+        SseEmitter emitter = userEmitters.get(notification.getUser().getUserSeq());
+        if (emitter != null) {
+            executor.execute(() -> {
+                try {
+                    emitter.send(SseEmitter.event().name("notification").data(notification.getNotificationMessage()));
+                } catch (Exception e) {
+                    // 예외 처리
+                    log.error("Error sending notification", e);
+                    userEmitters.remove(notification.getUser().getUserSeq());
+                }
+            });
+        }
+    }
+
+    @Override
+    public SseEmitter addUser(Users user) {
+        SseEmitter emitter = new SseEmitter();
+        userEmitters.put(user, emitter);
+        emitter.onCompletion(() -> userEmitters.remove(user));
+        emitter.onTimeout(() -> userEmitters.remove(user));
+        return emitter;
     }
 }

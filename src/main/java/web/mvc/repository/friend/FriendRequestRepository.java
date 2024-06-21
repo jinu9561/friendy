@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import web.mvc.entity.friend.FriendRequest;
 import web.mvc.entity.user.Users;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -48,5 +49,11 @@ public interface FriendRequestRepository extends JpaRepository<FriendRequest, Lo
     @Modifying
     @Query("UPDATE FriendRequest fr SET fr.requestStatus = 2 WHERE fr.friendRequestSeq = :friendRequestSeq")
     void rejectFriendRequest(@Param("friendRequestSeq") Long friendRequestSeq);
+
+    /**
+     * 수신자별로 친구 요청을 가져옴
+     * */
+    @Query("SELECT fr FROM FriendRequest fr WHERE fr.receiver = :receiver AND fr.requestStatus = 0")
+    List<FriendRequest> findAllByReceiver(@Param("receiver") Users receiver);
 
 }

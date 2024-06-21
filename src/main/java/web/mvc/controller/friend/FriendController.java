@@ -9,13 +9,16 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import web.mvc.config.user.CustomMemberDetails;
 import web.mvc.dto.friend.FriendListDTO;
+import web.mvc.dto.friend.FriendRequestDTO;
 import web.mvc.entity.friend.FriendList;
 import web.mvc.entity.friend.FriendRequest;
 import web.mvc.entity.user.Users;
 import web.mvc.repository.user.UserRepository;
 import web.mvc.service.friend.FriendService;
+import web.mvc.service.notification.NotificationService;
 import web.mvc.service.user.UserService;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,7 +29,7 @@ import java.util.stream.Collectors;
 public class FriendController {
 
     private final FriendService friendService;
-    private final UserService userService;
+    private final NotificationService notificationService;
     private final UserRepository userRepository;
 
     /**
@@ -46,6 +49,7 @@ public class FriendController {
 
         try {
             FriendRequest friendRequest = friendService.sendFriendRequest(sender, receiver);
+            notificationService.addNotification(receiver, "친구 요청이 왔습니다."); // 알림 추가
             return ResponseEntity.status(HttpStatus.OK).body(friendRequest);
         } catch (IllegalStateException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
@@ -60,6 +64,8 @@ public class FriendController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         CustomMemberDetails userDetails = (CustomMemberDetails) authentication.getPrincipal();
 
+
+        log.info("########userDetails : {}",userDetails);
         try {
             friendService.acceptFriendRequest(friendRequestSeq, userDetails.getUsers());
             return ResponseEntity.status(HttpStatus.OK).body("친구 요청이 수락되었습니다.");
@@ -128,15 +134,20 @@ public class FriendController {
      * 친구 목록 조회
      */
     @GetMapping("/list")
-    public ResponseEntity<List<FriendListDTO>> getAllFriends() {
+    public ResponseEntity<List<FriendListDTO>> getAllFriends(Principal principal) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         log.info("authentication = {}" , authentication);
 
-        CustomMemberDetails userDetails = (CustomMemberDetails) authentication.getPrincipal();
-        log.info("cu.getUsers().getUserSeq = {}", userDetails.getUsers().getUserSeq());
-        log.info("cu.getUsers().getUserId = {}", userDetails.getUsers().getUserId());
+        //시큐리티에 저장된 정보 조회
+        String name = authentication.getName();//아이디
+        log.info("Authentication getName =  {} " , name);
+        log.info("Authentication  authentication.getPrincipal() =  {} " ,  authentication.getPrincipal());
 
-        List<FriendList> friends = friendService.getAllFriends(userDetails.getUsers());
+        CustomMemberDetails cu =  (CustomMemberDetails)authentication.getPrincipal();
+        log.info("cu.getUsers().getUserSeq = {}", cu.getUsers().getUserSeq());
+        log.info("cu.getUsers().getUserId = {}", cu.getUsers().getUserId());
+
+        List<FriendList> friends = friendService.getAllFriends(cu.getUsers());
         List<FriendListDTO> friendListDTOs = friends.stream()
                 .map(this::convertToDto)
                 .collect(Collectors.toList());
@@ -184,6 +195,29 @@ public class FriendController {
                 .friendStatus(friendList.getFriendStatus())
                 .friendRegDate(friendList.getFriendRegDate())
                 .friendUpdateDate(friendList.getFriendUpdateDate())
+                .build();
+    }
+
+    /**
+     * 친구 요청 목록 조회
+     */@GetMapping("/request/list")public ResponseEntity<List<FriendRequestDTO>> getAllFriendRequests(Principal principal) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        CustomMemberDetails userDetails = (CustomMemberDetails) authentication.getPrincipal();
+
+        List<FriendRequest> friendRequests = friendService.getFriendRequests(userDetails.getUsers());
+        List<FriendRequestDTO> friendRequestDTOs = friendRequests.stream()
+                .map(this::convertToFriendRequestDto)
+                .collect(Collectors.toList());
+
+        return ResponseEntity.status(HttpStatus.OK).body(friendRequestDTOs);
+    }
+
+    private FriendRequestDTO convertToFriendRequestDto(FriendRequest friendRequest) {
+        return FriendRequestDTO.builder()
+                .friendRequestSeq(friendRequest.getFriendRequestSeq())
+                .senderSeq(friendRequest.getSender().getUserSeq())
+                .senderName(friendRequest.getSender().getUserName())
+                .receiverSeq(friendRequest.getReceiver().getUserSeq())
                 .build();
     }
 }

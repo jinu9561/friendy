@@ -52,4 +52,6 @@ public interface FriendService {
      * @return 친구 목록
      */
     List<FriendList> getAllFriends(Users user);
+
+    List<FriendRequest> getFriendRequests(Users user);
 }
