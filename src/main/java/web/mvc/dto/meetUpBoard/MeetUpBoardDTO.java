@@ -19,7 +19,6 @@ public class MeetUpBoardDTO {
     private Long interestSeq;
     private String meetUpName;
     private String meetUpDesc;
-    private MeetUpBoardDetailImg meetUpBoardDetailImg;
     private List<String> meetUpPeopleList;
     private int meetUpPwd;
     private int checkPwd;

@@ -19,6 +19,8 @@ public class MeetUpRequestController {
 
     @PostMapping(value = "/request", produces = "application/json; charset=UTF-8")
     public ResponseEntity<?> meetUpRequest(@RequestBody MeetUpRequestDTO meetUpRequestDTO) {
+
+
         System.out.println("들어온 소모임 시퀀스" + meetUpRequestDTO.getMeetUpSeq());
         System.out.println("유저시퀀스" + meetUpRequestDTO.getUserSeq());
 
