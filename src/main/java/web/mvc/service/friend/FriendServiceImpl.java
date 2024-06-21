@@ -9,6 +9,8 @@ import web.mvc.entity.friend.FriendRequest;
 import web.mvc.entity.user.Users;
 import web.mvc.repository.friend.FriendListRepository;
 import web.mvc.repository.friend.FriendRequestRepository;
+import web.mvc.service.notification.NotificationService;
+import web.mvc.service.notification.SseEmitterService;
 
 import java.util.List;
 import java.util.Optional;
@@ -21,6 +23,8 @@ public class FriendServiceImpl implements FriendService {
 
     private final FriendRequestRepository friendRequestRepository;
     private final FriendListRepository friendListRepository;
+    private final NotificationService notificationService;
+    private final SseEmitterService sseEmitterService;
 
     @Override
     public FriendRequest sendFriendRequest(Users sender, Users receiver) {
@@ -32,7 +36,15 @@ public class FriendServiceImpl implements FriendService {
         friendRequest.setSender(sender);
         friendRequest.setReceiver(receiver);
         friendRequest.setRequestStatus(0); // 대기 상태
-        return friendRequestRepository.save(friendRequest);
+
+        FriendRequest savedRequest = friendRequestRepository.save(friendRequest);
+
+        // 수신자에게 알림 추가
+        String message = sender.getUserName() + "님이 친구 요청을 보냈습니다.";
+        notificationService.addNotification(receiver, message);
+        notificationService.sendNotification(message);  // SSE 클라이언트에게 알림 전송
+
+        return savedRequest;
     }
 
     @Override
@@ -94,6 +106,11 @@ public class FriendServiceImpl implements FriendService {
 
     @Override
     public List<FriendList> getAllFriends(Users user) {
-        return friendListRepository.findAllFriends(user);
+        return friendListRepository.findAllFriends(user.getUserSeq());
+    }
+
+    @Override
+    public List<FriendRequest> getFriendRequests(Users user) {
+        return friendRequestRepository.findAllByReceiver(user);
     }
 }
