@@ -9,6 +9,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import web.mvc.config.user.CustomMemberDetails;
 import web.mvc.dto.friend.FriendListDTO;
+import web.mvc.dto.friend.FriendRequestDTO;
 import web.mvc.entity.friend.FriendList;
 import web.mvc.entity.friend.FriendRequest;
 import web.mvc.entity.user.Users;
@@ -63,6 +64,8 @@ public class FriendController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         CustomMemberDetails userDetails = (CustomMemberDetails) authentication.getPrincipal();
 
+
+        log.info("########userDetails : {}",userDetails);
         try {
             friendService.acceptFriendRequest(friendRequestSeq, userDetails.getUsers());
             return ResponseEntity.status(HttpStatus.OK).body("친구 요청이 수락되었습니다.");
@@ -192,6 +195,29 @@ public class FriendController {
                 .friendStatus(friendList.getFriendStatus())
                 .friendRegDate(friendList.getFriendRegDate())
                 .friendUpdateDate(friendList.getFriendUpdateDate())
+                .build();
+    }
+
+    /**
+     * 친구 요청 목록 조회
+     */@GetMapping("/request/list")public ResponseEntity<List<FriendRequestDTO>> getAllFriendRequests(Principal principal) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        CustomMemberDetails userDetails = (CustomMemberDetails) authentication.getPrincipal();
+
+        List<FriendRequest> friendRequests = friendService.getFriendRequests(userDetails.getUsers());
+        List<FriendRequestDTO> friendRequestDTOs = friendRequests.stream()
+                .map(this::convertToFriendRequestDto)
+                .collect(Collectors.toList());
+
+        return ResponseEntity.status(HttpStatus.OK).body(friendRequestDTOs);
+    }
+
+    private FriendRequestDTO convertToFriendRequestDto(FriendRequest friendRequest) {
+        return FriendRequestDTO.builder()
+                .friendRequestSeq(friendRequest.getFriendRequestSeq())
+                .senderSeq(friendRequest.getSender().getUserSeq())
+                .senderName(friendRequest.getSender().getUserName())
+                .receiverSeq(friendRequest.getReceiver().getUserSeq())
                 .build();
     }
 }

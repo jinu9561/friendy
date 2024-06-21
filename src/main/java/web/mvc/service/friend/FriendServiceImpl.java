@@ -6,7 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import web.mvc.entity.friend.FriendList;
 import web.mvc.entity.friend.FriendRequest;
-import web.mvc.entity.notification.Notification;
 import web.mvc.entity.user.Users;
 import web.mvc.repository.friend.FriendListRepository;
 import web.mvc.repository.friend.FriendRequestRepository;
@@ -107,6 +106,11 @@ public class FriendServiceImpl implements FriendService {
 
     @Override
     public List<FriendList> getAllFriends(Users user) {
-        return friendListRepository.findAllFriends(user);
+        return friendListRepository.findAllFriends(user.getUserSeq());
+    }
+
+    @Override
+    public List<FriendRequest> getFriendRequests(Users user) {
+        return friendRequestRepository.findAllByReceiver(user);
     }
 }

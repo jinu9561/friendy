@@ -18,5 +18,6 @@ public class FriendRequestDTO {
     private int requestStatus;
     private LocalDateTime requestRegDate;
     private LocalDateTime requestUpdateDate;
+    private String senderName;
 
 }
