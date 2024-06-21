@@ -34,7 +34,27 @@ public class AdminPlaceServiceImpl implements AdminPlaceService{
     private String uploadDir;
     private String uploadMsg="등록에 성공했습니다.";
     private String alterMsg="수정에 성공했습니다.";
+    private String deleteMsg="삭제에 성공했습니다";
+    private String failMsg="수정에 실패했습니다.";
 
+
+    @Override
+    public PlaceRecommendationDTO getPlace(Long placeSeq) {
+        PlaceRecommendation placeRecommendation = placeRecommendationRepository.findById(placeSeq).orElseThrow(()->new GlobalException(ErrorCode.NOTFOUND_PLACE));
+        List<PlaceDetailImgDTO> detailImgDTOList = placeService.getPlaceDetailImg(placeRecommendation.getPlaceSeq());
+
+        PlaceRecommendationDTO dto = PlaceRecommendationDTO.builder()
+                .placeSeq(placeRecommendation.getPlaceSeq())
+                .placeName(placeRecommendation.getPlaceName())
+                .placeAddress(placeRecommendation.getPlaceAddress())
+                .placeDescription(placeRecommendation.getPlaceDescription())
+                .placeMainImg(placeRecommendation.getPlaceMainImg())
+                .placeMainImgName(placeRecommendation.getPlaceMainImgName())
+                .placeDetailImgList(detailImgDTOList)
+                .build();
+
+        return  dto;
+    }
 
     @Override
     public List<PlaceRecommendationDTO> getPlaceList() {
@@ -136,6 +156,38 @@ public class AdminPlaceServiceImpl implements AdminPlaceService{
         }
 
         return alterMsg;
+    }
+
+    @Override
+    public String deletePlace(Long placeSeq) {
+        PlaceRecommendation placeRecommendation = placeRecommendationRepository.findById(placeSeq).orElseThrow(
+                ()->new GlobalException(ErrorCode.NOTFOUND_PLACE)
+        );
+
+        placeRecommendationRepository.delete(placeRecommendation);
+
+        return deleteMsg;
+    }
+
+    @Override
+    public String deleteMainlImg(Long placeSeq) {
+        PlaceRecommendation placeRecommendation = placeRecommendationRepository.findById(placeSeq).orElseThrow(
+                ()->new GlobalException(ErrorCode.NOTFOUND_PLACE)
+        );
+
+        placeRecommendation.setPlaceMainImg("");
+        placeRecommendation.setPlaceMainImgName("");
+        placeRecommendation.setPlaceMainImgSize("");
+        placeRecommendation.setPlaceMainImgType("");
+
+        return deleteMsg;
+    }
+
+    @Override
+    public String deleteDetailImg(Long placeDetailImgSeq) {
+        PlaceDetailImg placeDetailImg = placeDetailImgRepository.findById(placeDetailImgSeq).orElseThrow(()->new GlobalException(ErrorCode.NOTFOUND_PLACE));
+        placeDetailImgRepository.delete(placeDetailImg);
+        return deleteMsg;
     }
 
 

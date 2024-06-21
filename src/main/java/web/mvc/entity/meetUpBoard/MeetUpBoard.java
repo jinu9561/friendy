@@ -23,7 +23,6 @@ public class MeetUpBoard {
     @SequenceGenerator(allocationSize = 1, sequenceName = "meetup_seq", name = "meetup_seq")
     private Long meetUpSeq;
 
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_seq" )
     private Users user;
@@ -34,10 +33,8 @@ public class MeetUpBoard {
     @Column(length = 100)
     private String meetUpDesc;
 
-    @ManyToOne
-    @JoinColumn(name = "meetupdetailimgseq", nullable = true)
-    private MeetUpBoardDetailImg meetUpDetailImgSeq;
-
+    @OneToMany(mappedBy = "meetUpBoard", cascade = CascadeType.ALL)
+    private List<MeetUpBoardDetailImg> meetUpBoardDetailImgList;
     @CreationTimestamp
     private Date meetUpRegDate;
 
