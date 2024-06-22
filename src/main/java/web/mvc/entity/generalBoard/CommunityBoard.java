@@ -5,6 +5,7 @@ import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.core.annotation.Order;
+import web.mvc.dto.generalBoard.CommunityBoardDTO;
 import web.mvc.entity.user.Users;
 
 import java.time.LocalDateTime;
@@ -12,7 +13,6 @@ import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
 @Setter
 @Getter
 @Entity//서버 실행시에 해당 객체로 테이블 매핑생성
@@ -28,7 +28,7 @@ public class CommunityBoard {
     private Long commBoardSeq;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "USER_SEQ", nullable = false)
+    @JoinColumn
     private Users user;
 
     @Column(name = "BOARD_TITLE", nullable = false)
@@ -61,4 +61,20 @@ public class CommunityBoard {
     @OrderBy("replySeq asc")//댓글 번호 오름차순 정렬
     private List<Reply> replyList;
 
+    // DTO로 변환
+    public CommunityBoardDTO toDTO() {
+        return CommunityBoardDTO.builder()
+                .commBoardSeq(this.commBoardSeq)
+                .userSeq(this.user.getUserSeq())
+                .nickName(this.user.getNickName())
+                .boardTitle(this.boardTitle)
+                .boardContent(this.boardContent)
+                .boardType(this.boardType)
+                .boardLike(this.boardLike)
+                .boardPwd(this.boardPwd)
+                .boardRegDate(this.boardRegDate)
+                .boardUpdateDate(this.boardUpdateDate)
+                .commBoardCount(this.commBoardCount)
+                .build();
+    }
 }
