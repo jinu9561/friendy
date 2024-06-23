@@ -41,6 +41,7 @@ public class CommunityBoardServiceImpl implements CommunityBoardService {
         return communityBoardDTOs;
     }
 
+
     @Transactional
     @Override
     public CommunityBoardDTO createCommunityBoard(CommunityBoardDTO communityBoardDTO) {
@@ -61,6 +62,46 @@ public class CommunityBoardServiceImpl implements CommunityBoardService {
         CommunityBoardDTO savedCommunityBoardDTO = savedCommunityBoard.toDTO();
         log.info("CommunityBoardDTO created with SEQ: {}", savedCommunityBoardDTO.getCommBoardSeq());
         return savedCommunityBoardDTO;
+    }
+
+    // 실명 게시판 조회
+    @Transactional(readOnly = true)
+    @Override
+    public List<CommunityBoardDTO> getAllRealNameCommunityBoards() {
+        log.info("Fetching all real name community boards");
+        List<CommunityBoard> communityBoards = communityBoardRepository.findByBoardType(0);
+
+        if (communityBoards == null || communityBoards.isEmpty()) {
+            log.warn("실명 게시물이 없습니다.");
+            throw new RuntimeException("실명 게시물이 없습니다.");
+        }
+
+        List<CommunityBoardDTO> communityBoardDTOs = communityBoards.stream()
+                .map(CommunityBoard::toDTO)
+                .collect(Collectors.toList());
+
+        log.info("Fetched {} real name community boards", communityBoardDTOs.size());
+        return communityBoardDTOs;
+    }
+
+    // 익명 게시판 조회
+    @Transactional(readOnly = true)
+    @Override
+    public List<CommunityBoardDTO> getAllAnonymousCommunityBoards() {
+        log.info("Fetching all anonymous community boards");
+        List<CommunityBoard> communityBoards = communityBoardRepository.findByBoardType(1);
+
+        if (communityBoards == null || communityBoards.isEmpty()) {
+            log.warn("익명 게시물이 없습니다.");
+            throw new RuntimeException("익명 게시물이 없습니다.");
+        }
+
+        List<CommunityBoardDTO> communityBoardDTOs = communityBoards.stream()
+                .map(CommunityBoard::toDTO)
+                .collect(Collectors.toList());
+
+        log.info("Fetched {} anonymous community boards", communityBoardDTOs.size());
+        return communityBoardDTOs;
     }
 
     @Transactional(readOnly = true)
@@ -130,3 +171,5 @@ public class CommunityBoardServiceImpl implements CommunityBoardService {
         return message;
     }
 }
+
+

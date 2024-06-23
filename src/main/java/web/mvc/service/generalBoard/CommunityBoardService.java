@@ -12,6 +12,10 @@ public interface CommunityBoardService {
 
     List<CommunityBoardDTO> getAllCommunityBoards();
 
+    List<CommunityBoardDTO> getAllRealNameCommunityBoards();
+
+    List<CommunityBoardDTO> getAllAnonymousCommunityBoards();
+
     CommunityBoardDTO updateCommunityBoard(Long commBoardSeq, CommunityBoardDTO communityBoardDTO);
 
     String deleteCommunityBoard(Long commBoardSeq);

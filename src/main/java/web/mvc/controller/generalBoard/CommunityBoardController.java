@@ -16,17 +16,29 @@ import java.util.List;
 @Slf4j
 public class CommunityBoardController {
 
-    @Autowired
-    private CommunityBoardService communityBoardService;
+
+    private final CommunityBoardService communityBoardService;
 
     /*모든 커뮤니티 게시물을 조회*/
-    @GetMapping("/")
+    @GetMapping
     public ResponseEntity<List<CommunityBoardDTO>> getAllCommunityBoards() {
         return ResponseEntity.ok(communityBoardService.getAllCommunityBoards());
     }
 
+    /* 모든 실명 게시물을 조회 */
+    @GetMapping("/realname")
+    public ResponseEntity<List<CommunityBoardDTO>> getAllRealNameCommunityBoards() {
+        return ResponseEntity.ok(communityBoardService.getAllRealNameCommunityBoards());
+    }
+
+    /* 모든 익명 게시물을 조회 */
+    @GetMapping("/anonymous")
+    public ResponseEntity<List<CommunityBoardDTO>> getAllAnonymousCommunityBoards() {
+        return ResponseEntity.ok(communityBoardService.getAllAnonymousCommunityBoards());
+    }
+
     /*커뮤니티 게시물을 생성*/
-    @PostMapping("/")
+    @PostMapping
     public ResponseEntity<CommunityBoardDTO> createCommunityBoard(@RequestBody CommunityBoardDTO communityBoardDTO) {
         return ResponseEntity.ok(communityBoardService.createCommunityBoard(communityBoardDTO));
     }
