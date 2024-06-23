@@ -1,12 +1,14 @@
 package web.mvc.dto.generalBoard;
 
 import lombok.*;
+import org.springframework.stereotype.Component;
 import web.mvc.entity.generalBoard.CommunityBoard;
 import web.mvc.entity.user.Users;
 import web.mvc.repository.user.UserRepository;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Setter
 @Getter
@@ -15,7 +17,6 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Builder
 public class CommunityBoardDTO {
-    private UserRepository userRepository;
 
     private Long commBoardSeq; //게시글 번호
     private Long userSeq; //게시글 작성자
@@ -28,12 +29,14 @@ public class CommunityBoardDTO {
     private LocalDateTime boardRegDate; //게시글 등록일
     private LocalDateTime boardUpdateDate; //게시글 수정일
     private int commBoardCount; //조회수
+    private List<ReplyDTO> replyList; //댓글 리스트
 
     // 사용자가 보낸 DTO에서 엔티티로 변환하는 메서드
-    public CommunityBoard toEntity() {
+    public CommunityBoard toEntity(Users user) {
         return CommunityBoard.builder()
-                .user(userRepository.findById(this.userSeq).orElseThrow(() -> new RuntimeException("User not found with userid: " + userSeq)))
-                .boardTitle(this.boardTitle)//
+                .commBoardSeq(this.commBoardSeq)
+                .user(user)
+                .boardTitle(this.boardTitle)
                 .boardContent(this.boardContent)
                 .boardType(this.boardType)
                 .boardLike(this.boardLike)

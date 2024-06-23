@@ -40,8 +40,7 @@ public class CommunityBoardController {
     /*특정 ID(commBoardSeq)를 가진 커뮤니티 게시물을 수정*/
     @PutMapping("/{commBoardSeq}")
     public ResponseEntity<CommunityBoardDTO> updateCommunityBoard(@PathVariable Long commBoardSeq, @RequestBody CommunityBoardDTO communityBoardDTO) {
-        communityBoardDTO.setCommBoardSeq(commBoardSeq); // URL 경로에서 받은 ID를 DTO에 설정
-        return ResponseEntity.ok(communityBoardService.updateCommunityBoard(communityBoardDTO));
+        return ResponseEntity.ok(communityBoardService.updateCommunityBoard(commBoardSeq, communityBoardDTO));
     }
 
     /*특정 ID(commBoardSeq)를 가진 커뮤니티 게시물을 삭제*/

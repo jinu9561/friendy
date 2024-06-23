@@ -4,42 +4,28 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import web.mvc.dto.generalBoard.ReplyReqDTO;
+import web.mvc.dto.generalBoard.ReplyDTO;
 import web.mvc.service.generalBoard.ReplyService;
 
 import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping("/replies")
+@RequestMapping("/community-boards/{commBoardSeq}/replies")
 @RequiredArgsConstructor
-
 public class ReplyController {
     private final ReplyService replyService;
 
-    // 게시물에 대한 모든 댓글 조회
-    @GetMapping("/board/{boardSeq}")
-    public ResponseEntity<List<ReplyReqDTO>> getRepliesByBoardSeq(@PathVariable Long boardSeq){
-        return ResponseEntity.ok(replyService.getRepliesByBoardSeq(boardSeq));
-    }
-
     //댓글 생성
-    @PostMapping("/")
-    public ResponseEntity<ReplyReqDTO> createReply(@RequestBody ReplyReqDTO replyReqDTO){
-        return ResponseEntity.ok(replyService.createReply(replyReqDTO));
+    @PostMapping
+    public ResponseEntity<ReplyDTO> createReply(@PathVariable Long commBoardSeq, @RequestBody ReplyDTO replyDTO){
+        return ResponseEntity.ok(replyService.addReply(commBoardSeq, replyDTO));
     }
 
-    //특정 id(replySeq)를 가진 댓글 조회
-    @GetMapping("/{replySeq}")
-    public ResponseEntity<ReplyReqDTO> getReplyById(@PathVariable Long replySeq){
-        return ResponseEntity.ok(replyService.getReplyById(replySeq));
-    }
-
-    //특정 id(replySeq)를 가진 댓글 수정
-    @PutMapping("/{replySeq}")
-    public ResponseEntity<ReplyReqDTO> updateReply(@PathVariable Long replySeq, @RequestBody ReplyReqDTO replyReqDTO){
-        replyReqDTO.setReplySeq(replySeq);
-        return ResponseEntity.ok(replyService.updateReply(replyReqDTO));
+    // 게시물에 대한 모든 댓글 조회
+    @GetMapping
+    public ResponseEntity<List<ReplyDTO>> getRepliesByBoardSeq(@PathVariable Long commBoardSeq){
+        return ResponseEntity.ok(replyService.getRepliesByCommBoardSeq(commBoardSeq));
     }
 
     //특정 id(replySeq)를 가진 댓글 삭제
@@ -47,4 +33,14 @@ public class ReplyController {
     public String deleteReply(@PathVariable Long replySeq){
         return replyService.deleteReply(replySeq);
     }
+
+    // 전체 댓글 조회
+    @GetMapping("/all")
+    public ResponseEntity<List<ReplyDTO>> getAllReplies(){
+        return ResponseEntity.ok(replyService.getAllReplies());
+    }
+
+
+
+
 }
