@@ -18,7 +18,7 @@ public class ReplyController {
 
     //댓글 생성
     @PostMapping
-    public ResponseEntity<ReplyDTO> createReply(@PathVariable Long commBoardSeq, @RequestBody ReplyDTO replyDTO){
+    public ResponseEntity<ReplyDTO> addReply(@PathVariable Long commBoardSeq, @RequestBody ReplyDTO replyDTO){
         return ResponseEntity.ok(replyService.addReply(commBoardSeq, replyDTO));
     }
 
