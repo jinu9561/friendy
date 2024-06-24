@@ -36,7 +36,7 @@ public class CommunityBoard {
     @Column(name = "BOARD_TITLE", nullable = false)
     private String boardTitle;
 
-    @Column(name = "BOARD_CONTENT", nullable = false)
+    @Column(name = "BOARD_CONTENT", nullable = false,  length = 3000) //내용은 길이를 크게 지정
     private String boardContent;
 
     @Column(name = "BOARD_TYPE", nullable = false)  //0번 : 실명(게시자 정보 표시) 게시판, 1번 : 익명 게시판

@@ -1,5 +1,6 @@
 package web.mvc.dto.generalBoard;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 
 import org.springframework.stereotype.Component;
@@ -23,6 +24,7 @@ public class ReplyDTO {
     private Long userSeq;
     private Long commBoardSeq;
     private String replyContent;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss") //Json으로 보낼 때, LocalDateTime을 String으로 변환
     private LocalDateTime replyRegDate;
     private String nickName;
 
