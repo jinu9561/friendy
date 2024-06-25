@@ -20,7 +20,7 @@ public interface MeetUpBoardRepository extends JpaRepository<MeetUpBoard, Long> 
     @Modifying
     @Transactional
     @Query("UPDATE MeetUpBoard m " +
-            "SET m.meetUpName = :#{#dto.meetUpName}, m.meetUpDesc = :#{#dto.meetUpDesc}, m.meetUpDeadLine = :#{#dto.meetUpDeadLine}" +
+            "SET m.meetUpName = :#{#dto.meetUpName}, m.meetUpDesc = :#{#dto.meetUpDesc}, m.meetUpDeadLine = :#{#dto.meetUpDeadLine} , m.meetUpMaxEntry = :#{#dto.meetUpMaxEntry}" +
             " WHERE m.meetUpSeq = :#{#dto.meetUpSeq}")
     int updateMeetUp(@Param("dto") MeetUpBoard dto);
 
@@ -55,7 +55,7 @@ public interface MeetUpBoardRepository extends JpaRepository<MeetUpBoard, Long> 
 
 
     @Modifying
-    @Query("update MeetUpBoard  p set p.meetUpPeopleList= ?1 where p.meetUpSeq=?2")
-    int addMeetUpPeopleList(String meetUpPeopleList , Long meetUpSeq);
+    @Query("update MeetUpBoard  p set p.meetUpPeopleList= ?1, p.nowEntry=?2 where p.meetUpSeq=?3")
+    int addMeetUpPeopleList(String meetUpPeopleList ,  int count , Long meetUpSeq);
 
 }

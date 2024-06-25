@@ -21,7 +21,7 @@ public interface MeetUpBoardService {
 
     String updateBoard(MeetUpUpdateDTO meetUpUpdateDTO , List<MultipartFile> file) throws  Exception;
 
-    String deleteBoard(MeetUpDeleteDTO meetUpDeleteDTO);
+    String deleteBoard( String meetUpSeq, String meetUpPwd);
 
     MeetUpBoard  findMeetUpByMeetUpName(String meetUpName);
 

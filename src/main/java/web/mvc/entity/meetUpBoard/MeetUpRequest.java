@@ -15,7 +15,6 @@ import java.util.Date;
 @AllArgsConstructor
 @Getter
 @Setter
-@ToString
 public class MeetUpRequest {
 
     @Id
@@ -28,7 +27,7 @@ public class MeetUpRequest {
     @JoinColumn(name="meetup_seq")
     private MeetUpBoard meetUpBoard;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name ="user_seq")
     private Users user;
 
@@ -36,4 +35,7 @@ public class MeetUpRequest {
     private int meetUpRequestStatus;
     @CreationTimestamp
     private Date meetUpReqeustRegDate;
+
+    @Column(length = 300)
+    private String requestText;
 }

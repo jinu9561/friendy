@@ -3,6 +3,7 @@ package web.mvc.entity.chatting;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import web.mvc.entity.meetUpBoard.MeetUpBoard;
 import web.mvc.entity.meetUpBoard.MeetUpRequest;
 
 import java.util.Date;
@@ -24,11 +25,12 @@ public class ChattingRoom {
     @OneToMany(mappedBy = "chattingroom", cascade = CascadeType.ALL)
     private List<MessageLog> messageLogList;
 
-
-
     private String roomId;
     @CreationTimestamp
     private Date roomRegDate;
+
+    @OneToOne(mappedBy = "chattingroom", cascade = CascadeType.ALL)
+    private MeetUpBoard meetUpBoard;
 
 
 }
