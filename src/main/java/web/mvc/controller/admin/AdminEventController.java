@@ -44,6 +44,7 @@ public class AdminEventController {
     @PutMapping("/update/{eventSeq}")
     public ResponseEntity<?> updateEvent(@PathVariable Long eventSeq, @ModelAttribute EventDTO eventDTO,
                                          @RequestParam("file") MultipartFile file){
+        log.info("여기 오는지 확인?????????");
         return ResponseEntity.status(HttpStatus.OK).body(adminEventService.updateEvent(eventSeq, eventDTO, file));
     }
 
