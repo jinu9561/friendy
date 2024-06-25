@@ -24,7 +24,7 @@ public interface EventRepository extends JpaRepository<Event, Long> {
     //삭제
     @Modifying
     @Transactional
-    @Query("delete from Event e where e.eventStatus = web.mvc.enums.event.EventStatus.DISABLE and e.eventSeq = ?1")
+    @Query("delete from Event e where e.eventSeq = ?1")
     int deleteByEventStatus(Long eventSeq);
 
     //전체검색(데드라인 순으로 검색)
