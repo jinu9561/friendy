@@ -4,13 +4,17 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.core.annotation.Order;
+import web.mvc.dto.generalBoard.CommunityBoardDTO;
 import web.mvc.entity.user.Users;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
 @Setter
 @Getter
 @Entity//서버 실행시에 해당 객체로 테이블 매핑생성
@@ -26,13 +30,13 @@ public class CommunityBoard {
     private Long commBoardSeq;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "USER_SEQ", nullable = false)
+    @JoinColumn
     private Users user;
 
     @Column(name = "BOARD_TITLE", nullable = false)
     private String boardTitle;
 
-    @Column(name = "BOARD_CONTENT", nullable = false)
+    @Column(name = "BOARD_CONTENT", nullable = false,  length = 3000) //내용은 길이를 크게 지정
     private String boardContent;
 
     @Column(name = "BOARD_TYPE", nullable = false)  //0번 : 실명(게시자 정보 표시) 게시판, 1번 : 익명 게시판
@@ -54,4 +58,26 @@ public class CommunityBoard {
 
     @Column(name = "COMM_BOARD_COUNT", nullable = false)
     private int commBoardCount;
+
+    @OneToMany(mappedBy="communityBoard",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @OrderBy("replySeq asc")//댓글 번호 오름차순 정렬
+    private List<Reply> replyList;
+
+    // DTO로 변환
+    public CommunityBoardDTO toDTO() {
+        return CommunityBoardDTO.builder()
+                .commBoardSeq(this.commBoardSeq)
+                .userSeq(this.user.getUserSeq())
+                .nickName(this.user.getNickName())
+                .boardTitle(this.boardTitle)
+                .boardContent(this.boardContent)
+                .boardType(this.boardType)
+               .boardLike(this.boardLike)
+                .boardPwd(this.boardPwd)
+                .boardRegDate(this.boardRegDate)
+                .boardUpdateDate(this.boardUpdateDate)
+                .commBoardCount(this.commBoardCount)
+                .replyList(this.replyList != null ? this.replyList.stream().map(Reply::toDTO).collect(Collectors.toList()) : Collections.emptyList())
+                .build();
+    }
 }

@@ -1,48 +1,41 @@
 package web.mvc.dto.generalBoard;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
+
+import org.springframework.stereotype.Component;
 import web.mvc.entity.generalBoard.CommunityBoard;
 import web.mvc.entity.generalBoard.Reply;
-import web.mvc.entity.user.Users;
 
+import web.mvc.entity.user.Users;
+import web.mvc.repository.generalBoard.CommunityBoardRepository;
+import web.mvc.repository.user.UserRepository;
+
+import java.time.LocalDateTime;
 
 @Setter
 @Getter
-@ToString
-@AllArgsConstructor //모든 멤버를 인자(parameter)로 받아 DTO객체를 생성
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class ReplyDTO {
+
     private Long replySeq;
-    private long userSeq;
-    private long boardSeq;
+    private Long userSeq;
+    private Long commBoardSeq;
     private String replyContent;
-    private String replyRegDate;
-    private String replyUpdateDate;
-    private int replyLike;
-    private String replyPwd;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss") //Json으로 보낼 때, LocalDateTime을 String으로 변환
+    private LocalDateTime replyRegDate;
+    private String nickName;
 
-    // 사용자가 보낸 DTO에서 엔티티로 변환하는 메서드
-    public Reply toReplyEntity(ReplyDTO replyDTO, Users user, CommunityBoard communityBoard) {
+
+
+    public Reply toEntity(Users user, CommunityBoard communityBoard){
         return Reply.builder()
-                .user(user)  // 조회된 사용자 객체를 설정
-                .communityBoard(communityBoard)  // 조회된 커뮤니티 게시물 객체를 설정
+                .replySeq(this.replySeq)
+                .user(user)
+                .communityBoard(communityBoard)
                 .replyContent(this.replyContent)
-                .replyLike(this.replyLike)
-                .replyPwd(this.replyPwd)
                 .build();
-    }
-
-    // 엔티티에서 사용자에게 보낼 DTO로 변환하는 정적 메서드
-    public static ReplyDTO fromReplyEntity(Reply reply) {
-        return new ReplyDTO(
-                reply.getReplySeq(),
-                reply.getUser().getUserSeq(),
-                reply.getCommunityBoard().getCommBoardSeq(),
-                reply.getReplyContent(),
-                reply.getReplyRegDate(),
-                reply.getReplyUpdateDate(),
-                reply.getReplyLike(),
-                reply.getReplyPwd()
-        );
     }
 }
