@@ -72,7 +72,7 @@ public class CommunityBoard {
                 .boardTitle(this.boardTitle)
                 .boardContent(this.boardContent)
                 .boardType(this.boardType)
-                .boardLike(this.boardLike)
+               .boardLike(this.boardLike)
                 .boardPwd(this.boardPwd)
                 .boardRegDate(this.boardRegDate)
                 .boardUpdateDate(this.boardUpdateDate)

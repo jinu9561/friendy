@@ -37,13 +37,12 @@ public class CommunityBoardDTO {
     // 사용자가 보낸 DTO에서 엔티티로 변환하는 메서드
     public CommunityBoard toEntity(Users user) {
         return CommunityBoard.builder()
-                .commBoardSeq(this.commBoardSeq)
                 .user(user)
                 .boardTitle(this.boardTitle)
                 .boardContent(this.boardContent)
                 .boardType(this.boardType)
-                .boardLike(this.boardLike)
-                .boardPwd(this.boardPwd)
+              .boardLike(this.boardLike)
+              .boardPwd(this.boardPwd)
                 .build();
     }
 
