@@ -54,4 +54,6 @@ public interface FriendService {
     List<FriendList> getAllFriends(Users user);
 
     List<FriendRequest> getFriendRequests(Users user);
+
+    FriendRequest getFriendRequestById(Long friendRequestSeq);
 }

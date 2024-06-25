@@ -41,6 +41,7 @@ public interface FriendListRepository extends JpaRepository<FriendList, Long> {
     /**
      * 친구 목록 전체 출력 (friend_status가 1 (차단 상태)인 친구는 보이지 않음)
      */
-    @Query("SELECT fl FROM FriendList fl WHERE (fl.user.userSeq = :userSeq OR fl.friendUser.userSeq = :userSeq) AND fl.friendStatus = 0")
+    @Query("SELECT DISTINCT fl FROM FriendList fl WHERE fl.user.userSeq = :userSeq AND fl.friendStatus = 0")
     List<FriendList> findAllFriends(@Param("userSeq") Long userSeq);
+
 }

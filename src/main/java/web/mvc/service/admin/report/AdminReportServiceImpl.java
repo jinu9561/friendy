@@ -4,6 +4,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import web.mvc.dto.report.ReportDTO;
 import web.mvc.entity.report.Report;
 import web.mvc.exception.common.ErrorCode;
 import web.mvc.exception.common.GlobalException;
@@ -11,6 +12,7 @@ import web.mvc.repository.report.ReportRepository;
 import web.mvc.repository.report.ReportTypeRepository;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -22,27 +24,34 @@ public class AdminReportServiceImpl implements AdminReportService {
     private final ReportTypeRepository reportTypeRepository;
 
     @Override
-    public List<Report> findAllReportList() {
-        List<Report> list = reportRepository.findAll();
-
-        log.info("Report list : {}", list);
-
-        return list;
+    public List<ReportDTO> findAllReportList() {
+        List<Report> reports = reportRepository.findAll();
+        return reports.stream().map(this::convertToDTO).collect(Collectors.toList());
     }
 
     @Override
-    public Report selectReportBySeq(Long reportSeq) {
-        Report report = reportRepository.findById(reportSeq)
-                .orElseThrow(()->new GlobalException(ErrorCode.NOTFOUND_ID));
+    public ReportDTO selectReportBySeq(Long reportSeq) {
+        Report report = reportRepository.findById(reportSeq).orElseThrow(() -> new RuntimeException("Report not found"));
+        return convertToDTO(report);
+    }
 
-        log.info("report : {}", report);
-
-        return report;
+    private ReportDTO convertToDTO(Report report) {
+        ReportDTO reportDTO = new ReportDTO();
+        reportDTO.setReportSeq(report.getReportSeq());
+        reportDTO.setSenderSeq(report.getSender().getUserSeq());
+        reportDTO.setReceiverSeq(report.getReceiver() != null ? report.getReceiver().getUserSeq() : null);
+        reportDTO.setReportDescription(report.getReportDescription());
+        reportDTO.setReportRegDate(report.getReportRegDate());
+        reportDTO.setReportResult(report.getReportResult());
+        reportDTO.setReportStatus(report.getReportStatus());
+        reportDTO.setReportTypeSeq(report.getReportType().getReportTypeSeq());
+        reportDTO.setReportUrl(report.getReportUrl());
+        return reportDTO;
     }
 
     @Override
-    public String getReportedUrl(Report report) {
-        String url = report.getReportUrl();
+    public String getReportedUrl(ReportDTO reportDTO) {
+        String url = reportDTO.getReportUrl();
 
         log.info("url : {}", url);
 
@@ -50,27 +59,29 @@ public class AdminReportServiceImpl implements AdminReportService {
     }
 
     @Override
-    public Report updateReportStatus(Report report) {
-        int rowsUpdated = reportRepository.updateReportStatus(report.getReportStatus(), report.getReportSeq());
+    public ReportDTO updateReportStatus(ReportDTO reportDTO) {
+        int rowsUpdated = reportRepository.updateReportStatus(reportDTO.getReportStatus(), reportDTO.getReportSeq());
         if (rowsUpdated == 0) {
             throw new GlobalException(ErrorCode.NOTFOUND_ID);
         }
-        Report updatedReport = reportRepository.findById(report.getReportSeq())
+        Report updatedReport = reportRepository.findById(reportDTO.getReportSeq())
                 .orElseThrow(() -> new GlobalException(ErrorCode.NOTFOUND_ID));
-        log.info("Updated status report: {}", updatedReport);
-        return updatedReport;
+        ReportDTO updatedReportDTO = convertToDTO(updatedReport);
+        log.info("Updated status report: {}", updatedReportDTO);
+        return updatedReportDTO;
     }
 
     @Override
-    public Report updateReportResult(Report report) {
-        int rowsUpdated = reportRepository.updateReportResult(report.getReportResult(), report.getReportSeq());
+    public ReportDTO updateReportResult(ReportDTO reportDTO) {
+        int rowsUpdated = reportRepository.updateReportResult(reportDTO.getReportResult(), reportDTO.getReportSeq());
         if (rowsUpdated == 0) {
             throw new GlobalException(ErrorCode.NOTFOUND_ID);
         }
-        Report updatedReport = reportRepository.findById(report.getReportSeq())
+        Report updatedReport = reportRepository.findById(reportDTO.getReportSeq())
                 .orElseThrow(() -> new GlobalException(ErrorCode.NOTFOUND_ID));
-        log.info("Updated result report: {}", updatedReport);
-        return updatedReport;
+        ReportDTO updatedReportDTO = convertToDTO(updatedReport);
+        log.info("Updated result report: {}", updatedReportDTO);
+        return updatedReportDTO;
     }
 
 }

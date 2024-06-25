@@ -55,7 +55,7 @@ public class FriendServiceImpl implements FriendService {
             Users sender = friendRequest.getSender();
             Users receiver = friendRequest.getReceiver();
 
-            if (!receiver.equals(user)) {
+            if (receiver.getUserSeq() != user.getUserSeq()) {
                 throw new IllegalStateException("이 친구 요청을 수락할 권한이 없습니다.");
             }
 
@@ -64,16 +64,30 @@ public class FriendServiceImpl implements FriendService {
             friendRequestRepository.save(friendRequest);
 
             // 친구 관계 저장
-            FriendList friendList = new FriendList();
-            friendList.setUser(sender);
-            friendList.setFriendUser(receiver);
-            friendList.setFriendStatus(0); // 친구 상태
+            FriendList friendList1 = new FriendList();
+            friendList1.setUser(sender);
+            friendList1.setFriendUser(receiver);
+            friendList1.setFriendStatus(0); // 친구 상태
 
-            friendListRepository.save(friendList);
+            // user와 receiver 바꿔서 저장
+            FriendList friendList2 = new FriendList();
+            friendList2.setUser(receiver);
+            friendList2.setFriendUser(sender);
+            friendList2.setFriendStatus(0); // 친구 상태
+
+            friendListRepository.save(friendList1);
+            friendListRepository.save(friendList2);
+
+            // 수락 알림을 sender에게 추가 및 전송
+            String message = receiver.getUserId() + "님이 친구 요청을 수락했습니다.";
+            notificationService.addNotification(sender, message);
+            notificationService.sendNotification(message); // SSE 클라이언트에게 알림 전송
+
         } else {
             throw new IllegalStateException("친구 요청을 찾을 수 없습니다.");
         }
     }
+
 
     @Override
     public void rejectFriendRequest(Long friendRequestSeq, Users user) {
@@ -82,13 +96,14 @@ public class FriendServiceImpl implements FriendService {
             FriendRequest friendRequest = friendRequestOpt.get();
             Users receiver = friendRequest.getReceiver();
 
-            if (!receiver.equals(user)) {
+            if (receiver.getUserSeq() != user.getUserSeq()) {
                 throw new IllegalStateException("이 친구 요청을 거절할 권한이 없습니다.");
             }
 
             // 친구 요청 거절 상태로 변경
             friendRequest.setRequestStatus(2); // 거절 상태
             friendRequestRepository.save(friendRequest);
+
         } else {
             throw new IllegalStateException("친구 요청을 찾을 수 없습니다.");
         }
@@ -112,5 +127,10 @@ public class FriendServiceImpl implements FriendService {
     @Override
     public List<FriendRequest> getFriendRequests(Users user) {
         return friendRequestRepository.findAllByReceiver(user);
+    }
+
+    @Override
+    public FriendRequest getFriendRequestById(Long friendRequestSeq) {
+        return friendRequestRepository.findById(friendRequestSeq).orElseThrow(() -> new IllegalStateException("친구 요청을 찾을 수 없습니다."));
     }
 }
