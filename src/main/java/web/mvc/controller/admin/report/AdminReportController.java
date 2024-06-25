@@ -20,7 +20,7 @@ import java.util.List;
 public class AdminReportController {
 
     private final AdminReportService adminReportService;
-
+//
     /**
      * 신고 목록 전체 출력 (관리자용)
      * */
