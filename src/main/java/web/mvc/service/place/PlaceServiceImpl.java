@@ -34,7 +34,7 @@ public class PlaceServiceImpl implements PlaceService {
     private String defaultAddress = "경기도";
     @Value("${place.save.dir}")
     private String uploadDir;
-
+//
     @Override
     public List<PlaceRecommendationDTO> getPlaceByUserAddress(UsersDTO usersDTO) {
 
