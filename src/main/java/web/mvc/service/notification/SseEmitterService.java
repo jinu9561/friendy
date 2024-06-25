@@ -1,35 +1,36 @@
 package web.mvc.service.notification;
 
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.taglibs.standard.extra.spath.Step;
 import org.springframework.stereotype.Service;
-import web.mvc.entity.notification.Notification;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.io.IOException;
-import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Service
 @Slf4j
 public class SseEmitterService {
 
-    private final List<HttpServletResponse> clients = new CopyOnWriteArrayList<>();
+    private final Map<Long, SseEmitter> emitters = new ConcurrentHashMap<>();
 
-    public void addClient(HttpServletResponse response) {
-        clients.add(response);
+    public SseEmitter addUser(Long userSeq) {
+        SseEmitter emitter = new SseEmitter();
+        emitters.put(userSeq, emitter);
+        emitter.onCompletion(() -> emitters.remove(userSeq));
+        emitter.onTimeout(() -> emitters.remove(userSeq));
+        return emitter;
     }
 
-    public void sendNotification(String message) {
-        log.info("@@@Sending notification: {}", message);
-        clients.forEach(response -> {
+    public void sendNotification(Long userSeq, String message) {
+        SseEmitter emitter = emitters.get(userSeq);
+        if (emitter != null) {
             try {
-                response.getWriter().write("data: " + message + "\n\n");
-                response.getWriter().flush();
+                emitter.send(SseEmitter.event().name("notification").data(message));
             } catch (IOException e) {
-                log.error("@@@@Error broadcasting notification", e);
-                clients.remove(response);  // 에러가 발생하면 클라이언트를 제거
+                log.error("알림 전송 중 오류 발생", e);
+                emitters.remove(userSeq);
             }
-        });
+        }
     }
 }

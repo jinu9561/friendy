@@ -1,11 +1,13 @@
 package web.mvc.entity.report;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
+import web.mvc.entity.report.ReportType;
 import web.mvc.entity.user.Users;
 
 import java.time.LocalDateTime;
@@ -15,10 +17,11 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Getter
 @Setter
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Report {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE ,generator = "report_seq")
-    @SequenceGenerator(name ="report_seq" , allocationSize = 1 , sequenceName = "report_seq")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "report_seq")
+    @SequenceGenerator(name = "report_seq", allocationSize = 1, sequenceName = "report_seq")
     private Long reportSeq;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -44,7 +47,4 @@ public class Report {
     private int reportStatus; // 0=처리중, 1=처리완료
     @Column(nullable = false, columnDefinition = "int default 0") // 디폴트값 0
     private int reportResult; // 0=신고 미적용, 1=3일정지, 2=영구정지
-
-
-
 }
