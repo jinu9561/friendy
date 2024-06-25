@@ -48,9 +48,10 @@ public class MainServiceImpl implements MainService {
         }else{
             log.info("소모임 user "+ user);
             interest = interestRepository.findById(1L).orElseThrow(()-> new GlobalException(ErrorCode.ACCESS_DENIED));
+            log.info("interest "+ interest.getInterestCategory());
         }
 
-        List<MeetUpBoard> meetUpBoardList = meetUpBoardRepository.selectMeetUpBoardByInterest(interest.getInterestCategory());
+        List<MeetUpBoard> meetUpBoardList = meetUpBoardRepository.findMeetUpBoardByInterest(interest.getInterestCategory());
         List<MainMeetupDTO> mainMeetupDTOList = new ArrayList<>();
 
         for(MeetUpBoard meetUpBoard : meetUpBoardList){

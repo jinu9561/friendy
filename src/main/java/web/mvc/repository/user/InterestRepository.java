@@ -9,7 +9,6 @@ import web.mvc.entity.user.Interest;
 public interface InterestRepository extends JpaRepository<Interest, Long> {
 
 
-
     @Query("select i from Interest  i where  i.interestCategory = ?1")
     public Interest findByInterestCategory(String interestCategory);
 

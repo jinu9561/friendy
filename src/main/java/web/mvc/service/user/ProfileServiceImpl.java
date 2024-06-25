@@ -162,9 +162,12 @@ public class ProfileServiceImpl implements ProfileService {
             profileInterestRepository.deleteByProfileSeq(profile.getProfileSeq());
 
             // 새로운 관심사 목록을 추가
-            for(String i : interests){
-                Interest interest = interestRepository.findByInterestCategory(i);
-                ProfileInterest saveInterest = new ProfileInterest(interest,profile);
+            for (String interestCategory : interests) {
+                Interest interest = interestRepository.findByInterestCategory(interestCategory);
+                if (interest == null) {
+                    throw new GlobalException(ErrorCode.JSON_PROCESSING_ERROR);
+                }
+                ProfileInterest saveInterest = new ProfileInterest(interest, profile);
                 profile.getProfileInterestList().add(saveInterest);
             }
 
