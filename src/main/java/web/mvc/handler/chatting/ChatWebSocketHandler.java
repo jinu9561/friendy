@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.json.JSONObject;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.socket.CloseStatus;
@@ -16,9 +17,11 @@ import web.mvc.repository.user.UserRepository;
 import web.mvc.service.chatting.MessageLogService;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -33,89 +36,86 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
 
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws IOException {
-        String roomId = session.getHandshakeHeaders().getFirst("roomId");
-        Long userSeq = Long.valueOf(session.getHandshakeHeaders().getFirst("userSeq"));
-        Long chattingRoomSeq = Long.valueOf(session.getHandshakeHeaders().getFirst("chattingRoomSeq"));
+        log.info("Attempting connection: session {}", session);
+        Map<String, String> queryParams = parseQueryParams(session.getUri().getQuery());
+        String roomId = queryParams.get("roomId");
+        Long userSeq = Long.valueOf(queryParams.get("userSeq"));
+        Long chattingRoomSeq = Long.valueOf(queryParams.get("chattingRoomSeq"));
 
         printCurrentUsers();
-        System.out.println("chattingRoomSeq: " + chattingRoomSeq);
-        System.out.println("해당 세션에 접속됨 : " + session.getId());
-        System.out.println("roomId : " + roomId);
-        System.out.println("roomSeq : " + chattingRoomSeq);
+        log.info("Session connected: sessionId {}, roomId {}, roomSeq {}", session.getId(), roomId, chattingRoomSeq);
 
         if (roomId == null || roomId.isEmpty()) {
             session.close();
             return;
         }
 
-        // 동일한 userSeq와 chattingRoomSeq가 이미 존재하는지 확인
         Map<Long, WebSocketSession> userChattingRooms = userSessions.get(userSeq);
-        System.out.println("userChattingRooms : "+userChattingRooms);
         if (userChattingRooms != null && userChattingRooms.containsKey(chattingRoomSeq)) {
             WebSocketSession existingSession = userChattingRooms.get(chattingRoomSeq);
-            System.out.println("여기는??");
             if (existingSession != null) {
-                // 기존 세션이 존재하면 새로운 세션을 닫고 기존 세션 재사용
-                System.out.println("여기옴 ?");
                 session.close();
                 return;
             }
         }
 
-        // 새로운 세션 추가
-        Map<String, WebSocketSession> sessions = chatRooms.computeIfAbsent(roomId, k -> new ConcurrentHashMap<>());
-        sessions.put(session.getId(), session);
+        chatRooms.computeIfAbsent(roomId, k -> new ConcurrentHashMap<>()).put(session.getId(), session);
+        userSessions.computeIfAbsent(userSeq, k -> new ConcurrentHashMap<>()).put(chattingRoomSeq, session);
+    }
 
-        userChattingRooms = userSessions.computeIfAbsent(userSeq, k -> new ConcurrentHashMap<>());
-        userChattingRooms.put(chattingRoomSeq, session);
+    private Map<String, String> parseQueryParams(String query) {
+        return Arrays.stream(query.split("&"))
+                .map(param -> param.split("="))
+                .collect(Collectors.toMap(pair -> pair[0], pair -> pair[1]));
     }
 
     private void printCurrentUsers() {
-        System.out.println("현재 접속 중인 사용자 목록:");
-        for (String roomId : chatRooms.keySet()) {
-            System.out.println("Room ID: " + roomId);
-            Map<String, WebSocketSession> sessions = chatRooms.get(roomId);
-            for (String sessionId : sessions.keySet()) {
-                System.out.println("Session ID: " + sessionId);
-            }
-        }
+        log.info("Current connected users:");
+        chatRooms.forEach((roomId, sessions) -> {
+            log.info("Room ID: {}", roomId);
+            sessions.forEach((sessionId, session) -> log.info("Session ID: {}", sessionId));
+        });
     }
 
     @Override
     @Transactional
     public void handleTextMessage(WebSocketSession session, TextMessage message) {
-        String roomId = session.getHandshakeHeaders().getFirst("roomId");
-        String userSeq = session.getHandshakeHeaders().getFirst("userSeq");
-        Long chattingRoomSeq = Long.valueOf(session.getHandshakeHeaders().getFirst("chattingRoomSeq"));
-        System.out.println("chattingRoomSeq: " + chattingRoomSeq);
-        System.out.println("메세지 도착 roomId: " + roomId);
-
+        log.info("WebSocket session received a message: {}", message.getPayload());
+        String messageJason = message.getPayload();
+        JSONObject jsonObject = new JSONObject(messageJason);
+        String userSeq = jsonObject.getString("userSeq");
+        System.out.println("userSeq" + userSeq);
+        String jsonMessage = jsonObject.getString("message");
+        System.out.println("jsonMessage" + jsonMessage);
+        Map<String, String> queryParams = parseQueryParams(session.getUri().getQuery());
+        String roomId = queryParams.get("roomId");
+        Long chattingRoomSeq = Long.valueOf(queryParams.get("chattingRoomSeq"));
+        System.out.println("roomId" + roomId);
         if (roomId == null || roomId.isEmpty()) {
+            log.warn("Room ID is null or empty.");
             return;
         }
-
+//
         Map<String, WebSocketSession> sessions = chatRooms.get(roomId);
-
         if (sessions == null) {
+            log.warn("No sessions found for roomId: {}", roomId);
             return;
         }
 
-        // 채팅방 내 모든 사용자에게 메시지 전송
-        for (WebSocketSession ws : sessions.values()) {
+        sessions.values().forEach(ws -> {
             try {
                 Optional<Users> optionalUsers = userRepository.findById(Long.valueOf(userSeq));
                 if (optionalUsers.isPresent()) {
                     Users users = optionalUsers.get();
                     Long seq = users.getUserSeq();
-                    System.out.println("유저시퀀스는 " + seq);
                     String nickname = users.getNickName();
                     String content = message.getPayload();
 
-                    // 메시지 객체에 userSeq 정보 포함
                     JsonNode messageJson = objectMapper.createObjectNode()
-                            .put("message", message.getPayload())
+                            .put("message", content)
                             .put("senderNickname", nickname);
                     ws.sendMessage(new TextMessage(messageJson.toString()));
+
                     MessageDTO messageDTO = MessageDTO.builder()
                             .chattingRoomSeq(chattingRoomSeq)
                             .chatRoomId(roomId)
@@ -123,24 +123,21 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
                             .chattingContent(content)
                             .build();
                     messageLogService.insertMessage(messageDTO);
-                    System.out.println("정상 삽입됐나?");
+                    log.info("Message logged successfully for user: {}", nickname);
+                } else {
+                    log.warn("User not found for userSeq: {}", userSeq);
                 }
             } catch (IOException e) {
-                e.printStackTrace();
+                log.error("Error sending message", e);
             }
-        }
+        });
     }
+
 
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) {
-        for (Map<String, WebSocketSession> sessions : chatRooms.values()) {
-            sessions.remove(session.getId());
-            System.out.println("세션 종료");
-        }
-
-        // userSessions에서도 세션 제거
-        for (Map<Long, WebSocketSession> userChattingRooms : userSessions.values()) {
-            userChattingRooms.values().remove(session);
-        }
+        chatRooms.values().forEach(sessions -> sessions.remove(session.getId()));
+        userSessions.values().forEach(userChattingRooms -> userChattingRooms.values().remove(session));
+        log.info("Session closed: {}", session.getId());
     }
 }

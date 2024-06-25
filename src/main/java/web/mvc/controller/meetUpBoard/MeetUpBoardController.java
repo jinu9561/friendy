@@ -42,15 +42,25 @@ public class MeetUpBoardController {
         //입력된 타입이 안맞으면 @RequestBody에서 애초에 걸러져버림. .
         System.out.println("여기도 못가는거 맞지 ");
         System.out.println("받아온시퀀스"+meetUpBoardDTO.getUserSeq());
-
+        System.out.println(meetUpBoardDTO.getMeetUpName());
+        System.out.println(meetUpBoardDTO.getMeetUpDesc());
+        System.out.println(meetUpBoardDTO.getMeetUpDeadLine());
+        System.out.println("file : "+ file);
+        System.out.println(meetUpBoardDTO.getMeetUpMaxEntry());
+        System.out.println(meetUpBoardDTO.getMeetUpPwd());
+        System.out.println(meetUpBoardDTO.getInterestCate());
     String result =meetUpBoardService.createParty(meetUpBoardDTO, file);
-        System.out.println(result+"결과");
+//        System.out.println(result+"결과");
         return ResponseEntity.status(HttpStatus.OK).body("성공");
     }
 
     @PutMapping("/update")
     //게시글 수정
     public ResponseEntity<?> updateMeetUpBoard( @ModelAttribute MeetUpUpdateDTO meetUpUpdateDTO, @RequestPart(value = "file" , required = false) List<MultipartFile> file) throws Exception {
+        System.out.println("밋업" + meetUpUpdateDTO);
+        System.out.println("설명:"+meetUpUpdateDTO.getMeetUpDesc());
+        System.out.println("넘버 : "+ meetUpUpdateDTO.getMeetUpMaxEntry());
+        System.out.println("날짜 :" +meetUpUpdateDTO.getMeetUpDeadLine());
 
             meetUpBoardService.updateBoard(meetUpUpdateDTO, file);
         return  ResponseEntity.status(HttpStatus.OK).body("test");
@@ -95,6 +105,7 @@ public class MeetUpBoardController {
 
 @GetMapping("/selectAll")
 public ResponseEntity<?> findAllMeetUp() {
+    System.out.println("++++++++++++++++++++++++");
     List<MeetUpBoard> meetUpBoardList = meetUpBoardService.selectAll();
     List<MeetUpSendDTO> meetUpSendDTOList = new ArrayList<>();
 
@@ -117,7 +128,7 @@ public ResponseEntity<?> findAllMeetUp() {
                 .meetUpSeq(board.getMeetUpSeq())
                 .meetUpDesc(board.getMeetUpDesc())
                 .userSeq(board.getUser().getUserSeq())
-                .interest(board.getInterest())
+                .interestCate(board.getInterest().getInterestCategory())
                 .meetUpName(board.getMeetUpName())
                 .meetUpBoardDetailImgNameList(imgNameList)
                 .meetUpDeadLine(String.valueOf(date))
@@ -182,21 +193,68 @@ public ResponseEntity<?> selectImgBySeq(@RequestParam String meetUpDetailImg) {
     }
 
 
+    @GetMapping("/meetUpSeq")
+    public ResponseEntity<?> selectMeetUpBoard (@RequestParam  Long meetUpSeq){
+      MeetUpBoard meetUpBoard=   meetUpBoardService.findMeetUpByBoardSeq( meetUpSeq);
+        Optional<Interest> interestOptional=   interestRepository.findById(meetUpBoard.getInterest().getInterestSeq());
+        MeetUpSendDTO meetUpSendDTO= new MeetUpSendDTO();
+        List<MeetUpBoardDetailImg> list=meetUpDetailImgService.findImgList(meetUpSeq);
+        List<String> imgNameList= new ArrayList<>();
+        String meetUpImgName= null;
+        for(MeetUpBoardDetailImg meetUpBoardDetailImg : list){
+            meetUpImgName=meetUpBoardDetailImg.getMeetUpDetailImgName();
+            imgNameList.add(meetUpImgName);
+        }
+
+
+
+        if (interestOptional.isPresent()) {
+            System.out.println("등록일"+meetUpBoard.getMeetUpRegDate());
+
+
+            Interest interest = interestOptional.get();
+             meetUpSendDTO = meetUpSendDTO.builder()
+                    .meetUpName(meetUpBoard.getMeetUpName())
+                    .meetUpDesc(meetUpBoard.getMeetUpDesc())
+                    .interestCate(interest.getInterestCategory())
+                     .interestSeq(interest.getInterestSeq())
+                    .meetUpDeadLine(String.valueOf(meetUpBoard.getMeetUpDeadLine()))
+                     .meetUpBoardDetailImgNameList(imgNameList)
+                     .meetUpStatus(meetUpBoard.getMeetUpStatus())
+                     .meetUpPeopleList(meetUpBoard.getMeetUpPeopleList())
+                    .meetUpPwd(meetUpBoard.getMeetUpPwd())
+                    .meetUpMaxEntry(meetUpBoard.getMeetUpMaxEntry())
+                     .nowEntry(meetUpBoard.getNowEntry())
+                     .meetUpRegDate(String.valueOf(meetUpBoard.getMeetUpRegDate()))
+                     .userSeq(meetUpBoard.getUser().getUserSeq())
+                     .roomId(meetUpBoard.getChattingroom().getRoomId())
+                     .chattingRoomSeq(meetUpBoard.getChattingroom().getChattingroomSeq())
+                    .build();
+        }
+        System.out.println("meetUpSeq :"+ meetUpSeq);
+        return ResponseEntity.status(HttpStatus.OK).body(meetUpSendDTO);
+    }
+
 
 
 
 
     @DeleteMapping("/delete")
     //게시글 삭제
-    public ResponseEntity<?> deleteMeetUPBoard(@RequestBody MeetUpDeleteDTO meetUpDeleteDTO) {
-        String result = meetUpBoardService.deleteBoard(meetUpDeleteDTO);
+    public ResponseEntity<?> deleteMeetUPBoard(@RequestParam("meetUpSeq") String meetUpSeq, @RequestParam("meetUpPwd") String meetUpPwd) {
+        System.out.println(meetUpPwd);
 
+        System.out.println(meetUpSeq);
+        String result = meetUpBoardService.deleteBoard(meetUpSeq,meetUpPwd);
+        System.out.println();
         if (result == null) {
-            // 삭제 성공 시
+//             삭제 성공 시
             return ResponseEntity.status(HttpStatus.OK).body("삭제가 성공적으로 완료되었습니다.");
         } else {
-            // 삭제 실패 시
+//             삭제 실패 시
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(result);
         }
-    }
+
+
+}
 }

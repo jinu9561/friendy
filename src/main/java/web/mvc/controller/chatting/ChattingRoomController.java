@@ -44,7 +44,6 @@ public class ChattingRoomController {
 
     @GetMapping("/joinRoom/{chattingRoomSeq}")
     public ResponseEntity<?> joinRoom(@PathVariable Long chattingRoomSeq){
-
         List<MessageLog> messageLogList= chattingRoomService.findMessageLog(chattingRoomSeq);
 
         System.out.println("출력된 메세지 로그"+messageLogList.toString());

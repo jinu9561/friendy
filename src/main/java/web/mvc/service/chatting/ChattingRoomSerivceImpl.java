@@ -34,9 +34,9 @@ public class ChattingRoomSerivceImpl implements ChattingRoomService {
         ChattingRoom chattingRoom = ChattingRoom.builder()
                 .roomId(roomId)
                 .build();
-        chattingRoomRepository.save(chattingRoom);
+         chattingRoomRepository.save(chattingRoom);
 
-        return null;
+        return chattingRoom;
     }
 
     @Override
