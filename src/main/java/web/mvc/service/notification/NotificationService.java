@@ -42,5 +42,5 @@ public interface NotificationService {
      * */
     void addNotification(Users user, String message);
 
-    SseEmitter addUser(Users user);
+    SseEmitter addUser(Long userSeq);
 }

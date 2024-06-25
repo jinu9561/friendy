@@ -7,6 +7,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Commit;
+import web.mvc.controller.admin.report.AdminReportController;
+import web.mvc.controller.report.ReportController;
 import web.mvc.entity.report.Report;
 import web.mvc.entity.report.ReportType;
 import web.mvc.exception.common.ErrorCode;
@@ -36,12 +38,17 @@ public class ReportServiceTest {
     @Autowired
     UserService userService;
 
+    @Autowired
+    ReportController reportController;
+    @Autowired
+    AdminReportController adminReportController;
+
     @BeforeEach
     void setUp() {
         // 테스트 데이터 설정
         ReportType reportType = new ReportType();
-        reportType.setReportType(1); // 신고할 게시물의 유형 설정 (예: 채팅방)
-        reportType.setSeqByType(123L); // 임의의 seqByType 설정
+        reportType.setReportType("user"); // 신고할 게시물의 유형 설정 (예: 유저)
+        reportType.setSeqByType(2L); // 임의의 seqByType 설정
 
         Report report = new Report();
         report.setReportStatus(1); // 상태 설정
@@ -56,8 +63,8 @@ public class ReportServiceTest {
     void 신고하기() {
         // 테스트에 필요한 객체 생성
         ReportType reportType = new ReportType();
-        reportType.setReportType(1); // 신고할 게시물의 유형 설정 (예: 채팅방)
-        reportType.setSeqByType(123L); // 임의의 seqByType 설정
+        reportType.setReportType("user"); // 신고할 게시물의 유형 설정 (예: 채팅방)
+        reportType.setSeqByType(2L); // 임의의 seqByType 설정
 
         Report report = new Report();
         report.setReportStatus(1); // 상태 설정
@@ -76,7 +83,7 @@ public class ReportServiceTest {
         List<Report> list = reportRepository.findAll();
         log.info("Report list size: {}", list.size());
 
-        list.forEach(r -> log.info("Report Seq: {}", r.getReportSeq()));
+        list.forEach(r -> log.info("@@@Report Seq: {}", r.getReportSeq()));
     }
 
     @Test
@@ -87,4 +94,6 @@ public class ReportServiceTest {
 
         log.info("selectedReport: {}", selectedReport);
     }
+
+
 }

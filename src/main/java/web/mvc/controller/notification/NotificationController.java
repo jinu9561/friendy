@@ -95,7 +95,7 @@ public class NotificationController {
         log.info("cu.getUsers().getUserSeq = {}", cu.getUsers().getUserSeq());
         log.info("cu.getUsers().getUserId = {}", cu.getUsers().getUserId());
 
-        return notificationService.addUser(cu.getUsers());
+        return notificationService.addUser(cu.getUsers().getUserSeq());
     }
 }
 

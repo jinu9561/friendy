@@ -21,10 +21,9 @@ public class ReportController {
     /**
      * 신고하기
      * */
-    @GetMapping("/send")
-    public ResponseEntity<?> insertReport(@RequestBody Report report
-            , @RequestBody ReportType reportType) {
-
+    @PostMapping("/send")
+    public ResponseEntity<String> insertReport(@RequestBody Report report, @RequestBody ReportType reportType) {
+        log.info("Inserting report: {}, with type: {}", report, reportType);
         reportService.insertReport(report, reportType);
         return ResponseEntity.status(HttpStatus.OK).body("성공");
     }
