@@ -5,10 +5,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import web.mvc.dto.meetUpBoard.MeetUpRequestDTO;
+import web.mvc.dto.user.UsersDTO;
+import web.mvc.entity.friend.FriendRequest;
 import web.mvc.entity.meetUpBoard.MeetUpRequest;
+import web.mvc.entity.user.Users;
+import web.mvc.repository.user.UserRepository;
 import web.mvc.service.meetUpBoard.MeetUpRequestService;
 
-import java.util.List;
+import java.util.*;
 
 @RestController
 @RequestMapping("/partyBoard/")
@@ -16,14 +20,14 @@ import java.util.List;
 public class MeetUpRequestController {
 
     private final MeetUpRequestService meetUpRequestService;
+    private final UserRepository userRepository;
 
     @PostMapping(value = "/request", produces = "application/json; charset=UTF-8")
-    public ResponseEntity<?> meetUpRequest(@RequestBody MeetUpRequestDTO meetUpRequestDTO) {
-
-
+    public ResponseEntity<?> meetUpRequest(@ModelAttribute MeetUpRequestDTO meetUpRequestDTO) {
+        System.out.println("밋업리퀘스트" + meetUpRequestDTO);
         System.out.println("들어온 소모임 시퀀스" + meetUpRequestDTO.getMeetUpSeq());
         System.out.println("유저시퀀스" + meetUpRequestDTO.getUserSeq());
-
+        System.out.println("밋업소개"+ meetUpRequestDTO.getRequestText());
         // 신청 중복 확인
         List<Long> list = meetUpRequestService.checkValidRequest(meetUpRequestDTO.getMeetUpSeq());
         System.out.println("list" + list);
@@ -33,7 +37,10 @@ public class MeetUpRequestController {
 
             // 이 부분에서 에러를 발생시킵니다.
             if (seq == meetUpRequestDTO.getUserSeq()) {
-                throw new IllegalArgumentException("이미 신청하셨습니다. 신청을 기다려주세요.");
+                // 에러 메시지를 Map에 저장하여 반환
+                Map<String, String> errorMap = new HashMap<>();
+                errorMap.put("message", "이미 신청하셨습니다. 신청을 기다려주세요.");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMap);
             }
         }
 
@@ -43,16 +50,29 @@ public class MeetUpRequestController {
     }
 
 
+
     //신청창에 신청 리스트 출력.
     //입력받은 소모임 시퀀스로
-    @GetMapping(value = "/request/{meetUpBoardSeq}")
-    public ResponseEntity<?> meetUpRequestCheck(@PathVariable Long meetUpBoardSeq) {
+    @GetMapping( "/request/selectBySeq")
+    public ResponseEntity<?> meetUpRequestCheck(@RequestParam  Long meetUpSeq) {
+            List<MeetUpRequest> list = meetUpRequestService.findAllReqestBySeq(meetUpSeq);
+            List<MeetUpRequestDTO> requestList = new ArrayList<>();
 
-        List<MeetUpRequest> list = meetUpRequestService.findAllReqestBySeq(meetUpBoardSeq);
 
-        System.out.println("list : " + list);
+        for (MeetUpRequest meetUpRequest : list) {
+            MeetUpRequestDTO meetUpRequestDTO = MeetUpRequestDTO.builder()
+                    .userNickName(meetUpRequest.getUser().getNickName())
+                    .userSeq(meetUpRequest.getUser().getUserSeq())
+                    .meetUpRequestStatus(meetUpRequest.getMeetUpRequestStatus())
+                    .meetUpSeq(meetUpRequest.getMeetUpRequestSeq())
+                    .meetUpRequestSeq(meetUpRequest.getMeetUpRequestSeq())
+                    .requestText(meetUpRequest.getRequestText())
+                    .build();
+            requestList.add(meetUpRequestDTO);
+        }
 
-        return ResponseEntity.status(HttpStatus.OK).body(list);
+
+        return ResponseEntity.status(HttpStatus.OK).body(requestList);
     }
 
 
@@ -63,18 +83,23 @@ public class MeetUpRequestController {
         int status = meetUpRequestDTO.getMeetUpRequestStatus();
         System.out.println("스테이터스" + status);
         Long meetUpSeq = meetUpRequestDTO.getMeetUpSeq();
-
+        System.out.println("유저 시퀀스:"+ meetUpRequestDTO.getUserSeq());
         System.out.println("meetUpSeq" + meetUpSeq);
         Long userSeq = meetUpRequestDTO.getUserSeq();
         if (status == 1) {
+            meetUpRequestService.addMeetUpPeopleList(meetUpRequestDTO.getUserSeq(), meetUpRequestDTO.getMeetUpSeq());
+
+
             String result = meetUpRequestService.updateStatusByReqSeq( status ,meetUpSeq,userSeq );
 
 
-            meetUpRequestService.addMeetUpPeopleList(meetUpRequestDTO.getUserSeq(), meetUpRequestDTO.getMeetUpSeq());
 
             System.out.println("status: " + status);
 
         } else if (status==2) {
+
+            meetUpRequestService.deleteFromMeetUp(meetUpRequestDTO.getUserSeq(), meetUpRequestDTO.getMeetUpSeq());
+
 
             String result2 = meetUpRequestService.updateStatusByReqSeq( status ,meetUpSeq,userSeq );
             return ResponseEntity.status(HttpStatus.OK).body("모임 참가가 거절되었습니다.");
@@ -94,6 +119,29 @@ public class MeetUpRequestController {
 
         meetUpRequestService.deleteFromMeetUp(meetUpRequestDTO.getMeetUpSeq(), meetUpRequestDTO.getUserSeq());
         return null;
+    }
+    @GetMapping(value = "/request/profile/{userSeq}")
+    public ResponseEntity<?> selectProfileBySeq(@PathVariable Long userSeq) {
+
+
+        System.out.println("userSeq: "+ userSeq );
+       Optional<Users> usersOptional=  userRepository.findById(userSeq);
+        UsersDTO usersDTO= new UsersDTO();
+        if (usersOptional.isPresent()) {
+            Users users = usersOptional.get();
+            users.getNickName();
+             usersDTO = UsersDTO.builder()
+                     .nickName(users.getNickName())
+                    .email(users.getEmail())
+                    .country(users.getCountry())
+                    .gender(users.getGender())
+                    .phone(users.getPhone())
+                    .build();
+            System.out.println("userDTO :"+usersDTO);
+        }
+
+        return  ResponseEntity.status(HttpStatus.OK).body(usersDTO);
+
     }
 
 

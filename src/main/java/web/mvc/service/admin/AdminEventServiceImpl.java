@@ -162,7 +162,8 @@ public class AdminEventServiceImpl implements AdminEventService {
     //삭제
     @Override
     public void deleteEvent(Long eventSeq) {
-        eventRepository.deleteByEventStatus(eventSeq);
+        Event event = eventRepository.findById(eventSeq).orElseThrow(()->new GlobalException(ErrorCode.NOTFOUND_PLACE));
+        eventRepository.delete(event);
     }
 
     //이벤트 세부 사진 삭제

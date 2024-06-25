@@ -16,5 +16,8 @@ public class MeetUpUpdateDTO {
     private Long interestSeq;
     private int meetUpPwd;
     private Long meetUpMainImg;
-    private  String  meetUpDeadLine;
+    private int meetUpMaxEntry;
+    private String meetUpDeadLine;
+    private int nowEntry;
+
 }
