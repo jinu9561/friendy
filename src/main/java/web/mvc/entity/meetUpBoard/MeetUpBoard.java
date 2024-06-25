@@ -2,8 +2,11 @@ package web.mvc.entity.meetUpBoard;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import web.mvc.entity.chatting.ChattingRoom;
+import web.mvc.entity.user.Interest;
 import web.mvc.entity.user.MeetupRecord;
 import web.mvc.entity.user.Users;
 
@@ -16,7 +19,6 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
 public class MeetUpBoard {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "meetup_seq")
@@ -24,7 +26,7 @@ public class MeetUpBoard {
     private Long meetUpSeq;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_seq" )
+    @JoinColumn(name = "user_seq")
     private Users user;
 
     @Column(length = 50)
@@ -35,27 +37,38 @@ public class MeetUpBoard {
 
     @OneToMany(mappedBy = "meetUpBoard", cascade = CascadeType.ALL)
     private List<MeetUpBoardDetailImg> meetUpBoardDetailImgList;
+
     @CreationTimestamp
     private Date meetUpRegDate;
 
     @OneToMany(mappedBy = "meetUpBoard", cascade = CascadeType.ALL)
     private List<MeetUpRequest> meetUpRequestsList;
 
+//    @OneToMany(mappedBy = "meetUpBoard", cascade = CascadeType.ALL)
+//    private List<Interest> interestList;
+
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "interest_seq")
-    private String interest;
+    private Interest interest;
 
     @OneToOne(mappedBy = "meetUpBoard", cascade = CascadeType.ALL)
     private MeetupRecord meetupRecord;
 
-
     @UpdateTimestamp
     private Date meetUpUpdateTime;
 
+    @Column(nullable = true)
     private String meetUpPeopleList;
 
     private int meetUpPwd;
 
     private int meetUpMaxEntry;
+    @ColumnDefault("0")
+    private int nowEntry;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="chattingroom_seq")
+    private ChattingRoom chattingroom;
 
     private Date meetUpDeadLine;
 

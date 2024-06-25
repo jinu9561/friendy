@@ -4,11 +4,14 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import web.mvc.dto.generalBoard.ReplyDTO;
 import web.mvc.entity.user.Users;
+import web.mvc.repository.user.UserRepository;
+
+import java.time.LocalDateTime;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
 @Setter
 @Getter
 @Entity//서버 실행시에 해당 객체로 테이블 매핑생성
@@ -23,11 +26,11 @@ public class Reply {
     private Long replySeq;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "USER_SEQ", nullable = false)
+    @JoinColumn
     private Users user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "BOARD_SEQ", nullable = false)
+    @JoinColumn
     private CommunityBoard communityBoard;
 
     @Column(name = "REPLY_CONTENT", nullable = false)
@@ -35,16 +38,19 @@ public class Reply {
 
     @CreationTimestamp
     @Column(name = "REPLY_REG_DATE", nullable = false)
-    private String replyRegDate;
+    private LocalDateTime replyRegDate;
 
-    @UpdateTimestamp
-    @Column(name = "REPLY_UPDATE_DATE", nullable = false)
-    private String replyUpdateDate;
 
-    @Column(name = "REPLY_LIKE", nullable = false)
-    private int replyLike;
+    /*엔티티에서 DTO로 변환*/
+    public ReplyDTO toDTO(){
+        return ReplyDTO.builder()
+                .replySeq(this.replySeq)
+                .userSeq(this.user.getUserSeq())
+                .commBoardSeq(this.communityBoard.getCommBoardSeq())
+                .replyContent(this.replyContent)
+                .replyRegDate(this.replyRegDate)
+                .nickName(this.user.getNickName())
+                .build();
 
-    @Column(name = "REPLY_PWD", nullable = false)
-    private String replyPwd;
-
+    }
 }
