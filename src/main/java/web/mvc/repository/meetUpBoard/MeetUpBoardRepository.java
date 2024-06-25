@@ -52,10 +52,14 @@ public interface MeetUpBoardRepository extends JpaRepository<MeetUpBoard, Long> 
 
     @Query("select  p  from MeetUpBoard p where p.meetUpSeq=?1")
     MeetUpBoard findPwdBySeq(Long meetUpSeq);
-
+//
 
     @Modifying
     @Query("update MeetUpBoard  p set p.meetUpPeopleList= ?1, p.nowEntry=?2 where p.meetUpSeq=?3")
     int addMeetUpPeopleList(String meetUpPeopleList ,  int count , Long meetUpSeq);
+
+
+    @Query("select m from MeetUpBoard  m where m.interest.interestCategory =?1")
+    List<MeetUpBoard> findMeetUpBoardByInterest(String interestCategory);
 
 }
