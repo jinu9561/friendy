@@ -10,4 +10,10 @@ public interface PlaceRecommendationRepository extends JpaRepository<PlaceRecomm
 
     @Query("select p from PlaceRecommendation p where p.placeAddress like %?1% ")
     List<PlaceRecommendation> findByPlaceAddress(String address);
+
+    @Query("select p from PlaceRecommendation p order by p.placeRegDate desc ")
+    List<PlaceRecommendation> findAllByRegDate();
+
+    @Query("select p from PlaceRecommendation p order by p.placeUpdateDate desc ")
+    List<PlaceRecommendation> findAllByUpdateDate();
 }

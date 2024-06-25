@@ -57,6 +57,54 @@ public class AdminPlaceServiceImpl implements AdminPlaceService{
     }
 
     @Override
+    public List<PlaceRecommendationDTO> getPlaceListByRegDate() {
+        List<PlaceRecommendation> recommendations = placeRecommendationRepository.findAllByRegDate();
+        List<PlaceRecommendationDTO> list = new ArrayList<>();
+
+        for (PlaceRecommendation recommendation : recommendations) {
+            List<PlaceDetailImgDTO> detailImgDTOList = placeService.getPlaceDetailImg(recommendation.getPlaceSeq());
+
+            PlaceRecommendationDTO dto = PlaceRecommendationDTO.builder()
+                    .placeSeq(recommendation.getPlaceSeq())
+                    .placeName(recommendation.getPlaceName())
+                    .placeAddress(recommendation.getPlaceAddress())
+                    .placeDescription(recommendation.getPlaceDescription())
+                    .placeMainImg(recommendation.getPlaceMainImg())
+                    .placeMainImgName(recommendation.getPlaceMainImgName())
+                    .placeDetailImgList(detailImgDTOList)
+                    .build();
+            list.add(dto);
+        }
+
+        return list;
+
+    }
+
+    @Override
+    public List<PlaceRecommendationDTO> getPlaceListByUpdate() {
+
+        List<PlaceRecommendation> recommendations = placeRecommendationRepository.findAllByUpdateDate();
+        List<PlaceRecommendationDTO> list = new ArrayList<>();
+
+        for (PlaceRecommendation recommendation : recommendations) {
+            List<PlaceDetailImgDTO> detailImgDTOList = placeService.getPlaceDetailImg(recommendation.getPlaceSeq());
+
+            PlaceRecommendationDTO dto = PlaceRecommendationDTO.builder()
+                    .placeSeq(recommendation.getPlaceSeq())
+                    .placeName(recommendation.getPlaceName())
+                    .placeAddress(recommendation.getPlaceAddress())
+                    .placeDescription(recommendation.getPlaceDescription())
+                    .placeMainImg(recommendation.getPlaceMainImg())
+                    .placeMainImgName(recommendation.getPlaceMainImgName())
+                    .placeDetailImgList(detailImgDTOList)
+                    .build();
+            list.add(dto);
+        }
+
+        return list;
+    }
+
+    @Override
     public List<PlaceRecommendationDTO> getPlaceList() {
         List<PlaceRecommendation> recommendations = placeRecommendationRepository.findAll();
         List<PlaceRecommendationDTO> list = new ArrayList<>();
@@ -80,7 +128,7 @@ public class AdminPlaceServiceImpl implements AdminPlaceService{
     }
 
     @Override
-    public String uploadePlace(PlaceRecommendationDTO placeRecommendationDTO, MultipartFile file) {
+    public Map<String,String> uploadePlace(PlaceRecommendationDTO placeRecommendationDTO, MultipartFile file) {
 
         Map<String,String> map = commonService.uploadFile(true,file,uploadDir);
 
@@ -96,6 +144,23 @@ public class AdminPlaceServiceImpl implements AdminPlaceService{
 
 
             placeRecommendationRepository.save(placeRecommendation);
+            map.put("msg",uploadMsg);
+            map.put("placeSeq",placeRecommendation.getPlaceSeq().toString());
+
+        return map;
+    }
+
+    @Override
+    public String uploadMainImg(Long placeSeq, MultipartFile file) {
+        Map<String,String> map = commonService.uploadFile(true,file,uploadDir);
+
+        PlaceRecommendation placeRecommendation = placeRecommendationRepository.findById(placeSeq)
+                .orElseThrow(()->new GlobalException(ErrorCode.NOTFOUND_PLACE));
+
+        placeRecommendation.setPlaceMainImgSize(map.get("imgSrc"));
+        placeRecommendation.setPlaceMainImgType(map.get("imgType"));
+        placeRecommendation.setPlaceMainImgSize(map.get("imgSize"));
+        placeRecommendation.setPlaceMainImgName(map.get("imgName"));
 
         return uploadMsg;
     }
@@ -121,18 +186,11 @@ public class AdminPlaceServiceImpl implements AdminPlaceService{
     }
 
     @Override
-    public String alterPlace(Long placeSeq, MultipartFile file, PlaceRecommendationDTO placeRecommendationDTO){
+    public String alterPlace(Long placeSeq,  PlaceRecommendationDTO placeRecommendationDTO){
 
         PlaceRecommendation placeRecommendation = placeRecommendationRepository.findById(placeSeq).orElseThrow(
                 ()->new GlobalException(ErrorCode.NOTFOUND_PLACE)
         );
-
-        if(!file.isEmpty()){
-            Map<String,String> map = commonService.uploadFile(true,file,uploadDir);
-            placeRecommendation.setPlaceMainImg(map.get("imgSrc"));
-            placeRecommendation.setPlaceMainImgSize(map.get("imgSize"));
-            placeRecommendation.setPlaceMainImgType(map.get("imgType"));
-        }
 
         placeRecommendation.setPlaceName(placeRecommendationDTO.getPlaceName());
         placeRecommendation.setPlaceAddress(placeRecommendationDTO.getPlaceAddress());
@@ -143,26 +201,11 @@ public class AdminPlaceServiceImpl implements AdminPlaceService{
     }
 
     @Override
-    public String alterPlaceDetail(Long placeDetailImgSeq, MultipartFile file, PlaceDetailImgDTO placeDetailImgDTO) {
-        PlaceDetailImg placeDetailImg = placeDetailImgRepository.findById(placeDetailImgSeq).orElseThrow(
-                ()->new GlobalException(ErrorCode.NOTFOUND_PLACE)
-        );
-
-        if(!file.isEmpty()){
-            Map<String,String> map = commonService.uploadFile(false,file,uploadDir);
-            placeDetailImg.setPlaceDetailImgSrc(map.get("imgSrc"));
-            placeDetailImg.setPlaceDetailImgType(map.get("imgType"));
-            placeDetailImg.setPlaceDetailImgSize(map.get("imgSize"));
-        }
-
-        return alterMsg;
-    }
-
-    @Override
     public String deletePlace(Long placeSeq) {
         PlaceRecommendation placeRecommendation = placeRecommendationRepository.findById(placeSeq).orElseThrow(
                 ()->new GlobalException(ErrorCode.NOTFOUND_PLACE)
         );
+
 
         placeRecommendationRepository.delete(placeRecommendation);
 

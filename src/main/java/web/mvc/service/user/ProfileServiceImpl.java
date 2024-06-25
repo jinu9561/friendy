@@ -9,6 +9,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import web.mvc.controller.user.ProfanityFilter;
 import web.mvc.dto.user.JellyTransactionDTO;
 import web.mvc.dto.user.ProfileDTO;
 import web.mvc.entity.user.*;
@@ -170,9 +171,13 @@ public class ProfileServiceImpl implements ProfileService {
 
         }
 
-        if(profileDTO.getIntroduce()!=null && !profileDTO.getIntroduce().trim().isEmpty()){
-            profile.setIntroduce(profileDTO.getIntroduce());
-        }else{
+        if (profileDTO.getIntroduce() != null && !profileDTO.getIntroduce().trim().isEmpty()) {
+            if (ProfanityFilter.containsProfanity(profileDTO.getIntroduce())) {
+                return "자기소개에 욕설이 포함되어 있습니다.";
+            } else {
+                profile.setIntroduce(profileDTO.getIntroduce());
+            }
+        } else {
             profile.setIntroduce(profile.getIntroduce());
         }
 
@@ -265,7 +270,6 @@ public class ProfileServiceImpl implements ProfileService {
     @Override
     public String deleteDetailImg(Long profileDetailImgSeq) {
         profileDetailImgRepository.deleteById(profileDetailImgSeq);
-
         return deleteMsg;
     }
 
