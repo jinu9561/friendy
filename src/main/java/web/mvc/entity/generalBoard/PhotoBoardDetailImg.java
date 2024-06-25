@@ -11,21 +11,22 @@ import web.mvc.entity.generalBoard.PhotoBoard;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PhotoBoardDetailImg {
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE , generator = "photoBoardDetailImgSeq")
     @SequenceGenerator(name ="photoBoardDetailImgSeq" , allocationSize = 1 , sequenceName = "photoBoardDetailImgSeq")
-    private Long photoBoardDetailImgSeq;
+    private Long photoDetailImgSeq;
     @Column(length = 100)
-    private String photoBoardDetailImgName;
+    private String photoDetailImgName;
     @Column(length = 300)
-    private String photoBoardDetailImgSrc;
+    private String photoDetailImgSrc;
     @Column(length = 10)
-    private String photoBoardDetailImgType;
+    private String photoDetailImgType;
     @Column(length = 100)
-    private String photoBoardDetailImgSize;
+    private String photoDetailImgSize;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "photoBoardSeq")  // 외래 키를 지정
+    @JoinColumn(name = "photo_board_seq")  // 외래 키를 지정
     private PhotoBoard photoBoard;
 
     public PhotoBoardDetailImg(PhotoBoard photoBoard) {

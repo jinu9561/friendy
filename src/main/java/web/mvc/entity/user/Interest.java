@@ -3,7 +3,8 @@ package web.mvc.entity.user;
 
 import jakarta.persistence.*;
 import lombok.*;
-import web.mvc.entity.meetUpBoard.MeetUpBoard;
+import web.mvc.entity.generalBoard.PhotoBoard;
+import web.mvc.entity.generalBoard.PhotoBoardInterest;
 
 import java.util.List;
 
@@ -23,12 +24,9 @@ public class Interest {
     private String interestCategory;
 
     @OneToMany(mappedBy = "interest")
-    List<MeetUpBoard> meetUpBoardList;
-
-    @OneToMany(mappedBy = "interest")
     List<ProfileInterest> profileInterestList;
-
-
+    @OneToMany(mappedBy = "interest")
+    List<PhotoBoardInterest> photoBoardInterestList;
 
 
 

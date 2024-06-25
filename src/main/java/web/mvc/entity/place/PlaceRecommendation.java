@@ -2,8 +2,11 @@ package web.mvc.entity.place;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import web.mvc.entity.user.Users;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -32,6 +35,11 @@ public class PlaceRecommendation {
     private String placeMainImgSize;
     @Column(length = 100)
     private String placeMainImgName;
+
+    @CreationTimestamp
+    private LocalDateTime placeRegDate;
+    @UpdateTimestamp
+    private LocalDateTime placeUpdateDate;
 
     @OneToMany(mappedBy = "placeRecommendation" , cascade = CascadeType.ALL)
     private List<PlaceDetailImg> placeDetailImgList;

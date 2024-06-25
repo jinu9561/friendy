@@ -11,35 +11,21 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping("/replies")
+@RequestMapping("/community-boards/{commBoardSeq}/replies")
 @RequiredArgsConstructor
-
 public class ReplyController {
     private final ReplyService replyService;
 
-    // 게시물에 대한 모든 댓글 조회
-    @GetMapping("/board/{boardSeq}")
-    public ResponseEntity<List<ReplyDTO>> getRepliesByBoardSeq(@PathVariable Long boardSeq){
-        return ResponseEntity.ok(replyService.getRepliesByBoardSeq(boardSeq));
-    }
-
     //댓글 생성
-    @PostMapping("/")
-    public ResponseEntity<ReplyDTO> createReply(@RequestBody ReplyDTO replyDTO){
-        return ResponseEntity.ok(replyService.createReply(replyDTO));
+    @PostMapping
+    public ResponseEntity<ReplyDTO> addReply(@PathVariable Long commBoardSeq, @RequestBody ReplyDTO replyDTO){
+        return ResponseEntity.ok(replyService.addReply(commBoardSeq, replyDTO));
     }
 
-    //특정 id(replySeq)를 가진 댓글 조회
-    @GetMapping("/{replySeq}")
-    public ResponseEntity<ReplyDTO> getReplyById(@PathVariable Long replySeq){
-        return ResponseEntity.ok(replyService.getReplyById(replySeq));
-    }
-
-    //특정 id(replySeq)를 가진 댓글 수정
-    @PutMapping("/{replySeq}")
-    public ResponseEntity<ReplyDTO> updateReply(@PathVariable Long replySeq, @RequestBody ReplyDTO replyDTO){
-        replyDTO.setReplySeq(replySeq);
-        return ResponseEntity.ok(replyService.updateReply(replyDTO));
+    // 게시물에 대한 모든 댓글 조회
+    @GetMapping
+    public ResponseEntity<List<ReplyDTO>> getRepliesByBoardSeq(@PathVariable Long commBoardSeq){
+        return ResponseEntity.ok(replyService.getRepliesByCommBoardSeq(commBoardSeq));
     }
 
     //특정 id(replySeq)를 가진 댓글 삭제
@@ -47,4 +33,14 @@ public class ReplyController {
     public String deleteReply(@PathVariable Long replySeq){
         return replyService.deleteReply(replySeq);
     }
+
+    // 전체 댓글 조회
+    @GetMapping("/all")
+    public ResponseEntity<List<ReplyDTO>> getAllReplies(){
+        return ResponseEntity.ok(replyService.getAllReplies());
+    }
+
+
+
+
 }

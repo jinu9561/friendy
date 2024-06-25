@@ -34,7 +34,7 @@ public class PlaceServiceImpl implements PlaceService {
     private String defaultAddress = "경기도";
     @Value("${place.save.dir}")
     private String uploadDir;
-
+//
     @Override
     public List<PlaceRecommendationDTO> getPlaceByUserAddress(UsersDTO usersDTO) {
 
@@ -43,6 +43,7 @@ public class PlaceServiceImpl implements PlaceService {
 
         if(user != null){
             address = user.getAddress();
+            address = extractCityFromAddress(address);
         }
 
         log.info(usersDTO.getAddress());
@@ -102,5 +103,15 @@ public class PlaceServiceImpl implements PlaceService {
     public Resource getDetailImg(String imgName) {
         Resource resource = new FileSystemResource(uploadDir+"/detail"+"\\"+imgName);
         return resource;
+    }
+
+    // 주소 자르기
+    private String extractCityFromAddress(String address) {
+        int index = address.indexOf("시");
+        if (index != -1) {
+            return address.substring(0, index + 1);
+        } else {
+            return address;
+        }
     }
 }
