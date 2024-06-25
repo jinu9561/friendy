@@ -6,7 +6,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import web.mvc.dto.place.PlaceDetailImgDTO;
 import web.mvc.dto.place.PlaceRecommendationDTO;
 import web.mvc.service.admin.AdminPlaceService;
 
@@ -23,9 +22,24 @@ public class AdminPlaceController {
         return ResponseEntity.status(HttpStatus.OK).body(adminPlaceService.getPlaceList());
     }
 
+    @GetMapping("/regdate")
+    public ResponseEntity<?> getPlaceListByRegDate(){
+        return ResponseEntity.status(HttpStatus.OK).body(adminPlaceService.getPlaceListByRegDate());
+    }
+
+    @GetMapping("/update")
+    public ResponseEntity<?> getPlaceListByUpdate(){
+        return ResponseEntity.status(HttpStatus.OK).body(adminPlaceService.getPlaceListByUpdate());
+    }
+
     @PostMapping(value="/upload")
     public ResponseEntity<?> uploadePlace(@ModelAttribute PlaceRecommendationDTO placeRecommendationDTO,@RequestParam("file") MultipartFile file ){
         return ResponseEntity.status(HttpStatus.OK).body(adminPlaceService.uploadePlace(placeRecommendationDTO,file));
+    }
+
+    @PutMapping("/main/{placeSeq}")
+    public ResponseEntity<?> uploadMainImg(@PathVariable Long placeSeq ,@RequestParam("file") MultipartFile file){
+        return ResponseEntity.status(HttpStatus.OK).body(adminPlaceService.uploadMainImg(placeSeq,file));
     }
 
     @PostMapping("/detail/{placeSeq}")
@@ -34,19 +48,13 @@ public class AdminPlaceController {
     }
 
     @PutMapping("/alter/{placeSeq}")
-    public ResponseEntity<?> alterPlace(@PathVariable Long placeSeq,@RequestParam("file") MultipartFile file,
-                                        @ModelAttribute PlaceRecommendationDTO placeRecommendationDTO){
-        return ResponseEntity.status(HttpStatus.OK).body(adminPlaceService.alterPlace(placeSeq,file,placeRecommendationDTO));
-    }
-
-    @PutMapping("/alter/detail/{placeDetailImgSeq}")
-    public ResponseEntity<?> alterPlaceDetail(@PathVariable Long placeDetailImgSeq, @RequestParam("file") MultipartFile file,
-                                              @ModelAttribute PlaceDetailImgDTO placeDetailImgDTO){
-        return ResponseEntity.status(HttpStatus.OK).body(adminPlaceService.alterPlaceDetail(placeDetailImgSeq,file,placeDetailImgDTO));
+    public ResponseEntity<?> alterPlace(@PathVariable Long placeSeq, @RequestBody PlaceRecommendationDTO placeRecommendationDTO){
+        return ResponseEntity.status(HttpStatus.OK).body(adminPlaceService.alterPlace(placeSeq,placeRecommendationDTO));
     }
 
     @DeleteMapping("/delete/{placeSeq}")
     public ResponseEntity<?> deletePlace(@PathVariable Long placeSeq){
+        log.info("전체 삭제");
         return  ResponseEntity.status(HttpStatus.OK).body(adminPlaceService.deletePlace(placeSeq));
     }
 

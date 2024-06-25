@@ -4,6 +4,8 @@ package web.mvc.entity.user;
 import jakarta.persistence.*;
 import lombok.*;
 import web.mvc.entity.chatting.MessageLog;
+import web.mvc.entity.generalBoard.PhotoBoard;
+import web.mvc.entity.generalBoard.PhotoBoardLike;
 import web.mvc.entity.meetUpBoard.MeetUpBoard;
 import web.mvc.entity.meetUpBoard.MeetUpRequest;
 import web.mvc.entity.place.PlaceRecommendation;
@@ -65,6 +67,11 @@ public class Users {
     private List<MessageLog> messageLogList;
     @OneToOne(mappedBy = "user" , cascade = CascadeType.ALL)
     private MeetUpRequest meetUpRequest;
+
+    @OneToMany(mappedBy = "user" , cascade = CascadeType.ALL)
+    private List<PhotoBoard> photoBoardList;
+    @OneToMany(mappedBy = "user" , cascade = CascadeType.ALL)
+    private List<PhotoBoardLike> photoBoardLikeList;
 
 
 

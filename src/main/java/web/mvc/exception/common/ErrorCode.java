@@ -23,7 +23,8 @@ public enum ErrorCode {
     WRONG_TYPE(611, "비밀번호는 숫자로 입력해주세요."),
     NOTFOUND_TRANSACTION(612,"주문 내역 조회에 실패했습니다."),
     MAX_ENTRY(700, "최대인원입니다"),
-    JSON_PROCESSING_ERROR(701,"파싱에러");
+    JSON_PROCESSING_ERROR(701,"파싱에러"),
+    NOTFOUND_PHOTOBOARD(613,"사진 게시글 조회에 실패했습니다.");
     private final int status;
     private final String message;
 }
