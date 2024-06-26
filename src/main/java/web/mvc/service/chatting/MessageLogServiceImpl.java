@@ -2,6 +2,7 @@ package web.mvc.service.chatting;
 
 import lombok.RequiredArgsConstructor;
 import org.apache.catalina.User;
+import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 import web.mvc.dto.chat.MessageDTO;
 import web.mvc.entity.chatting.ChattingRoom;
@@ -20,6 +21,10 @@ public class MessageLogServiceImpl implements MessageLogService{
 
     @Override
     public List<MessageLog> messageList() {
+
+
+
+
         return null;
     }
 
@@ -37,9 +42,13 @@ public class MessageLogServiceImpl implements MessageLogService{
 
         System.out.println("MessageLogServiceImpl chattingRoom.getChattingroomSeq  =  "+chattingRoom.getChattingroomSeq());
         System.out.println("MessageLogServiceImpl users.getUserSeq  =  " + users.getUserSeq());
+        String messageLogString =messageDTO.getChattingContent();
+        JSONObject messageLogJson = new JSONObject(messageLogString);
+        String message = messageLogJson.getString("message");
+        System.out.println("message"+message);
 
         MessageLog messageLog = MessageLog.builder().
-        chattingContent(messageDTO.getChattingContent())
+        chattingContent(message)
                 .chattingroom(chattingRoom)
                 .user(users)
                         .build();

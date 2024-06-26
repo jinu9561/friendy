@@ -17,7 +17,12 @@ import web.mvc.repository.user.UserRepository;
 import web.mvc.service.chatting.MessageLogService;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
@@ -110,11 +115,19 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
                     Long seq = users.getUserSeq();
                     String nickname = users.getNickName();
                     String content = message.getPayload();
+                    System.out.println("content"+content);
+                    LocalTime currentTime = LocalTime.now();
+
+                    // 시간과 분을 문자열로 포맷팅
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+                    String formattedTime = currentTime.format(formatter);
 
                     JsonNode messageJson = objectMapper.createObjectNode()
-                            .put("message", content)
-                            .put("senderNickname", nickname);
-                    ws.sendMessage(new TextMessage(messageJson.toString()));
+                            .put("message", jsonMessage)
+                            .put("senderNickname", nickname)
+                                    .put("nowTime", formattedTime);
+
+                        ws.sendMessage(new TextMessage(messageJson.toString()));
 
                     MessageDTO messageDTO = MessageDTO.builder()
                             .chattingRoomSeq(chattingRoomSeq)
