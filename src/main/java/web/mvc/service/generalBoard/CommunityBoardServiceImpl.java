@@ -69,7 +69,7 @@ public class CommunityBoardServiceImpl implements CommunityBoardService {
     @Override
     public List<CommunityBoardDTO> getAllRealNameCommunityBoards() {
         log.info("Fetching all real name community boards");
-        List<CommunityBoard> communityBoards = communityBoardRepository.findByBoardType(0);
+        List<CommunityBoard> communityBoards = communityBoardRepository.findByBoardTypeOrderByCommBoardSeqDesc(0);
 
         if (communityBoards == null || communityBoards.isEmpty()) {
             log.warn("실명 게시물이 없습니다.");
@@ -89,7 +89,7 @@ public class CommunityBoardServiceImpl implements CommunityBoardService {
     @Override
     public List<CommunityBoardDTO> getAllAnonymousCommunityBoards() {
         log.info("Fetching all anonymous community boards");
-        List<CommunityBoard> communityBoards = communityBoardRepository.findByBoardType(1);
+        List<CommunityBoard> communityBoards = communityBoardRepository.findByBoardTypeOrderByCommBoardSeqDesc(1);
 
         if (communityBoards == null || communityBoards.isEmpty()) {
             log.warn("익명 게시물이 없습니다.");
@@ -113,9 +113,12 @@ public class CommunityBoardServiceImpl implements CommunityBoardService {
         CommunityBoard fetchedBoard = communityBoardRepository.findById(commBoardSeq)
                 .orElseThrow(() -> new RuntimeException("CommunityBoard not found with seq: " + commBoardSeq));
 
+        communityBoardRepository.updateCommBoardCount(commBoardSeq);
+
         // 엔티티를 DTO로 변환하여 반환
         CommunityBoardDTO fetchedBoardDTO = fetchedBoard.toDTO();
         log.info("Fetched community board with SEQ: {}", fetchedBoardDTO.getCommBoardSeq());
+
         return fetchedBoardDTO;
     }
 
@@ -170,6 +173,19 @@ public class CommunityBoardServiceImpl implements CommunityBoardService {
         log.info(message);
         return message;
     }
+
+    // 키워드로 게시물 검색
+    @Transactional(readOnly = true)
+    @Override
+    public List<CommunityBoardDTO> searchCommunityBoards(int boardType, String keyword) {
+        List<CommunityBoard> communityBoards = communityBoardRepository.findByBoardTypeAndTitleContainingOrBoardTypeAndContentContaining(
+                boardType, keyword, boardType, keyword);
+
+        return communityBoards.stream()
+                .map(CommunityBoard::toDTO)
+                .collect(Collectors.toList());
+    }
+
 }
 
 
