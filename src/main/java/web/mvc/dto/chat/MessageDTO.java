@@ -18,6 +18,6 @@ public class MessageDTO {
     Long userSeq;
     String sender;
     String chattingContent;
-    Date chattingCreateDate;
+    String chattingCreateDate;
 
 }

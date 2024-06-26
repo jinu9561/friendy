@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import web.mvc.dto.chat.ChattingRoomDTO;
+import web.mvc.dto.chat.MessageDTO;
 import web.mvc.entity.chatting.ChattingRoom;
 import web.mvc.entity.chatting.MessageLog;
 import web.mvc.entity.user.Users;
@@ -15,9 +16,9 @@ import web.mvc.repository.user.UserRepository;
 import web.mvc.service.chatting.ChattingRoomService;
 import web.mvc.service.chatting.MessageLogService;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.time.LocalDate;
 import java.util.Random;
 
@@ -43,12 +44,30 @@ public class ChattingRoomController {
 
 
     @GetMapping("/joinRoom/{chattingRoomSeq}")
-    public ResponseEntity<?> joinRoom(@PathVariable Long chattingRoomSeq){
-        List<MessageLog> messageLogList= chattingRoomService.findMessageLog(chattingRoomSeq);
+    public ResponseEntity<?> joinRoom(@PathVariable Long chattingRoomSeq) {
+        List<MessageLog> messageLogList = chattingRoomService.findMessageLog(chattingRoomSeq);
 
-        System.out.println("출력된 메세지 로그"+messageLogList.toString());
-        
-        return ResponseEntity.status(HttpStatus.OK).body(messageLogList);
+
+        MessageDTO messageDTO = new MessageDTO();
+        List<MessageDTO> messageDTOList = new ArrayList<>();
+
+
+
+        for (MessageLog messageLog : messageLogList) {
+
+            Date date = messageLog.getChattingCreateDate();
+            String timeOnly = new SimpleDateFormat("HH:mm").format(date);
+            messageDTO = MessageDTO.builder()
+                         .chattingRoomSeq(messageLog.getMessageSeq())
+                         .chatRoomId(messageLog.getChattingroom().getRoomId())
+                         .sender(messageLog.getUser().getNickName())
+                    .userSeq(messageLog.getUser().getUserSeq())
+                         .chattingContent(messageLog.getChattingContent())
+                         .chattingCreateDate(timeOnly)
+                         .build();
+                 messageDTOList.add(messageDTO);
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(messageDTOList);
     }
 
 }
