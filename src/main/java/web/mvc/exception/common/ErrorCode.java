@@ -24,7 +24,11 @@ public enum ErrorCode {
     NOTFOUND_TRANSACTION(612,"주문 내역 조회에 실패했습니다."),
     MAX_ENTRY(700, "최대인원입니다"),
     JSON_PROCESSING_ERROR(701,"파싱에러"),
-    NOTFOUND_PHOTOBOARD(613,"사진 게시글 조회에 실패했습니다.");
+    NOTFOUND_PHOTOBOARD(613,"사진 게시글 조회에 실패했습니다."),
+    INVALID_USER_ID(614,"아이디 형식이 맞지 않습니다."),
+    INVALID_BIRTH_DATE(615,"생년월일을 확인해 주세요."),
+    INVALID_PHONE_NUMBER(616,"전화번호를 확인해 주세요.");
+
     private final int status;
     private final String message;
 }

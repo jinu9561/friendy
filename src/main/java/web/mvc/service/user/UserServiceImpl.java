@@ -24,7 +24,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
+import java.util.regex.Pattern;
 
 
 @Service
@@ -107,6 +107,24 @@ public class UserServiceImpl implements UserService {
         // 잘못된 날짜를 자동으로 유효한 날짜로 변환하는 기능 비활성화 -> 잘못된 날짜는 바로 예외가 나와야 되기 때문에
         formatter.setLenient(false);
         Date birth = null;
+
+        // 정규 표현식을 사용하여 한글 문자가 포함되어 있는지 확인
+        Pattern koreanPattern = Pattern.compile("[ㄱ-ㅎㅏ-ㅣ가-힣]");
+        if (koreanPattern.matcher(usersDTO.getUserId()).find()) {
+            throw new GlobalException(ErrorCode.INVALID_USER_ID);
+        }
+
+        // 생년월일 형식 검사
+        Pattern birthPattern = Pattern.compile("\\d{4}\\d{2}\\d{2}");
+        if (!birthPattern.matcher(usersDTO.getBirth()).matches()) {
+            throw new GlobalException(ErrorCode.INVALID_BIRTH_DATE);
+        }
+
+        // 전화번호 형식 검사 (예: 01012345678)
+        Pattern phonePattern = Pattern.compile("^01[0-9]\\d{3,4}\\d{4}$");
+        if (!phonePattern.matcher(usersDTO.getPhone()).matches()) {
+            throw new GlobalException(ErrorCode.INVALID_PHONE_NUMBER);
+        }
 
         try {
             birth = formatter.parse(usersDTO.getBirth());
