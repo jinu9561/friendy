@@ -35,7 +35,7 @@ public interface NotificationService {
 
     Notification getNotificationById(Long notificationSeq);
 
-    void sendNotification(String message);
+    void sendNotification(Long userSeq, String message);
 
     /**
      * 알림 추가 메소드
@@ -43,4 +43,6 @@ public interface NotificationService {
     void addNotification(Users user, String message);
 
     SseEmitter addUser(Long userSeq);
+
+    void removeEmitter(Long userSeq, SseEmitter emitter);
 }

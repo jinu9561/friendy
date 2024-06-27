@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import web.mvc.dto.report.ReportDTO;
+import web.mvc.dto.report.ReportTypeDTO;
 import web.mvc.entity.report.Report;
 import web.mvc.service.admin.report.AdminReportService;
 
@@ -27,7 +28,6 @@ public class AdminReportController {
     @GetMapping("/")
     public ResponseEntity<List<ReportDTO>> getReportList() {
         List<ReportDTO> reportList = adminReportService.findAllReportList();
-        log.info("@@@@@reportList.url = {}", reportList.get(0).getReportUrl());
 
         return ResponseEntity.status(HttpStatus.OK).body(reportList);
     }
@@ -46,7 +46,6 @@ public class AdminReportController {
      */
     @PostMapping("/moveToUrl")
     public void moveToUrl(@RequestBody ReportDTO report, HttpServletResponse response) throws IOException {
-        log.info("Redirecting to URL for report: {}", report.getReportSeq());
         String url = adminReportService.getReportedUrl(report);
         response.sendRedirect(url);
     }
@@ -56,17 +55,15 @@ public class AdminReportController {
      */
     @PostMapping("/updateStatus")
     public ResponseEntity<ReportDTO> updateReportStatus(@RequestBody ReportDTO ReportDTO) {
-        log.info("Updating report status for report: {}", ReportDTO.getReportSeq());
         ReportDTO updatedReport = adminReportService.updateReportStatus(ReportDTO);
         return ResponseEntity.status(HttpStatus.OK).body(updatedReport);
     }
 
     /**
-     * 신고 처리결과 업데이트 (무혐의 || 3일정지 || 영구정지)
+     * 신고 처리결과 업데이트 (대기중 || 무죄 || 3일정지 || 영구정지)
      */
     @PostMapping("/updateResult")
     public ResponseEntity<ReportDTO> updateReportResult(@RequestBody ReportDTO ReportDTO) {
-        log.info("Updating report result for report: {}", ReportDTO.getReportSeq());
         ReportDTO updatedReport = adminReportService.updateReportResult(ReportDTO);
         return ResponseEntity.status(HttpStatus.OK).body(updatedReport);
     }

@@ -30,4 +30,8 @@ public interface AdminReportService {
      * 신고 처리결과 업데이트 (무혐의 || 3일정지 || 영구정지)
      * */
     ReportDTO updateReportResult(ReportDTO reportDTO);
+
+    void updateReportResult(Long reportSeq, int result);
+
+    void updateReportedUserState(Long userId, int result);
 }

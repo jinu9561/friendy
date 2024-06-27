@@ -19,5 +19,5 @@ public class MessageDTO {
     String sender;
     String chattingContent;
     String chattingCreateDate;
-
+    Long receiverId; // 진우가 추가함
 }

@@ -18,4 +18,7 @@ public interface UserRepository extends JpaRepository<Users, Long> {
 
     @Query("select u from Users u where u.nickName = ?1")
     public Users findUserByNickName(String nickName);
+
+    @Query("select u from Users u where u.userSeq = ?1") // 진우가 작성함
+    public Users findUserByUserSeq(Long userSeq);
 }

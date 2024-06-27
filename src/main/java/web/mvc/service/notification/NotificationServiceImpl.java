@@ -59,13 +59,23 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
-    public void sendNotification(String message) {
-
+    public void sendNotification(Long userSeq, String message) {
+        SseEmitter emitter = emitters.get(userSeq);
+        if (emitter != null) {
+            try {
+                emitter.send(SseEmitter.event().name("report-status").data(message));
+            } catch (IOException e) {
+                log.error("Failed to send notification", e);
+                emitters.remove(userSeq);
+                emitter.completeWithError(e);
+            }
+        }
     }
 
     @Override
     public void addNotification(Users user, String message) {
         // 알림 저장
+        System.out.println("@%&%^@@@@@addNotification");
         Notification notification = new Notification();
         notification.setUser(user);
         notification.setNotificationMessage(message);
@@ -78,6 +88,7 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     private void sendRealTimeNotification(Long userSeq, String message) {
+        System.out.println("@%&%^@@@@@sendRealTimeNotification message" + message);
         SseEmitter emitter = emitters.get(userSeq);
         if (emitter != null) {
             executor.execute(() -> {
@@ -98,6 +109,13 @@ public class NotificationServiceImpl implements NotificationService {
         emitter.onCompletion(() -> emitters.remove(userSeq));
         emitter.onTimeout(() -> emitters.remove(userSeq));
         return emitter;
+    }
+
+    @Override
+    public void removeEmitter(Long userSeq, SseEmitter emitter) {
+        emitters.remove(userSeq);
+        emitter.complete();
+        log.info("Removed and completed emitter for userSeq: {}", userSeq);
     }
 }
 

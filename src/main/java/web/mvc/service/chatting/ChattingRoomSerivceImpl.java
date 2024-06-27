@@ -55,4 +55,12 @@ public class ChattingRoomSerivceImpl implements ChattingRoomService {
         List<MessageLog> list= messageLogRepository.findMessageLogByRoomId(chattingRoomSeq);
         return list;
     }
+    /////////////////////////////////////진우가 만든거///////////////////////////////////////////
+    private String generateRoomId(String userNickname) {
+        System.out.println("!!#!@#@#!@!@generateRoomId 호출됨!!!");
+        LocalDate today = LocalDate.now();
+        int randomNumber = new Random().nextInt(100000);
+        return userNickname + today.getMonthValue() + today.getDayOfMonth() + randomNumber;
+    }
+
 }

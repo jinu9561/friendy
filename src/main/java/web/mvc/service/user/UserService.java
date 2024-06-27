@@ -42,5 +42,6 @@ public interface UserService {
     public boolean duplicateNickNameCheck(String nickName);
 
 
-
+///////////////////////////////진우가 추가한 코드///////////////////////////////
+    String updateReportResult(Long reportId, int result, int newState);
 }

@@ -42,7 +42,7 @@ public class FriendServiceImpl implements FriendService {
         // 수신자에게 알림 추가
         String message = sender.getUserName() + "님이 친구 요청을 보냈습니다.";
         notificationService.addNotification(receiver, message);
-        notificationService.sendNotification(message);  // SSE 클라이언트에게 알림 전송
+//        notificationService.sendNotification(message);  // SSE 클라이언트에게 알림 전송
 
         return savedRequest;
     }
@@ -81,7 +81,7 @@ public class FriendServiceImpl implements FriendService {
             // 수락 알림을 sender에게 추가 및 전송
             String message = receiver.getUserId() + "님이 친구 요청을 수락했습니다.";
             notificationService.addNotification(sender, message);
-            notificationService.sendNotification(message); // SSE 클라이언트에게 알림 전송
+//            notificationService.sendNotification(message); // SSE 클라이언트에게 알림 전송
 
         } else {
             throw new IllegalStateException("친구 요청을 찾을 수 없습니다.");
