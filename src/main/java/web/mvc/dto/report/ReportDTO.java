@@ -22,5 +22,7 @@ public class ReportDTO {
     private int reportStatus;
     private int reportResult;
 
+    private ReportTypeDTO reportTypeDTO;
+    private String reportTypeName;
 
 }

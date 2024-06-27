@@ -5,6 +5,7 @@ import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import web.mvc.entity.meetUpBoard.MeetUpBoard;
 import web.mvc.entity.meetUpBoard.MeetUpRequest;
+import web.mvc.entity.user.Users;
 
 import java.util.Date;
 import java.util.List;
@@ -32,5 +33,16 @@ public class ChattingRoom {
     @OneToOne(mappedBy = "chattingroom", cascade = CascadeType.ALL)
     private MeetUpBoard meetUpBoard;
 
+    /////////////////////////////진우가 추가한 코드/////////////////////////////
+    @OneToMany(mappedBy = "room", cascade = CascadeType.ALL)
+    private List<ChatParticipant> participants;
+
+    public void addParticipant(Users user) {
+        ChatParticipant participant = ChatParticipant.builder()
+                .user(user)
+                .room(this)
+                .build();
+        this.participants.add(participant);
+    }
 
 }

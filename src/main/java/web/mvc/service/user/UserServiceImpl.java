@@ -11,10 +11,12 @@ import org.springframework.stereotype.Service;
 import web.mvc.dto.user.AdminDTO;
 import web.mvc.dto.user.EmailVerificationDTO;
 import web.mvc.dto.user.UsersDTO;
+import web.mvc.entity.report.Report;
 import web.mvc.entity.user.*;
 import web.mvc.enums.users.State;
 import web.mvc.exception.common.ErrorCode;
 import web.mvc.exception.common.GlobalException;
+import web.mvc.repository.report.ReportRepository;
 import web.mvc.repository.user.InterestRepository;
 import web.mvc.repository.user.ProfileInterestRepository;
 import web.mvc.repository.user.UserRepository;
@@ -295,5 +297,26 @@ public class UserServiceImpl implements UserService {
         return false;
     }
 
-
+///////////////////////////////진우가 추가한 코드//////////////////////////////////////////
+    
+    private final ReportRepository reportRepository;
+    
+    @Override
+    public String updateReportResult(Long reportSeq, int result, int newState) {
+        Report report = reportRepository.findById(reportSeq)
+                .orElseThrow(() -> new GlobalException(ErrorCode.INVALID_USER_ID));
+    
+        Users user = userRepository.findById(report.getReportSeq())
+                .orElseThrow(() -> new GlobalException(ErrorCode.INVALID_USER_ID));
+    
+        // Update report result
+        report.setReportResult(result);
+        reportRepository.save(report);
+    
+        // Update user state
+        user.getUserDetail().setUserState(State.values()[newState]);
+        userRepository.save(user);
+    
+        return "유저 상태 업데이트 완료";
+    }
 }
