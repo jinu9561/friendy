@@ -65,8 +65,8 @@ public class Users {
     private List<MeetUpBoard> meetUpBoardList;
     @OneToMany(mappedBy = "user" , cascade = CascadeType.ALL)
     private List<MessageLog> messageLogList;
-    @OneToOne(mappedBy = "user" , cascade = CascadeType.ALL)
-    private MeetUpRequest meetUpRequest;
+    @OneToMany(mappedBy = "user" , cascade = CascadeType.ALL)
+    private List<MeetUpRequest> meetUpRequest;
 
     @OneToMany(mappedBy = "user" , cascade = CascadeType.ALL)
     private List<PhotoBoard> photoBoardList;

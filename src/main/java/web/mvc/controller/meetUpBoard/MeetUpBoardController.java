@@ -229,7 +229,8 @@ public ResponseEntity<?> selectImgBySeq(@RequestParam String meetUpDetailImg) {
                      .userSeq(meetUpBoard.getUser().getUserSeq())
                      .roomId(meetUpBoard.getChattingroom().getRoomId())
                      .chattingRoomSeq(meetUpBoard.getChattingroom().getChattingroomSeq())
-                    .build();
+                     .userName(meetUpBoard.getUser().getUserName())
+                     .build();
         }
         System.out.println("meetUpSeq :"+ meetUpSeq);
         return ResponseEntity.status(HttpStatus.OK).body(meetUpSendDTO);

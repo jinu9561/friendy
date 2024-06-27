@@ -9,12 +9,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import web.mvc.dto.chat.ChattingRoomDTO;
 import web.mvc.dto.chat.MessageDTO;
+import web.mvc.dto.chat.NoticePostDTO;
 import web.mvc.entity.chatting.ChattingRoom;
 import web.mvc.entity.chatting.MessageLog;
+import web.mvc.entity.chatting.NoticePost;
 import web.mvc.entity.user.Users;
+import web.mvc.repository.chatting.NoticePostRepository;
 import web.mvc.repository.user.UserRepository;
 import web.mvc.service.chatting.ChattingRoomService;
 import web.mvc.service.chatting.MessageLogService;
+import web.mvc.service.chatting.NoticePostService;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -29,9 +33,8 @@ import java.util.Random;
 public class ChattingRoomController {
     
     private final ChattingRoomService chattingRoomService;
-    private final MessageLogService messageLogService;
-    private final UserRepository userRepository;
-
+    private final NoticePostService noticePostService;
+    private final NoticePostRepository noticePostRepository;
 
     @PostMapping("/createRoom")
     public ResponseEntity<?> createRoom(@RequestBody ChattingRoomDTO chattingRoomDTO) {
@@ -61,7 +64,7 @@ public class ChattingRoomController {
                          .chattingRoomSeq(messageLog.getMessageSeq())
                          .chatRoomId(messageLog.getChattingroom().getRoomId())
                          .sender(messageLog.getUser().getNickName())
-                    .userSeq(messageLog.getUser().getUserSeq())
+                         .userSeq(messageLog.getUser().getUserSeq())
                          .chattingContent(messageLog.getChattingContent())
                          .chattingCreateDate(timeOnly)
                          .build();
@@ -69,5 +72,37 @@ public class ChattingRoomController {
         }
         return ResponseEntity.status(HttpStatus.OK).body(messageDTOList);
     }
+
+
+    @PostMapping("/createNotice")
+    public ResponseEntity<?> createNotice (@ModelAttribute NoticePostDTO noticePostDTO){
+
+        noticePostService.createNoticePost(noticePostDTO);
+
+
+        return ResponseEntity.status(HttpStatus.OK).body(null);
+    }
+    @PutMapping("/changeNotice")
+    public ResponseEntity<?> changeNotice(@RequestParam int noticePostSeq) {
+
+         noticePostService.selectBySeq((long) noticePostSeq);
+        return ResponseEntity.status(HttpStatus.OK).body(null);
+    }
+    @GetMapping("/allNotice")
+    public ResponseEntity<?> selectAllNoticeByRoomId (@RequestParam String roomId){
+        List<NoticePostDTO> list= noticePostService.selectAllListByRoomId(roomId);
+
+        return ResponseEntity.status(HttpStatus.OK).body(list);
+    }
+
+    @DeleteMapping("/deleteNotice")
+    public ResponseEntity<?> deleteNoticeBySeq (@RequestParam String noticeContent , String noticeCreateDate ,  String noticePostSeq){
+
+        noticePostService.deleteBySeq(Long.valueOf(noticePostSeq));
+
+        return ResponseEntity.status(HttpStatus.OK).body("Ok");
+    }
+
+
 
 }

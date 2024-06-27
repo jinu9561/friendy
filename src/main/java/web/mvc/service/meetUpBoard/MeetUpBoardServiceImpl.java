@@ -89,14 +89,12 @@ public class MeetUpBoardServiceImpl implements MeetUpBoardService {
         }
 
         Long interestSeq = meetUpBoardDTO.getInterestSeq();
-        System.out.println("여기인듯?");
         Optional<Interest> interestOptional = interestRepository.findById(interestSeq);
         ChattingRoom chattingRoom= new ChattingRoom();
         if (interestOptional.isPresent()) {
             Interest interest = interestOptional.get();
             String interestCategory = interest.getInterestCategory();
             Users users = Users.builder().userSeq(meetUpBoardDTO.getUserSeq()).build();
-            System.out.println("여기까지는 오나 ?");
             // MeetUpBoard 객체 생성
             try {
                 Optional<Users> optionalUsers = userRepository.findById(meetUpBoardDTO.getUserSeq());
@@ -108,11 +106,9 @@ public class MeetUpBoardServiceImpl implements MeetUpBoardService {
                             .build();
                    chattingRoom= chattingRoomService.createChattingRoom(chattingRoomDTO);
 
-                    System.out.println("채팅방생성파티보드");
                 }
 
             } catch (NumberFormatException e) {
-                System.out.println("에러메세지?" + e.getMessage());
                 throw new GlobalException(ErrorCode.WRONG_TYPE);
             }
             MeetUpBoard meetUpBoard = MeetUpBoard.builder()
@@ -156,14 +152,10 @@ public class MeetUpBoardServiceImpl implements MeetUpBoardService {
 
 
         if (files !=null) {
-            System.out.println("파일이 존재합니다");
-            System.out.println("meetUpSeq"+meetUpUpdateDTO.getMeetUpSeq());
             meetUpBoardDetailImgRepository.deleteAllByMeetUpBoardSeq(meetUpUpdateDTO.getMeetUpSeq());
 
-            System.out.println("파일이 삭제되었습니다.");
 
             for (MultipartFile file : files) {
-                System.out.println("+++file+++"+file);
                 Map<String, String> map = commonService.uploadFile(true, file, uploadDir);
                 MeetUpBoardDetailImg meetUpBoardDetailImg = new MeetUpBoardDetailImg();
                 meetUpBoardDetailImg.setMeetUpBoard(meetUpBoardForImg);
@@ -171,23 +163,18 @@ public class MeetUpBoardServiceImpl implements MeetUpBoardService {
                 meetUpBoardDetailImg.setMeetUpDetailImgType(map.get("imgType"));
                 meetUpBoardDetailImg.setMeetUpDetailImgSize(map.get("imgSize"));
                 meetUpBoardDetailImg.setMeetUpDetailImgName(map.get("imgName"));
-                System.out.println("이미지이름"+meetUpBoardDetailImg.getMeetUpDetailImgName());
                 meetUpBoardDetailImgs.add(meetUpBoardDetailImg);
                 meetUpBoardDetailImgRepository.save(meetUpBoardDetailImg);
-                System.out.println("+++meetUpBoardDetailIMg+++"+meetUpBoardDetailImg);
             }
         }
 
-        System.out.println("updateTargetSeq"+ updateTargetSeq);
 
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         String dateTime = meetUpUpdateDTO.getMeetUpDeadLine();
-        System.out.println("DATETIME"+dateTime);
         String formattedDateTime = dateTime.replace("T", " ");
         Date date;
         try {
             date = formatter.parse(formattedDateTime);
-            System.out.println("데드라인"+date);
         } catch (ParseException e) {
             // meetUpDeadLine 날짜 형식이 잘못된 경우 처리
             throw new GlobalException(ErrorCode.WRONG_DATE);
@@ -199,9 +186,7 @@ public class MeetUpBoardServiceImpl implements MeetUpBoardService {
                     .meetUpMaxEntry(meetUpUpdateDTO.getMeetUpMaxEntry())
                     .meetUpDeadLine(date)
                     .build();
-            System.out.println("멕스 엔트리"+meetUpBoard2.getMeetUpMaxEntry());
-            System.out.println("입력되는 이름" + meetUpBoard2.getMeetUpName());
-            System.out.println("시퀀스시퀀스" + meetUpBoard2.getMeetUpSeq());
+
             meetUpBoardRepository.updateMeetUp(meetUpBoard2);
 
 
@@ -245,9 +230,15 @@ public class MeetUpBoardServiceImpl implements MeetUpBoardService {
     }
 
     @Override
-    public Resource getDetailImg(String imgName) {
+    public MeetUpBoard findMeetUpPeopleList(String roomId) {
 
-        System.out.println("imgName :" +imgName);
+MeetUpBoard meetUpBoardForSeq=meetUpBoardRepository.findMeetUpBoardByRoomId(roomId);
+        System.out.println("여기에서는?"+ meetUpBoardForSeq.getMeetUpPeopleList());
+        return  meetUpBoardForSeq;
+    }
+
+    @Override
+    public Resource getDetailImg(String imgName) {
 
         Resource resource= new FileSystemResource(uploadDir+"\\"+imgName);
         return resource;
@@ -257,8 +248,6 @@ public class MeetUpBoardServiceImpl implements MeetUpBoardService {
     public List<MeetUpBoard> findMeetUpByInterest(String interest) {
 
             List<MeetUpBoard> list =meetUpBoardRepository.selectMeetUpBoardByInterest(interest);
-        System.out.println("리스트 컨트롤러단"+list);
-
         return list;
     }
 
@@ -266,7 +255,6 @@ public class MeetUpBoardServiceImpl implements MeetUpBoardService {
     public MeetUpBoard findMeetUpByBoardSeq(Long meetUpSeq) {
 
         MeetUpBoard meetUpBoardInfo = meetUpBoardRepository.findMeetUpBoardByMeetUpSeq(meetUpSeq);
-
         return meetUpBoardInfo;
     }
 
@@ -274,8 +262,6 @@ public class MeetUpBoardServiceImpl implements MeetUpBoardService {
     public List<MeetUpBoard> findByMeetUpName(String meetUpName) {
 
         List<MeetUpBoard> resultList = meetUpBoardRepository.findMeetUPBoardByMeetUpName(meetUpName);
-        System.out.println("검색결과: " + resultList);
-
         return null;
     }
 
@@ -285,14 +271,12 @@ public class MeetUpBoardServiceImpl implements MeetUpBoardService {
 
 
         List<MeetUpBoard> meetUpBoardList= meetUpBoardRepository.findAll();
-        System.out.println("meetUpBoardList"+meetUpBoardList);
         return meetUpBoardList;
     }
 
     @Override
     public List<Date> findByPartySeq() {
         List<Date> list = meetUpBoardRepository.findAllPartDeadLine();
-        System.out.println("list 여기는?:" + list);
         return list;
     }
 
@@ -301,31 +285,21 @@ public class MeetUpBoardServiceImpl implements MeetUpBoardService {
     //매일 정각에 체크하는기능 .
     @Override
     //    @Scheduled(cron = "0 0 * * * ?") //매시간마다 배포시에는 주석 해제해야함.
-//    @Scheduled(cron = "0 * * * * ?") // 매 분마다 작동
+    @Scheduled(cron = "0 * * * * ?") // 매 분마다 작동
     public void checkDeadLine() {  //받아오는 타입 문제 ..
-
         List<Date> list = findByPartySeq();
-        System.out.println(" 서비스단 리스트 list :" + list);
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime truncatedNow = now.withMinute(0).withSecond(0).withNano(0);
-
 //        System.out.println("now:" + now);
-        System.out.println("truncatedNow: " + truncatedNow);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.S");
         String formattedNow = now.format(formatter);
-        System.out.println("formattedNow" + formattedNow);
         for (Date date : list) {
             Date deadList = date;
             String deadListString = date.toString();
-            System.out.println("deadList" + deadList);
-            System.out.println("date" + date);
             if (deadListString.equals(formattedNow)) {
                 //데드라인과 현재시간이 일치하게 되면 해당 데드라인의 시퀀스 정보 가져옴.
                 List<Long> meetUpSeq = meetUpBoardRepository.findByPartySeqByDeadLine(deadList);
-                System.out.println("해당되는소모임시퀀스:" + meetUpSeq);
-
                 for (Long partSeq : meetUpSeq) {
-                    System.out.println("해당되는소모임시퀀스:" + partSeq);
                     //가져온 시퀀스에 해당되는 상태 1로 변경
                     meetUpBoardRepository.updatePartyStatus(partSeq);
 

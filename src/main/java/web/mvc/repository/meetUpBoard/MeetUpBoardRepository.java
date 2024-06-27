@@ -14,7 +14,7 @@ import java.util.List;
 
 public interface MeetUpBoardRepository extends JpaRepository<MeetUpBoard, Long> {
 
-    @Query("select pb.meetUpDeadLine FROM MeetUpBoard pb")
+    @Query("select pb.meetUpDeadLine FROM MeetUpBoard pb order by pb.meetUpRegDate desc ")
     List<Date> findAllPartDeadLine();
 
     @Modifying
@@ -61,5 +61,8 @@ public interface MeetUpBoardRepository extends JpaRepository<MeetUpBoard, Long> 
 
     @Query("select m from MeetUpBoard  m where m.interest.interestCategory =?1")
     List<MeetUpBoard> findMeetUpBoardByInterest(String interestCategory);
+
+    @Query("select m from MeetUpBoard  m where m.chattingroom.roomId=?1")
+    MeetUpBoard findMeetUpBoardByRoomId(String roomId);
 
 }

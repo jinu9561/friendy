@@ -12,7 +12,7 @@ public interface MessageLogRepository extends JpaRepository<MessageLog, Long> {
 
 
 
-    @Query("select m from MessageLog m where m.chattingroom.chattingroomSeq =?1")
+    @Query("select m from MessageLog m where m.chattingroom.chattingroomSeq =?1 order by m.chattingCreateDate asc")
     List<MessageLog> findMessageLogByRoomId (Long chattingRoomSeq);
 
 }
