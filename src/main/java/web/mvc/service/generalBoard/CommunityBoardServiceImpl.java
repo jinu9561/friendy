@@ -69,7 +69,7 @@ public class CommunityBoardServiceImpl implements CommunityBoardService {
     @Override
     public List<CommunityBoardDTO> getAllRealNameCommunityBoards() {
         log.info("Fetching all real name community boards");
-        List<CommunityBoard> communityBoards = communityBoardRepository.findByBoardTypeOrderByCommBoardSeqDesc(0);
+        List<CommunityBoard> communityBoards = communityBoardRepository.findByBoardTypeOrderByBoardRegDateDesc(0);
 
         if (communityBoards == null || communityBoards.isEmpty()) {
             log.warn("실명 게시물이 없습니다.");
@@ -89,7 +89,7 @@ public class CommunityBoardServiceImpl implements CommunityBoardService {
     @Override
     public List<CommunityBoardDTO> getAllAnonymousCommunityBoards() {
         log.info("Fetching all anonymous community boards");
-        List<CommunityBoard> communityBoards = communityBoardRepository.findByBoardTypeOrderByCommBoardSeqDesc(1);
+        List<CommunityBoard> communityBoards = communityBoardRepository.findByBoardTypeOrderByBoardRegDateDesc(1);
 
         if (communityBoards == null || communityBoards.isEmpty()) {
             log.warn("익명 게시물이 없습니다.");
@@ -178,8 +178,8 @@ public class CommunityBoardServiceImpl implements CommunityBoardService {
     @Transactional(readOnly = true)
     @Override
     public List<CommunityBoardDTO> searchCommunityBoards(int boardType, String keyword) {
-        List<CommunityBoard> communityBoards = communityBoardRepository.findByBoardTypeAndTitleContainingOrBoardTypeAndContentContaining(
-                boardType, keyword, boardType, keyword);
+        List<CommunityBoard> communityBoards = communityBoardRepository.findByBoardTypeAndBoardTitleContainingOrBoardContentContainingOrderByBoardRegDateDesc(
+                boardType, keyword, keyword);
 
         return communityBoards.stream()
                 .map(CommunityBoard::toDTO)
