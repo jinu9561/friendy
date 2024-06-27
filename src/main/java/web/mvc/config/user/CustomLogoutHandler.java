@@ -28,7 +28,7 @@ public class CustomLogoutHandler implements LogoutHandler {
 
         String userId = request.getParameter("userId");
         Users user = userRepository.findUserByUserId(userId);
-
+//
 //        if (!user.getRole().equals("ROLE_ADMIN")) {
 //            user.getUserDetail().setLastLoginDate(LocalDateTime.now());
 //            userRepository.save(user);
