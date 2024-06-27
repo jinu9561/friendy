@@ -19,4 +19,6 @@ public interface CommunityBoardService {
     CommunityBoardDTO updateCommunityBoard(Long commBoardSeq, CommunityBoardDTO communityBoardDTO);
 
     String deleteCommunityBoard(Long commBoardSeq);
+
+    public List<CommunityBoardDTO> searchCommunityBoards(int boardType, String keyword);
 }
