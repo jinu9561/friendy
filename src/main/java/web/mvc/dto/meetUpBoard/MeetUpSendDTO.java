@@ -24,6 +24,7 @@ public class MeetUpSendDTO {
     private int meetUpPwd;
     private int meetUpMaxEntry;
     private int nowEntry;
+    private String userName;
     private String meetUpRegDate;
     private  String  meetUpDeadLine;
     private int  meetUpStatus;

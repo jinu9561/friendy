@@ -33,6 +33,9 @@ public class ChattingRoom {
     @OneToOne(mappedBy = "chattingroom", cascade = CascadeType.ALL)
     private MeetUpBoard meetUpBoard;
 
+    @OneToMany(mappedBy = "chattingroom", cascade = CascadeType.ALL)
+    private List<NoticePost> noticePostList;
+
     /////////////////////////////진우가 추가한 코드/////////////////////////////
     @OneToMany(mappedBy = "room", cascade = CascadeType.ALL)
     private List<ChatParticipant> participants;

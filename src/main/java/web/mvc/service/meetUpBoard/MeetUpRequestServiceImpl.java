@@ -138,14 +138,14 @@ public class MeetUpRequestServiceImpl implements MeetUpRequestService {
             Users users = optionalUsers.get();
             // users 객체 사용
             System.out.println("유저 아이디" + users.getUserId());
-            String addUserName = users.getUserName();
-            System.out.println("에드유저네임" + addUserName);
+            String addUserId = users.getUserId();
+            System.out.println("에드유저네임" + addUserId);
             MeetUpBoard meetUpBoard = meetUpBoardService.findMeetUpByBoardSeq(meetUpSeq);
             String meetUpList = meetUpBoard.getMeetUpPeopleList();
             System.out.println("meetUpList:"+meetUpList);
             if (meetUpList == "[]" || meetUpList==null) {
                 List<Object> newList = new ArrayList<>();
-                newList.add(addUserName);
+                newList.add(addUserId);
                 int count=1;
                 JSONArray newJsonArray = new JSONArray(newList);
                 String newMeetUpList = newJsonArray.toString();
@@ -170,7 +170,7 @@ public class MeetUpRequestServiceImpl implements MeetUpRequestService {
                  }
 
                 System.out.println("리스트 출력" + list);
-                list.add(addUserName);
+                list.add(addUserId);
                 System.out.println("추가후 리스트 " + list);
 
                 // String 으로 바꿔서 다시 업데이트 .
@@ -203,11 +203,11 @@ public class MeetUpRequestServiceImpl implements MeetUpRequestService {
 
             for (Object obj : list) {
                 System.out.println("오브젝트" + obj);
-                String userName = users.getUserName();
-                System.out.println("삭제하고자 하는 유저 아이디" + userName);
+                String userId = users.getUserId();
+                System.out.println("삭제하고자 하는 유저 아이디" + userId);
                 count++;
                 System.out.println("카운트++"+count);
-                if (userName.equals(obj)) {
+                if (userId.equals(obj)) {
                     System.out.println("삭제되었습니다" + obj);
                     list.remove(obj);
                     System.out.println("삭제후 " + list);

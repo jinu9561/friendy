@@ -25,7 +25,7 @@ public interface MeetUpBoardService {
 
     MeetUpBoard  findMeetUpByMeetUpName(String meetUpName);
 
-
+    MeetUpBoard findMeetUpPeopleList(String roomId);
     Resource getDetailImg(String imgName);
 
    List<MeetUpBoard> findMeetUpByInterest(String interest);
