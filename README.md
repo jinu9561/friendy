@@ -85,4 +85,71 @@
 
 ---
 
+[Rest api 정의서 eaa22b44114146e2a856fd1b6bc35f03.md](https://github.com/user-attachments/files/16180118/Rest.api.eaa22b44114146e2a856fd1b6bc35f03.md)
+# Rest api 정의서
 
+## 사용자 회원 관리
+
+| Url | method | request body | 설명 |
+| --- | --- | --- | --- |
+| /users/register | POST | userId | 회원 가입 |
+|  |  | userPwd |  |
+|  |  | userName |  |
+|  |  | birth |  |
+|  |  | address |  |
+|  |  | email |  |
+|  |  | phone |  |
+|  |  | country |  |
+|  |  | gender |  |
+| /users/login | POST | userId | 로그인 |
+|  |  | userPwd |  |
+| /users/delete/{id} | GET |  | 회원 탈퇴 |
+| /users/profile | PUT | profileMainImg | 프로필 수정 |
+|  |  | introduce |  |
+|  |  | profileDetailImg |  |
+|  |  | interest |  |
+| /users/email | POST | email | 본인 인증(이메일) |
+
+## 관리자 회원 관리
+
+| 관리자 Url | method | request body | 설명 |
+| --- | --- | --- | --- |
+| /admin/users/{id}/approval | GET |  | 회원가입 승인, 본인 인증 승인 |
+| /admin/users/{id}/profile | GET |  | 프로필 수정 승인 |
+| /admin/users/{id}/delete | GET |  | 회원 탈퇴 요청 승인 |
+
+## 관리자 고객 지원
+
+| 관리자 Url | method | request body | 설명 |
+| --- | --- | --- | --- |
+| /admin/qna/{id}/answer | POST |  | 챗봇을 통한 문의사항 답변 |
+| /admin/reports/answer | POST |  | 챗봇을 통한 신고 처리 결과 안내 |
+
+## 관리자 이벤트 관리
+
+| 관리자 Url | method | request body | 설명 |
+| --- | --- | --- | --- |
+| /admin/event/eventList | GET |  | 관리자 주최 이벤트 리스트 검색 |
+| /admin/event/eventdetail | GET |  | 관리자 주최 각 이벤트 별 디테일한 정보 검색(내용, 인원, 상태-완료, 진행 등) |
+| /admin/event/eventInsert | POST |  | 관리자 주최 이벤트 등록 |
+| /admin/event/eventInsert/{seq} | PUT |  | 관리자 주최 이벤트 수정 |
+
+## 사용자 이벤트 목록확인
+
+| 관리자 Url | method | request body | 설명 |
+| --- | --- | --- | --- |
+| /users/event | GET |  | 관리자 주최 이벤트 검색 |
+| /users/event/eventdetail | GET |  | 관리자 주최 이벤트 상세 내용 조회(내용, 장소, 시간 등) |
+
+## 메인페이지
+
+| 관리자 Url | method | request body | 설명 |
+| --- | --- | --- | --- |
+| /main | GET |  | 사용자와 관리자 모두가 처음에 만나는 메인 페이지 |
+
+## 장소추천
+
+| 관리자 Url | method | request body | 설명 |
+| --- | --- | --- | --- |
+| /users/place | GET |  | 사용자에게 추천된 장소 상세 내용 설명  |
+| /admin/place | POST |  | 관리자가 추천하는 장소 상세 내용 설명 등록 |
