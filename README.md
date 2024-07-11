@@ -6,9 +6,11 @@
   <br>
 </p>
 
+---
+
 **KOSTA 272기 FINAL PROJECT**  
 **개발 기간:** 2024.05.29 ~ 2024.06.28  
-**팀원:** 5명
+**개발 인원 (역할):** 5명 (게시판 신고, 회원 알림, 회원 상태변경, 친구 관리, Q&A 챗봇 기능 담당)
 
 ---
 
@@ -29,6 +31,12 @@ Friendly Backend Server는 비슷한 취미를 가진 사용자들이 사적 및
   ![Github](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=GitHub&logoColor=white)
 
 ### 백엔드 기술 스택
+
+<br>
+
+| JavaScript | TypeScript |  React   |  Node   |
+| :--------: | :--------: | :------: | :-----: |
+|   ![js]    |   ![ts]    | ![react] | ![node] |
 
 - **언어 및 프레임워크:**  
   ![Java](https://img.shields.io/badge/Java-17-orange?style=for-the-badge&logo=Java&logoColor=white)  
