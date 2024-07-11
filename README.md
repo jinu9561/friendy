@@ -95,7 +95,8 @@
 
 ![Friendy (1)](https://github.com/jinu9561/friendy/assets/82188917/2cb698cc-7206-4bb0-85a9-a9fb95426846)
 
-## [🔗 ERD CLOUD](http://erdcloud.com/d/YMQY2jjSHqhQgEYFj)
+### [🔗 ERD CLOUD](http://erdcloud.com/d/YMQY2jjSHqhQgEYFj)
+
 
 ---
 ## 📊 플로우 차트
@@ -107,8 +108,18 @@
 ![adminflowchart](https://github.com/jinu9561/friendy/assets/82188917/7eb78428-31d4-4108-b4d1-763c289faf4e)
 
 ---
+## 🎨 레이아웃
 
+![fffffff](https://github.com/jinu9561/friendy/assets/82188917/96128413-59a9-434f-bae5-a456f92b4059)
 
+---
+## 나의 역할
+
+### 관리자 기능
+
+### 사용자 기능
+
+---
 
 # Rest api 정의서
 
