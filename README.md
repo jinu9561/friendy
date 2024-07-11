@@ -87,7 +87,17 @@
 
 ## 📆 개발 기간
 
----![friendy-09](https://github.com/jinu9561/friendy/assets/82188917/049ff22a-98fd-4f7c-b1ca-e85d1a8c0a5d)
+![friendy-09](https://github.com/jinu9561/friendy/assets/82188917/049ff22a-98fd-4f7c-b1ca-e85d1a8c0a5d)
+
+---
+
+## 💾 데이터 베이스 구조 - ERD
+
+![Friendy (1)](https://github.com/jinu9561/friendy/assets/82188917/2cb698cc-7206-4bb0-85a9-a9fb95426846)
+[ERD CLOUD](http://erdcloud.com/d/YMQY2jjSHqhQgEYFj)
+
+---
+
 
 
 
