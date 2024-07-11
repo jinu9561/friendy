@@ -19,15 +19,17 @@
 Friendly Backend Server는 비슷한 취미를 가진 사용자들이 사적 및 온라인 커뮤니티에서 소규모 그룹을 만들고 활동할 수 있게 돕는 서비스입니다. 사용자는 소그룹 게시판을 통해 모임을 만들고, 모임에 지원하며 승인된 사용자들과 채팅할 수 있습니다. 다양한 게시판 기능(사진 게시판, 익명 게시판, 자유 게시판)도 제공합니다.
 
 <br/>
+
 ### [🔗 FRONT-END GitHub Repository](https://github.com/jinu9561/friendy_front)
+
 <br/>
 
 ### ⛏️ 백엔드 기술 스택
 
 - **언어 및 프레임워크:**  
-  ![Java](https://img.shields.io/badge/Java-17-orange?style=for-the-badge&logo=Java&logoColor=white)  
-  ![Spring Data JPA](https://img.shields.io/badge/Spring%20Data%20JPA-3.3.0.RELEASE-green?style=for-the-badge&logo=Spring&logoColor=white)
-  ![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.3.0.RELEASE-green?style=for-the-badge&logo=Spring&logoColor=white)
+  ![Java](https://img.shields.io/badge/Java-17-orange?style=for-the-badge&logo=Java&logoColor=white)  <br/>
+  ![Spring Data JPA](https://img.shields.io/badge/Spring%20Data%20JPA-3.3.0.RELEASE-green?style=for-the-badge&logo=Spring&logoColor=white)<br/>
+  ![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.3.0.RELEASE-green?style=for-the-badge&logo=Spring&logoColor=white)<br/>
   ![Spring Security](https://img.shields.io/badge/Spring%20Security-3.3.0.RELEASE-green?style=for-the-badge&logo=Spring&logoColor=white)
   ![Socket.io](https://img.shields.io/badge/Socket.io-black?style=for-the-badge&logo=socket.io&badgeColor=010101)
 
