@@ -40,18 +40,13 @@ Friendly Backend Server는 비슷한 취미를 가진 사용자들이 사적 및
 
 ### API
 
-| API                    | Description                                                                                                   |
-|---------------------|----------------------------------------------------------------------------------------------------------------|
-| [![Kakao Pay API](https://img.shields.io/badge/Kakao%20Pay%20API-FFCD00?style=for-the-badge&logo=kakao&logoColor=black)](https://developers.kakao.com/docs/latest/ko/kakaopay) |                                                                                                    |
-| ![KakaoChatBot](https://img.shields.io/badge/kakao_ChatBot-ffcd00.svg?style=for-the-badge&logo=kakaoChatBot&logoColor=000000)                                           |                                                                                                                     |
-| [![CoolSMS API](https://img.shields.io/badge/CoolSMS%20API-5B9BD5?style=for-the-badge&logo=coolpad&logoColor=white)](https://www.coolsms.co.kr/)                         |                                                                                                                   |
-| ![Gmail](https://img.shields.io/badge/Gmail-D14836?style=for-the-badge&logo=gmail&logoColor=white)                                                                     |                                                                                                                                                                                   |
+| API                    | Description                                                                                                                                                                                                                                                     |
+|------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| [![Kakao Pay API](https://img.shields.io/badge/Kakao%20Pay%20API-FFCD00?style=for-the-badge&logo=kakao&logoColor=black)](https://developers.kakao.com/docs/latest/ko/kakaopay) | 카카오 페이 API를 통해 포인트를 충전하고 결제할 수 있습니다.                                                                                                                                                         |
+| ![KakaoChatBot](https://img.shields.io/badge/kakao_ChatBot-ffcd00.svg?style=for-the-badge&logo=kakaoChatBot&logoColor=000000)                                           | 카카오 챗봇을 이용한 자동 응답 시스템을 제공합니다.                                                                                                                                                                               |
+| [![CoolSMS API](https://img.shields.io/badge/CoolSMS%20API-5B9BD5?style=for-the-badge&logo=coolpad&logoColor=white)](https://www.coolsms.co.kr/)                         | CoolSMS API를 통해 SMS를 전송합니다.                                                                                                                                                                                            |
+| ![Gmail](https://img.shields.io/badge/Gmail-D14836?style=for-the-badge&logo=gmail&logoColor=white)                                                                     | Gmail API를 통해 이메일 알림을 보냅니다.                                                                                                                                                                                         |
 
-
-[![Kakao Pay API](https://img.shields.io/badge/Kakao%20Pay%20API-FFCD00?style=for-the-badge&logo=kakao&logoColor=black)](https://developers.kakao.com/docs/latest/ko/kakaopay) <br/>
-![KakaoChatBot](https://img.shields.io/badge/kakao_ChatBot-ffcd00.svg?style=for-the-badge&logo=kakaoChatBot&logoColor=000000)<br/>
-[![CoolSMS API](https://img.shields.io/badge/CoolSMS%20API-5B9BD5?style=for-the-badge&logo=coolpad&logoColor=white)](https://www.coolsms.co.kr /) <br/>
-![Gmail](https://img.shields.io/badge/Gmail-D14836?style=for-the-badge&logo=gmail&logoColor=white) <br/>
 
 ### 협업 도구
 
