@@ -94,10 +94,19 @@
 ## 💾 데이터 베이스 구조 - ERD
 
 ![Friendy (1)](https://github.com/jinu9561/friendy/assets/82188917/2cb698cc-7206-4bb0-85a9-a9fb95426846)
-[ERD CLOUD](http://erdcloud.com/d/YMQY2jjSHqhQgEYFj)
+
+## [🔗 ERD CLOUD](http://erdcloud.com/d/YMQY2jjSHqhQgEYFj)
 
 ---
+## 📊 플로우 차트
 
+### 사용자
+![userflowchart](https://github.com/jinu9561/friendy/assets/82188917/220f1f1d-c823-44a3-994e-9b09d35aeea0)
+
+### 관리자
+![adminflowchart](https://github.com/jinu9561/friendy/assets/82188917/7eb78428-31d4-4108-b4d1-763c289faf4e)
+
+---
 
 
 
