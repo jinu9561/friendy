@@ -7,7 +7,6 @@
 </p>
 
 ---
----
 
 ## KOSTA 272기 FINAL PROJECT
 **개발 기간:** 2024.05.29 ~ 2024.06.28  
@@ -19,21 +18,17 @@
 
 Friendly Backend Server는 비슷한 취미를 가진 사용자들이 사적 및 온라인 커뮤니티에서 소규모 그룹을 만들고 활동할 수 있게 돕는 서비스입니다. 사용자는 소그룹 게시판을 통해 모임을 만들고, 모임에 지원하며 승인된 사용자들과 채팅할 수 있습니다. 다양한 게시판 기능(사진 게시판, 익명 게시판, 자유 게시판)도 제공합니다.
 
+
 ### [🔗 FRONT-END GitHub Repository](https://github.com/jinu9561/friendy_front)
+
 
 ### ⛏️ 백엔드 기술 스택
 
-<br>
-
 - **언어 및 프레임워크:**  
   ![Java](https://img.shields.io/badge/Java-17-orange?style=for-the-badge&logo=Java&logoColor=white)  
- 
   ![Spring Data JPA](https://img.shields.io/badge/Spring%20Data%20JPA-3.3.0.RELEASE-green?style=for-the-badge&logo=Spring&logoColor=white)
-
   ![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.3.0.RELEASE-green?style=for-the-badge&logo=Spring&logoColor=white)
-  
   ![Spring Security](https://img.shields.io/badge/Spring%20Security-3.3.0.RELEASE-green?style=for-the-badge&logo=Spring&logoColor=white)
-  
   ![Socket.io](https://img.shields.io/badge/Socket.io-black?style=for-the-badge&logo=socket.io&badgeColor=010101)
 
 - **데이터베이스:**  
@@ -47,21 +42,17 @@ Friendly Backend Server는 비슷한 취미를 가진 사용자들이 사적 및
 
 - **버전 관리:**  
   ![Git](https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=Git&logoColor=white)
-  
   ![Github](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=GitHub&logoColor=white)
 
 
-### 사용 API
+### API
 
 [![Kakao Pay API](https://img.shields.io/badge/Kakao%20Pay%20API-FFCD00?style=for-the-badge&logo=kakao&logoColor=black)](https://developers.kakao.com/docs/latest/ko/kakaopay)  
-
 ![KakaoChatBot](https://img.shields.io/badge/kakao_ChatBot-ffcd00.svg?style=for-the-badge&logo=kakaoChatBot&logoColor=000000)
-
 [![CoolSMS API](https://img.shields.io/badge/CoolSMS%20API-5B9BD5?style=for-the-badge&logo=coolpad&logoColor=white)](https://www.coolsms.co.kr/)  
-
 ![Gmail](https://img.shields.io/badge/Gmail-D14836?style=for-the-badge&logo=gmail&logoColor=white)  
 
-### 커뮤니케이션 도구
+### 협업 툴
 
 ![Notion](https://img.shields.io/badge/Notion-000000?style=for-the-badge&logo=Notion&logoColor=white)  
 
