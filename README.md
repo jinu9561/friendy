@@ -4,8 +4,8 @@
   <br>
 </p>
 
-### Find Your Friends
-# Friendy
+
+### Find Your Friends # Friendy
 
 ---
 
