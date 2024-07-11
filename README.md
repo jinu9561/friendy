@@ -1,6 +1,12 @@
-# Friendly Backend Server
+# Friendy
 
-**KOSTA 272기 최종 프로젝트**  
+<p align="center">
+  <br>
+  <img src="./src/main/resources/logo.png">
+  <br>
+</p>
+
+**KOSTA 272기 FINAL PROJECT**  
 **개발 기간:** 2024.05.29 ~ 2024.06.28  
 **팀원:** 5명
 
