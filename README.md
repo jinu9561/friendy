@@ -1,10 +1,11 @@
-# Friendy
 
 <p align="center">
   <br>
   <img src="./src/main/resources/logo.png" width="200">
   <br>
 </p>
+
+# Friendy
 
 ---
 
