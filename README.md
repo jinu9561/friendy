@@ -85,7 +85,12 @@
 
 ---
 
-[Rest api 정의서 eaa22b44114146e2a856fd1b6bc35f03.md](https://github.com/user-attachments/files/16180118/Rest.api.eaa22b44114146e2a856fd1b6bc35f03.md)
+## 📆 개발 기간
+
+---![friendy-09](https://github.com/jinu9561/friendy/assets/82188917/049ff22a-98fd-4f7c-b1ca-e85d1a8c0a5d)
+
+
+
 # Rest api 정의서
 
 ## 사용자 회원 관리
