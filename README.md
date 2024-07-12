@@ -129,68 +129,60 @@
 
 # Rest api 정의서
 
+# REST API 정의
+
+이 프로젝트는 사용자 회원 관리, 관리자 회원 관리, 고객 지원, 이벤트 관리, 메인 페이지 및 장소 추천을 위한 REST API를 제공합니다.
+
 ## 사용자 회원 관리
 
-| Url | method | request body | 설명 |
-| --- | --- | --- | --- |
-| /users/register | POST | userId | 회원 가입 |
-|  |  | userPwd |  |
-|  |  | userName |  |
-|  |  | birth |  |
-|  |  | address |  |
-|  |  | email |  |
-|  |  | phone |  |
-|  |  | country |  |
-|  |  | gender |  |
-| /users/login | POST | userId | 로그인 |
-|  |  | userPwd |  |
-| /users/delete/{id} | GET |  | 회원 탈퇴 |
-| /users/profile | PUT | profileMainImg | 프로필 수정 |
-|  |  | introduce |  |
-|  |  | profileDetailImg |  |
-|  |  | interest |  |
-| /users/email | POST | email | 본인 인증(이메일) |
+| URL               | Method | Request Body                                     | Description              |
+| ----------------- | ------ | ------------------------------------------------ | ------------------------ |
+| /users/register   | POST   | userId, userPwd, userName, birth, address, email, phone, country, gender | 회원 가입                |
+| /users/login      | POST   | userId, userPwd                                  | 로그인                   |
+| /users/delete/{id}| GET    | 없음                                             | 회원 탈퇴                |
+| /users/profile    | PUT    | profileMainImg, introduce, profileDetailImg, interest | 프로필 수정             |
+| /users/email      | POST   | email                                            | 이메일 인증              |
 
 ## 관리자 회원 관리
 
-| 관리자 Url | method | request body | 설명 |
-| --- | --- | --- | --- |
-| /admin/users/{id}/approval | GET |  | 회원가입 승인, 본인 인증 승인 |
-| /admin/users/{id}/profile | GET |  | 프로필 수정 승인 |
-| /admin/users/{id}/delete | GET |  | 회원 탈퇴 요청 승인 |
+| URL                         | Method | Request Body | Description                                         |
+| --------------------------- | ------ | ------------ | --------------------------------------------------- |
+| /admin/users/{id}/approval  | GET    | 없음         | 회원 가입 승인, 본인 인증 승인                      |
+| /admin/users/{id}/profile   | GET    | 없음         | 프로필 수정 승인                                    |
+| /admin/users/{id}/delete    | GET    | 없음         | 회원 탈퇴 요청 승인                                 |
 
 ## 관리자 고객 지원
 
-| 관리자 Url | method | request body | 설명 |
-| --- | --- | --- | --- |
-| /admin/qna/{id}/answer | POST |  | 챗봇을 통한 문의사항 답변 |
-| /admin/reports/answer | POST |  | 챗봇을 통한 신고 처리 결과 안내 |
+| URL                       | Method | Request Body | Description                               |
+| ------------------------- | ------ | ------------ | ----------------------------------------- |
+| /admin/qna/{id}/answer    | POST   | 없음         | 챗봇을 통한 문의 응답                     |
+| /admin/reports/answer     | POST   | 없음         | 챗봇을 통한 신고 처리 결과 안내           |
 
 ## 관리자 이벤트 관리
 
-| 관리자 Url | method | request body | 설명 |
-| --- | --- | --- | --- |
-| /admin/event/eventList | GET |  | 관리자 주최 이벤트 리스트 검색 |
-| /admin/event/eventdetail | GET |  | 관리자 주최 각 이벤트 별 디테일한 정보 검색(내용, 인원, 상태-완료, 진행 등) |
-| /admin/event/eventInsert | POST |  | 관리자 주최 이벤트 등록 |
-| /admin/event/eventInsert/{seq} | PUT |  | 관리자 주최 이벤트 수정 |
+| URL                        | Method | Request Body | Description                                                       |
+| -------------------------- | ------ | ------------ | ----------------------------------------------------------------- |
+| /admin/event/eventList     | GET    | 없음         | 관리자 주최 이벤트 목록 조회                                      |
+| /admin/event/eventdetail   | GET    | 없음         | 관리자 주최 각 이벤트의 상세 정보 조회 (내용, 인원, 진행 상태 등) |
+| /admin/event/eventInsert   | POST   | 없음         | 관리자 주최 이벤트 등록                                          |
+| /admin/event/eventInsert/{seq}| PUT | 없음         | 관리자 주최 이벤트 수정                                           |
 
-## 사용자 이벤트 목록확인
+## 사용자 이벤트 목록 조회
 
-| 관리자 Url | method | request body | 설명 |
-| --- | --- | --- | --- |
-| /users/event | GET |  | 관리자 주최 이벤트 검색 |
-| /users/event/eventdetail | GET |  | 관리자 주최 이벤트 상세 내용 조회(내용, 장소, 시간 등) |
+| URL                        | Method | Request Body | Description                                   |
+| -------------------------- | ------ | ------------ | --------------------------------------------- |
+| /users/event               | GET    | 없음         | 관리자 주최 이벤트 검색                       |
+| /users/event/eventdetail   | GET    | 없음         | 관리자 주최 이벤트의 상세 정보 조회 (내용, 장소, 시간 등) |
 
-## 메인페이지
+## 메인 페이지
 
-| 관리자 Url | method | request body | 설명 |
-| --- | --- | --- | --- |
-| /main | GET |  | 사용자와 관리자 모두가 처음에 만나는 메인 페이지 |
+| URL  | Method | Request Body | Description                               |
+| ---- | ------ | ------------ | ----------------------------------------- |
+| /main| GET    | 없음         | 사용자와 관리자가 처음 만나는 메인 페이지 |
 
-## 장소추천
+## 장소 추천
 
-| 관리자 Url | method | request body | 설명 |
-| --- | --- | --- | --- |
-| /users/place | GET |  | 사용자에게 추천된 장소 상세 내용 설명  |
-| /admin/place | POST |  | 관리자가 추천하는 장소 상세 내용 설명 등록 |
+| URL            | Method | Request Body | Description                                       |
+| -------------- | ------ | ------------ | ------------------------------------------------- |
+| /users/place   | GET    | 없음         | 사용자에게 추천된 장소의 상세 설명                |
+| /admin/place   | POST   | 없음         | 관리자 추천 장소의 상세 설명 등록     
