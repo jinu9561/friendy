@@ -119,6 +119,18 @@
 ![fffffff](https://github.com/jinu9561/friendy/assets/82188917/96128413-59a9-434f-bae5-a456f92b4059)
 
 ---
+
+## 기능 구현
+
+### 회원가입 로그인
+
+👉 [자세히 보기]
+[README2.md](https://github.com/user-attachments/files/16358504/README2.md)
+
+
+
+
+---
 ## 🙋 나의 역할
 
 ### 관리자 기능
