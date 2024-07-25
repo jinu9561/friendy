@@ -124,11 +124,12 @@
 
 ### 회원가입 로그인
 
-👉 [자세히 보기](https://github.com/jinu9561/friendy.wiki.git/회원가입-및-로그인)
-
+👉 [자세히 보기](https://github.com/jinu9561/friendy/wiki/%ED%9A%8C%EC%9B%90%EA%B0%80%EC%9E%85-%EB%B0%8F-%EB%A1%9C%EA%B7%B8%EC%9D%B8)
 
 ### 커뮤니티 게시판 
 👉 [자세히 보기](https://github.com/jinu9561/friendy/wiki/%EA%B2%8C%EC%8B%9C%ED%8C%90)
+
+
 
 ---
 ## 🙋 나의 역할
