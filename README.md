@@ -124,11 +124,11 @@
 
 ### 회원가입 로그인
 
-👉 [자세히 보기]
-[README2.md](https://github.com/user-attachments/files/16358504/README2.md)
+👉 [자세히 보기](https://github.com/jinu9561/friendy.wiki.git)
 
 
-
+### 커뮤니티 게시판 
+👉 [자세히 보기](https://github.com/jinu9561/friendy.wiki.git)
 
 ---
 ## 🙋 나의 역할
